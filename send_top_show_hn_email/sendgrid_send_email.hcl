@@ -58,11 +58,4 @@ pipeline "sendgrid_send_email" {
     })
   }
 
-  output "response" {
-    value = step.http.send_email
-  }
-
-  output "response_body" {
-    value = step.http.send_email.response_body
-  }
 }
