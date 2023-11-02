@@ -42,9 +42,7 @@ pipeline "send_top_show_hn_email" {
   }
 
   step "pipeline" "send_email" {
-    // TODO: Switch these once mod install works
-    #pipeline = sendgrid.pipeline.send_email
-    pipeline = pipeline.sendgrid_send_email
+    pipeline = sendgrid.pipeline.send_email
     args = {
       api_key = param.sendgrid_api_key
       to      = param.to
