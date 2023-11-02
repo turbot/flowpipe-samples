@@ -70,11 +70,8 @@ pipeline "ip_profiler" {
     json = {
       ip2location_ip_location : step.pipeline.ip2location.output.ip_details,
       abuseipdb_ip_info : step.pipeline.abuseipdb.output.report.data,
-      abuseipdb_abuse_reports : step.pipeline.abuseipdb_reports.output.reports.data,
-      virustotal_ip_scan : try({
-        last_analysis_stats : step.pipeline.virustotal.output.ip_report.data.attributes.last_analysis_stats,
-        total_votes : step.pipeline.virustotal.output.ip_report.data.attributes.total_votes
-      }, "Must be a valid IPv4 for VirusTotal scan.")
+      abuseipdb_abuse_reports : step.pipeline.abuseipdb_reports.output.reports.data.results,
+      virustotal_ip_scan : try(step.pipeline.virustotal.output.ip_report.data, "Must be a valid IPv4 for VirusTotal scan.")
     }
   }
 
@@ -84,7 +81,7 @@ pipeline "ip_profiler" {
 
   # output "abuseipdb_profile" {
   #   description = "AbuseIPDB Report details."
-  #   value       = step.pipeline.abuseipdb.output.report
+  #   value       = step.pipeline.abuseipdb.output.report.data
   # }
 
   # output "ip2location_profile" {
@@ -94,7 +91,7 @@ pipeline "ip_profiler" {
 
   # output "virustotal_profile" {
   #   description = "VirusTotal Report details."
-  #   value       = can(regex("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", param.ip_address)) ? step.pipeline.virustotal.output.ip_report : "Must be a valid IPv4 for VirusTotal scan."
+  #   value       = try(step.pipeline.virustotal.output.ip_report.data, "Must be a valid IPv4 for VirusTotal scan.")
   # }
 }
 
