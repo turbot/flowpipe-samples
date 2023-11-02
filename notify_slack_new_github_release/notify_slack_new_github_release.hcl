@@ -23,13 +23,25 @@ pipeline "router_pipeline" {
     description = "GitHub event request body."
   }
 
+  param "slack_token" {
+    type        = string
+    description = "Slack app token used to connect to the API."
+    default     = var.slack_token
+  }
+
+  param "slack_channel" {
+    type        = string
+    description = "Channel containing the message to be updated."
+    default     = var.slack_channel
+  }
+
   step "pipeline" "post_message" {
     if = param.event == "release" && param.request_body.action == "published"
 
-    # TODO: Switch once mod install works
-    #pipeline = slack_mod.pipeline.post_message
-    pipeline = pipeline.slack_post_message
+    pipeline = slack.pipeline.chat_post_message
     args = {
+      token   = param.slack_token
+      channel = param.slack_channel
       message = "New release created by ${param.request_body.release.author.login}: ${param.request_body.release.html_url}"
     }
   }
