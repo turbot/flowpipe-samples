@@ -111,15 +111,9 @@ pipeline "notify_suspend_disable_azuread_account" {
       token        = param.token
       user_email   = param.user_email
       project_key  = param.project_key
-
-      // summary      = "Off-boarding user ${step.pipeline.get_ad_user.output.user}"
-      // summary = step.pipeline.get_ad_user.output.user.
-      summary = "Off-boarding user ${param.user_id}" // Not dynamic
-      // description = "User Details ${step.pipeline.get_ad_user.output.user}"
-      // description = step.pipeline.get_ad_user.output.user
-      description = "User Details"
-
-      issue_type = param.issue_type
+      summary      = "Off-boarding user ${step.pipeline.get_ad_user.output.user.userPrincipalName}"
+      description  = "User Details ${jsonencode(step.pipeline.get_ad_user.output.user)}"
+      issue_type   = param.issue_type
     }
   }
 
