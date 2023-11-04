@@ -20,32 +20,35 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
   }
 
   step "pipeline" "update_iam_access_key_status" {
-    for_each = step.pipeline.list_iam_access_keys
+    for_each = concat([for keys in step.pipeline.list_iam_access_keys: keys.output.stdout.AccessKeyMetadata])
     # Run only if the access key is active and older than 90 days. (2160h = 90 days)
-    # As https://developer.hashicorp.com/terraform/language/functions/timeadd does not support addind days, we are using hours.
-    if = each.value.output.stdout.AccessKeyMetadata[0].Status == "Active" && timecmp(each.value.output.stdout.AccessKeyMetadata[0].CreateDate, timeadd(timestamp(), "-2160h")) < 0
+    # As https:#developer.hashicorp.com/terraform/language/functions/timeadd does not support addind days, we are using hours.
+    if = each.value.Status == "Active" && timecmp(each.value.CreateDate, timeadd(timestamp(), "-2160h")) < 0
     pipeline = aws.pipeline.update_iam_access_key_status
     args = {
-      user_name = each.value.output.stdout.AccessKeyMetadata[0].UserName
-      access_key_id = each.value.output.stdout.AccessKeyMetadata[0].AccessKeyId
+      user_name = each.value.UserName
+      access_key_id = each.value.AccessKeyId
       status = "Inactive"
     }
   }
 
-  # TODO: Figure out how to iterate both over step.pipeline.list_iam_access_keys then over each.value.output.stdout.AccessKeyMetadata
+  // TODO find out a way to output the list of deactivated access keys. Currently the update_iam_access_key API doesn't return anything.
 
   output "update_iam_access_key_status" {
     description = "List of access keys."
     value       = step.pipeline.update_iam_access_key_status
   }
 
-  output "access_keys" {
-    description = "List of access keys."
-    value       = step.pipeline.list_iam_access_keys
-  }
+  # Reenable for debugging
+  # output "access_keys" {
+  #   description = "List of access keys."
+  #   value       = step.pipeline.list_iam_access_keys
+  # }
 
-  output "iam_users" {
-    description = "List of IAM users."
-    value       = step.pipeline.list_iam_users.output.stdout
-  }
+  # Reenable for debugging
+  # output "iam_users" {
+  #   description = "List of IAM users."
+  #   value       = step.pipeline.list_iam_users.output.stdout
+  # }
+
 }
