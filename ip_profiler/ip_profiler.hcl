@@ -115,5 +115,3 @@ pipeline "ip_profiler" {
   #   value       = try(step.pipeline.virustotal.output.ip_report.data, "Must be a valid IPv4 for VirusTotal scan.")
   # }
 }
-
-

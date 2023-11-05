@@ -6,6 +6,52 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, IP2Location and Vi
 
 - Add your IP2Location, AbuseIPDB and VirusTotal API keys to `flowpipe.pvars`
 - Run the pipeline and specify the IP address you want to scan.
+- IPv6 Example: `flowpipe pipeline run ip_profiler --pipeline-arg ip_address='2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1'`
+
+```json
+{
+  "flowpipe": {
+    "execution_id": "exec_cl3p1r0cj6rjg7obpelg",
+    "pipeline_execution_id": "pexec_cl3p1r0cj6rjg7obpem0",
+    "status": "finished"
+  },
+  "ip_profile": {
+    "abuseipdb_abuse_reports": null,
+    "abuseipdb_ip_info": {
+      "abuseConfidenceScore": 0,
+      "countryCode": "US",
+      "domain": "amazon.com",
+      "hostnames": null,
+      "ipAddress": "2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1",
+      "ipVersion": 6,
+      "isPublic": true,
+      "isTor": false,
+      "isWhitelisted": null,
+      "isp": "Amazon.com Inc.",
+      "lastReportedAt": null,
+      "numDistinctUsers": 0,
+      "totalReports": 0,
+      "usageType": "Data Center/Web Hosting/Transit"
+    },
+    "ip2location_ip_location": {
+      "as": "Amazon.com Inc.",
+      "asn": "14618",
+      "city_name": "Ashburn",
+      "country_code": "US",
+      "country_name": "United States of America",
+      "ip": "2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1",
+      "is_proxy": false,
+      "latitude": 39.039474,
+      "longitude": -77.491809,
+      "region_name": "Virginia",
+      "time_zone": "-04:00",
+      "zip_code": "20147"
+    },
+    "virustotal_ip_scan": "Must be a valid IPv4 for VirusTotal scan."
+  }
+}
+```
+
 - IPv4 Example: `flowpipe pipeline run ip_profiler --pipeline-arg ip_address='76.76.21.21'`
 
 ```json
@@ -666,52 +712,6 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, IP2Location and Vi
       },
       "type": "ip_address"
     }
-  }
-}
-```
-
-- IPv6 Example: `flowpipe pipeline run ip_profiler --pipeline-arg ip_address='2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1'`
-
-```json
-{
-  "flowpipe": {
-    "execution_id": "exec_cl3p1r0cj6rjg7obpelg",
-    "pipeline_execution_id": "pexec_cl3p1r0cj6rjg7obpem0",
-    "status": "finished"
-  },
-  "ip_profile": {
-    "abuseipdb_abuse_reports": null,
-    "abuseipdb_ip_info": {
-      "abuseConfidenceScore": 0,
-      "countryCode": "US",
-      "domain": "amazon.com",
-      "hostnames": null,
-      "ipAddress": "2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1",
-      "ipVersion": 6,
-      "isPublic": true,
-      "isTor": false,
-      "isWhitelisted": null,
-      "isp": "Amazon.com Inc.",
-      "lastReportedAt": null,
-      "numDistinctUsers": 0,
-      "totalReports": 0,
-      "usageType": "Data Center/Web Hosting/Transit"
-    },
-    "ip2location_ip_location": {
-      "as": "Amazon.com Inc.",
-      "asn": "14618",
-      "city_name": "Ashburn",
-      "country_code": "US",
-      "country_name": "United States of America",
-      "ip": "2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1",
-      "is_proxy": false,
-      "latitude": 39.039474,
-      "longitude": -77.491809,
-      "region_name": "Virginia",
-      "time_zone": "-04:00",
-      "zip_code": "20147"
-    },
-    "virustotal_ip_scan": "Must be a valid IPv4 for VirusTotal scan."
   }
 }
 ```
