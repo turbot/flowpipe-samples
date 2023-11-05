@@ -25,13 +25,34 @@ pipeline "ip_profiler" {
     description = "The IP address you want to profile for detailed insights and security information."
   }
 
-  // AbuseIPDB
-  step "pipeline" "abuseipdb" {
+  param "max_age_in_days" {
+    type        = number
+    default     = 30
+    optional    = true
+    description = "Maximum age in days for the AbuseIPDB reports to retrieve. Defaults to 30 days."
+  }
+
+  param "page" {
+    type        = number
+    default     = 1
+    optional    = true
+    description = "The page number of results to retrieve. Defaults to page 1."
+  }
+
+  param "per_page" {
+    type        = number
+    default     = 25
+    optional    = true
+    description = "The number of reports per page. Defaults to 25 reports per page."
+  }
+
+  # AbuseIPDB
+  step "pipeline" "abuseipdb_ip_info" {
     pipeline = abuseipdb.pipeline.check_ip
     args = {
       api_key         = param.abuseipdb_api_key
       ip_address      = param.ip_address
-      max_age_in_days = 30
+      max_age_in_days = param.max_age_in_days
     }
   }
 
@@ -40,13 +61,13 @@ pipeline "ip_profiler" {
     args = {
       api_key         = param.abuseipdb_api_key
       ip_address      = param.ip_address
-      max_age_in_days = 30
-      page            = 1
-      per_page        = 25
+      max_age_in_days = param.max_age_in_days
+      page            = param.page
+      per_page        = param.per_page
     }
   }
 
-  // IP2Location
+  # IP2Location
   step "pipeline" "ip2location" {
     pipeline = ip2location.pipeline.get_ip
     args = {
@@ -55,9 +76,9 @@ pipeline "ip_profiler" {
     }
   }
 
-  // VirusTotal
+  # VirusTotal
   step "pipeline" "virustotal" {
-    // virustotal works only for ipv4
+    # virustotal works only for ipv4
     if       = can(regex("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", param.ip_address)) == true
     pipeline = virustotal.pipeline.get_ip
     args = {
@@ -69,7 +90,7 @@ pipeline "ip_profiler" {
   step "echo" "ip_profile" {
     json = {
       ip2location_ip_location : step.pipeline.ip2location.output.ip_details,
-      abuseipdb_ip_info : step.pipeline.abuseipdb.output.report.data,
+      abuseipdb_ip_info : step.pipeline.abuseipdb_ip_info.output.report.data,
       abuseipdb_abuse_reports : step.pipeline.abuseipdb_reports.output.reports.data.results,
       virustotal_ip_scan : try(step.pipeline.virustotal.output.ip_report.data, "Must be a valid IPv4 for VirusTotal scan.")
     }

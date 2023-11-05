@@ -5,14 +5,14 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, IP2Location and Vi
 ## Usage
 
 - Add your IP2Location, AbuseIPDB and VirusTotal API keys to `flowpipe.pvars`
-- Run the pipeline and specify the IP address you want to scan, e.g., `flowpipe pipeline run ip_profiler --pipeline-arg ip_address='76.76.21.21'`
-- Below is an example output.
+- Run the pipeline and specify the IP address you want to scan.
+- IPv4 Example: `flowpipe pipeline run ip_profiler --pipeline-arg ip_address='76.76.21.21'`
 
 ```json
 {
   "flowpipe": {
-    "execution_id": "exec_cl1us50cj6rr8j3dbrm0",
-    "pipeline_execution_id": "pexec_cl1us50cj6rr8j3dbrmg",
+    "execution_id": "exec_cl3p1ogcj6rjg7obpe50",
+    "pipeline_execution_id": "pexec_cl3p1ogcj6rjg7obpe5g",
     "status": "finished"
   },
   "ip_profile": {
@@ -24,42 +24,10 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, IP2Location and Vi
         "reporterCountryCode": "LT",
         "reporterCountryName": "Lithuania",
         "reporterId": 84727
-      },
-      {
-        "categories": [4],
-        "comment": "(CT) IP 76.76.21.21 (US/United States/-) found to have 568 connections",
-        "reportedAt": "2023-10-21T04:40:28+00:00",
-        "reporterCountryCode": "LT",
-        "reporterCountryName": "Lithuania",
-        "reporterId": 84727
-      },
-      {
-        "categories": [4],
-        "comment": "(CT) IP 76.76.21.21 (US/United States/-) found to have 610 connections",
-        "reportedAt": "2023-10-21T04:10:17+00:00",
-        "reporterCountryCode": "LT",
-        "reporterCountryName": "Lithuania",
-        "reporterId": 84727
-      },
-      {
-        "categories": [4],
-        "comment": "(CT) IP 76.76.21.21 (US/United States/-) found to have 584 connections",
-        "reportedAt": "2023-10-21T03:40:13+00:00",
-        "reporterCountryCode": "LT",
-        "reporterCountryName": "Lithuania",
-        "reporterId": 84727
-      },
-      {
-        "categories": [4],
-        "comment": "(CT) IP 76.76.21.21 (US/United States/-) found to have 504 connections",
-        "reportedAt": "2023-10-21T03:10:08+00:00",
-        "reporterCountryCode": "LT",
-        "reporterCountryName": "Lithuania",
-        "reporterId": 84727
       }
     ],
     "abuseipdb_ip_info": {
-      "abuseConfidenceScore": 11,
+      "abuseConfidenceScore": 10,
       "countryCode": "US",
       "domain": "vercel.com",
       "hostnames": null,
@@ -94,7 +62,7 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, IP2Location and Vi
         "asn": 16509,
         "continent": "NA",
         "country": "US",
-        "last_analysis_date": 1698948272,
+        "last_analysis_date": 1699188612,
         "last_analysis_results": {
           "0xSI_f33d": {
             "category": "undetected",
@@ -679,15 +647,15 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, IP2Location and Vi
           },
           "version": "V3"
         },
-        "last_https_certificate_date": 1698948574,
-        "last_modification_date": 1698950608,
+        "last_https_certificate_date": 1699188674,
+        "last_modification_date": 1699188674,
         "network": "76.76.21.0/24",
         "regional_internet_registry": "ARIN",
-        "reputation": 1,
+        "reputation": 0,
         "tags": null,
         "total_votes": {
           "harmless": 3,
-          "malicious": 2
+          "malicious": 3
         },
         "whois": "NetRange: 76.76.21.0 - 76.76.21.255\nCIDR: 76.76.21.0/24\nNetName: VERCEL-01\nNetHandle: NET-76-76-21-0-1\nParent: NET76 (NET-76-0-0-0-0)\nNetType: Direct Allocation\nOriginAS: \nOrganization: Vercel, Inc (ZEITI)\nRegDate: 2020-05-08\nUpdated: 2020-06-05\nComment: -----BEGIN CERTIFICATE-----MIIDmzCCAoOgAwIBAgIUYqxVc6t5udbMz0Ys6xC4VTX4NDgwDQYJKoZIhvcNAQELBQAwXTELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAkNBMQ8wDQYDVQQHDAZXYWxudXQxEzARBgNVBAoMClZlcmNlbCBJbmMxGzAZBgkqhkiG9w0BCQEWDG1AdmVyY2VsLmNvbTAeFw0yMDA1MTExMzIxMDJaFw0yMjA1MTExMzIxMDJaMF0xCzAJBgNVBAYTAlVTMQswCQYDVQQIDAJDQTEPMA0GA1UEBwwGV2FsbnV0MRMwEQYDVQQKDApWZXJjZWwgSW5jMRswGQYJKoZIhvcNAQkBFgxtQHZlcmNlbC5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDGZNRvQYOIYbBJHiZAs3VUPlT9OxU3S+zg5gFgEogAM5sCuQC+jOAfTY/RLgy9RFyfqeqrAtggW7AcSxVbywKaoPUrSeO0leksfVIWnUUpvuZvZJeoArlzrw7CjZ2AZirHkbgZpkpoPDOyR6D9nt5pY1uWiP2CF1vV2XIX7lJEwrzgu1Ki0O4a9UXRCHx818OHEJzF9OJfg5iwGuHmSwAQ0tVfOtvHCKMuFRb6wQzzdcI+4GmKIkfYKSQsTEAndDXcI8nDVEJ3lEt1mFA0x/vrFm5u4fzos9nogPGLaoQ1cUqnwFcoTckM0ic2GAuEUUnhLLr3kC+remuVMGN1HuZ/AgMBAAGjUzBRMB0GA1UdDgQWBBS8RvrS4Dyk7FAMmz+ldKyIPsITGzAfBgNVHSMEGDAWgBS8RvrS4Dyk7FAMmz+ldKyIPsITGzAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQC5JPZscR5+q3YMgwLsjCAFY/AbUDJvavT3oy8fyO597Xa9fzBJFXY6qG7b+KYQ8TfEgNGY/AUNU3+h8YG5VyRgaIzC0FANQc2EpxnmBBW+grvLIn+BlKAaFH2LvpG+hc8fUUgGicCKUvKxCyuRZMYxzpnTn4A6PzojbALdVAG1CuicfYvD91yvsBzDimniUehSG7dyWJklwsssT6sHFjqOv/1PLej2NWcE92M1Il27IZwZfOV8urG6yd6FZlGBG+8KZP8IEsMf6OropTRKlikHSvKzsOhAnmE/1J45HDjVFNeco+bZW5iOZiHu2Ov1FMTENrMe0xgjPjI7Ri2rdcU8-----END CERTIFICATE-----\nRef: https://rdap.arin.net/registry/ip/76.76.21.0\nOrgName: Vercel, Inc\nOrgId: ZEITI\nAddress: 340 S LEMON AVE #4133\nCity: Walnut\nStateProv: CA\nPostalCode: 91789\nCountry: US\nRegDate: 2020-03-26\nUpdated: 2020-06-05\nComment: https://vercel.com\nRef: https://rdap.arin.net/registry/entity/ZEITI\nOrgAbuseHandle: ABUSE7926-ARIN\nOrgAbuseName: Abuse \nOrgAbusePhone: +1-415-980-8007 \nOrgAbuseEmail: abuse@vercel.com\nOrgAbuseRef: https://rdap.arin.net/registry/entity/ABUSE7926-ARIN\nOrgTechHandle: MFV2-ARIN\nOrgTechName: Vieira, Matheus Fernandez\nOrgTechPhone: +1-415-980-8007 \nOrgTechEmail: m@vercel.com\nOrgTechRef: https://rdap.arin.net/registry/entity/MFV2-ARIN\n",
         "whois_date": 1696598087
@@ -698,6 +666,52 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, IP2Location and Vi
       },
       "type": "ip_address"
     }
+  }
+}
+```
+
+- IPv6 Example: `flowpipe pipeline run ip_profiler --pipeline-arg ip_address='2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1'`
+
+```json
+{
+  "flowpipe": {
+    "execution_id": "exec_cl3p1r0cj6rjg7obpelg",
+    "pipeline_execution_id": "pexec_cl3p1r0cj6rjg7obpem0",
+    "status": "finished"
+  },
+  "ip_profile": {
+    "abuseipdb_abuse_reports": null,
+    "abuseipdb_ip_info": {
+      "abuseConfidenceScore": 0,
+      "countryCode": "US",
+      "domain": "amazon.com",
+      "hostnames": null,
+      "ipAddress": "2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1",
+      "ipVersion": 6,
+      "isPublic": true,
+      "isTor": false,
+      "isWhitelisted": null,
+      "isp": "Amazon.com Inc.",
+      "lastReportedAt": null,
+      "numDistinctUsers": 0,
+      "totalReports": 0,
+      "usageType": "Data Center/Web Hosting/Transit"
+    },
+    "ip2location_ip_location": {
+      "as": "Amazon.com Inc.",
+      "asn": "14618",
+      "city_name": "Ashburn",
+      "country_code": "US",
+      "country_name": "United States of America",
+      "ip": "2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1",
+      "is_proxy": false,
+      "latitude": 39.039474,
+      "longitude": -77.491809,
+      "region_name": "Virginia",
+      "time_zone": "-04:00",
+      "zip_code": "20147"
+    },
+    "virustotal_ip_scan": "Must be a valid IPv4 for VirusTotal scan."
   }
 }
 ```
