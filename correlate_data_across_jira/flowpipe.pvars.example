@@ -1,0 +1,5 @@
+# Jira api_base_url, token, user_email and project_key
+api_base_url=""
+token=""
+user_email=""
+project_key=""
