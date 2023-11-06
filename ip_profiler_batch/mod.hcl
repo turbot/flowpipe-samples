@@ -1,6 +1,6 @@
 mod "ip_profiler_batch" {
   title       = "IP Profiler Batch"
-  description = "A composite Flowpipe mod that aggregates data from VirusTotal, AbuseIPDB, and IP2Location, offering in-depth and actionable intelligence on IP addresses."
+  description = "A composite Flowpipe mod that aggregates data from VirusTotal, AbuseIPDB, and ReallyFreeGeoIP, offering in-depth and actionable intelligence on IP addresses."
 
   require {
     mod "github.com/turbot/flowpipe-mod-abuseipdb" {
