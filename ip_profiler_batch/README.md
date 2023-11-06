@@ -6,7 +6,7 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, ReallyFreeGeoIP an
 
 - Add your AbuseIPDB and VirusTotal API keys to `flowpipe.pvars`
 - Run the pipeline and specify the IP addresses you want to scan.
-- Example: `flowpipe pipeline run ip_profiler --pipeline-arg ip_address='["2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1", "76.76.21.21"]'`
+- Example: `flowpipe pipeline run ip_profiler --pipeline-arg ip_addresses='["2600:1f18:61c9:6100:42a3:2e94:e60d:1ad1", "76.76.21.21"]'`
 
 ```json
 {
@@ -52,9 +52,7 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, ReallyFreeGeoIP an
     "76.76.21.21": {
       "abuseipdb_abuse_reports": [
         {
-          "categories": [
-            15
-          ],
+          "categories": [15],
           "comment": "(PERMBLOCK) 76.76.21.21 (US/United States/-) has had more than 4 temp blocks",
           "reportedAt": "2023-10-21T05:10:34+00:00",
           "reporterCountryCode": "LT",
@@ -62,9 +60,7 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, ReallyFreeGeoIP an
           "reporterId": 84727
         },
         {
-          "categories": [
-            4
-          ],
+          "categories": [4],
           "comment": "(CT) IP 76.76.21.21 (US/United States/-) found to have 568 connections",
           "reportedAt": "2023-10-21T04:40:28+00:00",
           "reporterCountryCode": "LT",
@@ -72,9 +68,7 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, ReallyFreeGeoIP an
           "reporterId": 84727
         },
         {
-          "categories": [
-            4
-          ],
+          "categories": [4],
           "comment": "(CT) IP 76.76.21.21 (US/United States/-) found to have 610 connections",
           "reportedAt": "2023-10-21T04:10:17+00:00",
           "reporterCountryCode": "LT",
@@ -82,9 +76,7 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, ReallyFreeGeoIP an
           "reporterId": 84727
         },
         {
-          "categories": [
-            4
-          ],
+          "categories": [4],
           "comment": "(CT) IP 76.76.21.21 (US/United States/-) found to have 584 connections",
           "reportedAt": "2023-10-21T03:40:13+00:00",
           "reporterCountryCode": "LT",
@@ -92,9 +84,7 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, ReallyFreeGeoIP an
           "reporterId": 84727
         },
         {
-          "categories": [
-            4
-          ],
+          "categories": [4],
           "comment": "(CT) IP 76.76.21.21 (US/United States/-) found to have 504 connections",
           "reportedAt": "2023-10-21T03:10:08+00:00",
           "reporterCountryCode": "LT",
@@ -690,20 +680,10 @@ A composite Flowpipe mod that aggregates data from AbuseIPDB, ReallyFreeGeoIP an
                 "CA Issuers": "http://r3.i.lencr.org/",
                 "OCSP": "http://r3.o.lencr.org"
               },
-              "certificate_policies": [
-                "2.23.140.1.2.1"
-              ],
-              "extended_key_usage": [
-                "serverAuth",
-                "clientAuth"
-              ],
-              "key_usage": [
-                "digitalSignature",
-                "keyEncipherment"
-              ],
-              "subject_alternative_name": [
-                "no-sni.vercel-infra.com"
-              ],
+              "certificate_policies": ["2.23.140.1.2.1"],
+              "extended_key_usage": ["serverAuth", "clientAuth"],
+              "key_usage": ["digitalSignature", "keyEncipherment"],
+              "subject_alternative_name": ["no-sni.vercel-infra.com"],
               "subject_key_identifier": "60f599129d7a804325e09c12286dca647a2d7eec"
             },
             "issuer": {
