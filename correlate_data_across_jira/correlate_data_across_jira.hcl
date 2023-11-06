@@ -24,47 +24,69 @@ pipeline "correlate_data_across_jira" {
     type        = string
     description = "JQL query for searching issues."
     default     = "project = test-turbot"
+    // default = "project = azuread-user-offboarding"
   }
 
-  step "pipeline" "search_issues_by_JQL" {
-    pipeline = jira.pipeline.search_issues_by_JQL
+  param "summary" {
+    type        = string
+    description = "Summary for the issue."
+    default     = "Summary"
+  }
+
+  param "description" {
+    type        = string
+    description = "Description for the issue."
+    default     = "Description"
+  }
+
+  param "project_key" {
+    type        = string
+    description = "Project key for the new issue to be created."
+    default     = "SBT"
+  }
+
+  step "pipeline" "search_issues_by_jql" {
+    pipeline = jira.pipeline.search_issues_by_jql
     args = {
       api_base_url = param.api_base_url
       token        = param.token
       user_email   = param.user_email
       jql_query    = param.jql_query
     }
+    error {
+      ignore = true
+    }
   }
 
-  output "issues" {
+  output "test" {
     description = "List of issues matching the JQL query."
-    value       = step.pipeline.search_issues_by_JQL.response_body
+    value = !is_error(step.pipeline.search_issues_by_jql.output) ? "pass" : "fail"
   }
-
+  
   // step "pipeline" "update_issue" {
-  //   when = "eq(length(pipeline.search_issues_by_JQL.issues), 1)"
+  //   // if       = length(pipeline.search_issues_by_jql.output.issues.issues) == 1
   //   pipeline = jira.pipeline.update_issue
   //   args = {
   //     api_base_url = param.api_base_url
   //     token        = param.token
   //     user_email   = param.user_email
-  //     issue_id     = pipeline.search_issues_by_JQL.issues[0].id
-  //     issue_key    = pipeline.search_issues_by_JQL.issues[0].key
-  //     summary      = "Updated summary"
-  //     description  = "Updated description"
+  //     issue_id     = pipeline.search_issues_by_jql.output.issues.issues[0].id
+  //     issue_key    = pipeline.search_issues_by_jql.output.issues.issues[0].key
+  //     summary      = param.summary
+  //     description  = param.description
   //   }
   // }
 
-  // step "pipeline" "create_issue" {
-  //   when = "eq(length(pipeline.search_issues_by_JQL.issues), 0)"
+  //   step "pipeline" "create_issue" {
+  //   if = length(step.pipeline.search_issues_by_jql.output.issues.issues) == 0
   //   pipeline = jira.pipeline.create_issue
   //   args = {
   //     api_base_url = param.api_base_url
   //     token        = param.token
   //     user_email   = param.user_email
-  //     project_key  = "TEST"
-  //     summary      = "Created summary"
-  //     description  = "Created description"
+  //     project_key  = param.project_key
+  //     summary      = param.summary
+  //     description  = param.description
   //   }
   // }
 
