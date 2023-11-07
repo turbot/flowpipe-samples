@@ -13,7 +13,7 @@ mod "deactivate_expired_aws_iam_access_keys" {
     }
 
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "*"
+      version = "v0.0.3"
       args = {
         token   = var.slack_token
         channel = var.slack_channel
