@@ -1,3 +1,12 @@
-slack_channel ="test-channel"
-slack_token   ="xoxp-12345-67890"
+# Jira
+api_base_url="https://<company>-turbot.atlassian.net/"
+token="N887JdsfdsfdfHmJBB6B"
+user_email="name@company.com"
+project_key="SBT"
 
+# Azure
+tenant_id="fffgd708-7da0-4cea-abeb-0a4c334d232f"
+client_secret="qme8Q~7JLj5vktm0crpsdsdfJJsdfdsf35sSPxdoMkaNW"
+client_id="0e774c34-1234-46ce-d5gg-72d930c777cf"
+subscription_id="sdfdsfdf-f95f-1234-bbb5-529d4c76659c"
+resource_group="sandbox"

@@ -41,8 +41,12 @@ pipeline "notify_suspend_disable_azuread_account" {
     description = "The AzureAD user object ID or principal name."
   }
 
-  //Jira Setup
+  param "account_enabled" {
+    type        = string
+    description = "User account status."
+  }
 
+  //Jira Setup
   param "token" {
     type        = string
     description = "API access token"
@@ -75,15 +79,6 @@ pipeline "notify_suspend_disable_azuread_account" {
     default     = "Task"
   }
 
-  // param "summary" {
-  //   type        = string
-  //   description = "Issue summary."
-  // }
-
-  // param "description" {
-  //   type        = string
-  //   description = "Issue description."
-  // }
 
   step "pipeline" "get_ad_user" {
     pipeline = azure.pipeline.get_ad_user
@@ -96,16 +91,9 @@ pipeline "notify_suspend_disable_azuread_account" {
     }
   }
 
-  // step "echo" "user" {
-  //   text = try(step.pipeline.get_ad_user, "user error aya")
-  // }
-
-  // step "echo" "principal" {
-  //   text = try(step.pipeline.get_ad_user.output.user.userPrincipalName, "principal error aya")
-  // }
-
   step "pipeline" "create_issue" {
-    pipeline = jira.pipeline.create_issue
+    depends_on = [step.pipeline.get_ad_user]
+    pipeline   = jira.pipeline.create_issue
     args = {
       api_base_url = param.api_base_url
       token        = param.token
@@ -117,14 +105,86 @@ pipeline "notify_suspend_disable_azuread_account" {
     }
   }
 
-  output "issue" {
-    description = "Issue metadata."
-    value       = step.pipeline.create_issue
+  // We need to hold this pipeline execution till the  status is changed to DONE in JIRA??
+  //Alternative
+  step "sleep" "sleep" {
+    depends_on = [step.pipeline.create_issue]
+    duration   = "30s"
+  }
+
+  //Using Trigger
+  // Schedule Trigger
+  // trigger "schedule" "pipeline.get_issue_status" {
+  //   description = "A cron that checks the status of the JIRA issue, if it is approved or not every MON at 9AM UTC."
+  //   schedule    = "0 9 * * *"
+  //   pipeline    = pipeline.get_issue_status
+  // }
+
+  // // Interval Trigger
+  // trigger "interval" "pipeline.get_issue_status" {
+  //   description = "A daily interval job that checks for unencrypted volumes and creates/update a GitHub Issue."
+  //   schedule    = "daily"
+  //   pipeline    = pipeline.get_issue_status
+  // }
+
+  step "pipeline" "get_issue_status" {
+    depends_on = [step.sleep.sleep]
+    pipeline   = jira.pipeline.get_issue_status
+    args = {
+      api_base_url = param.api_base_url
+      token        = param.token
+      user_email   = param.user_email
+      issue_id     = step.pipeline.create_issue.output.issue.id
+    }
+  }
+
+  // step "pipeline" "delete_ad_user" {
+  //   depends_on = [step.pipeline.get_issue_status]
+  //   if       = strcontains(step.pipeline.get_issue_status.output.status, "Approval Done") == true
+  //   pipeline = azure.pipeline.delete_ad_user
+  //   args = {
+  //     tenant_id       = param.tenant_id
+  //     client_secret   = param.client_secret
+  //     client_id       = param.client_id
+  //     subscription_id = param.subscription_id
+  //     user_id         = param.user_id
+  //   }
+
+  // }
+
+  step "pipeline" "ad_user_account_status" {
+    depends_on = [step.pipeline.get_issue_status]
+    if         = strcontains(step.pipeline.get_issue_status.output.status, "Approval Done") == true
+    pipeline   = azure.pipeline.ad_user_account_status
+    args = {
+      tenant_id       = param.tenant_id
+      client_secret   = param.client_secret
+      client_id       = param.client_id
+      subscription_id = param.subscription_id
+      user_id         = param.user_id
+      account_enabled = param.account_enabled
+    }
+
   }
 
   output "user" {
     description = "User info."
     value       = step.pipeline.get_ad_user
   }
+
+  output "issue" {
+    description = "Issue metadata."
+    value       = step.pipeline.create_issue
+  }
+
+  output "issue_status" {
+    description = "Issue info."
+    value       = step.pipeline.get_issue_status.output.status
+  }
+
+  // output "delete_status" {
+  //   description = "Delete info."
+  //   value       = step.pipeline.delete_ad_user.output.stdout
+  // }
 
 }

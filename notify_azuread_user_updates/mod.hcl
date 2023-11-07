@@ -13,7 +13,7 @@ mod "notify_azuread_user_updates" {
       }
     }
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "*"
+      version = "v0.0.3-rc.0"
       args = {
         token        = var.token
         user_email   = var.user_email
