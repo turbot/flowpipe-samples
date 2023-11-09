@@ -65,7 +65,7 @@ pipeline "aws_iam_user_in_groups" {
   }
 
   # If a GitHub issue in found in the above step for a particular user, add a comment to it.
-  step "pipeline" "github_issue_comment" {
+  step "pipeline" "github_comment_issue" {
     for_each = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output.stdout.Groups }
     if       = try((length(each.value)), 1) > 1 && step.pipeline.github_search_issue[each.key].output.issues != null
     pipeline = github.pipeline.create_issue_comment
@@ -104,8 +104,8 @@ pipeline "aws_iam_user_in_groups" {
     value = { for user, issues in step.pipeline.github_search_issue : user => try(issues.output, issues) }
   }
 
-  output "github_issue_comment" {
-    value = { for user, issues in step.pipeline.github_issue_comment : user => try(issues.output, issues) }
+  output "github_comment_issue" {
+    value = { for user, issues in step.pipeline.github_comment_issue : user => try(issues.output, issues) }
   }
 
   output "github_create_issue" {
