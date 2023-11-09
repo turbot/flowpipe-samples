@@ -23,6 +23,7 @@ pipeline "correlate_data_across_jira" {
   param "jql_query" {
     type        = string
     description = "JQL query for searching issues."
+    default     = "project = SBT"
   }
 
   param "project_key" {
@@ -37,7 +38,6 @@ pipeline "correlate_data_across_jira" {
 
   param "assignee_id" {
     type        = string
-    optional    = true
     description = "Assignee id."
   }
 
