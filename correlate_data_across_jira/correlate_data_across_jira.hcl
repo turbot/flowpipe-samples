@@ -23,32 +23,22 @@ pipeline "correlate_data_across_jira" {
   param "jql_query" {
     type        = string
     description = "JQL query for searching issues."
-    // default     = "project = test-turbot"
-    // default     = "project = TUTORIAL"
-  }
-
-  param "summary" {
-    type        = string
-    description = "Summary for the issue."
-    // default     = "Flowpipe Fireworks 2"
-  }
-
-  param "description" {
-    type        = string
-    description = "Description for the issue."
-    // default     = "Description 2"
   }
 
   param "project_key" {
     type        = string
     description = "Project key for the new issue to be created."
-    // default     = "SBT"
   }
 
   param "issue_type" {
     type        = string
     description = "Issue type for the new issue to be created."
-    // default     = "Task"
+  }
+
+  param "assignee_id" {
+    type        = string
+    optional    = true
+    description = "Assignee id."
   }
 
   step "pipeline" "search_issues_by_jql" {
@@ -61,8 +51,26 @@ pipeline "correlate_data_across_jira" {
     }
   }
 
+  step "pipeline" "update_issue" {
+    if = step.pipeline.search_issues_by_jql.output.issues != null
+
+    for_each = step.pipeline.search_issues_by_jql.output.issues == null ? tomap({}) : { for issue in step.pipeline.search_issues_by_jql.output.issues : issue.id => issue }
+
+    pipeline = jira.pipeline.update_issue
+    args = {
+      api_base_url = param.api_base_url
+      token        = param.token
+      user_email   = param.user_email
+      issue_id     = each.key
+      summary      = "This issue is updated by Flowpipe."
+      description  = "This issue is related to issues ${join(", ", [for issue in step.pipeline.search_issues_by_jql.output.issues : "##${issue.id}"])}"
+      priority     = "High"
+      assignee_id  = param.assignee_id
+    }
+  }
+
   step "pipeline" "create_issue" {
-    if       = step.pipeline.search_issues_by_jql.output.count == 0
+    if       = step.pipeline.search_issues_by_jql.output.issues == null
     pipeline = jira.pipeline.create_issue
     args = {
       api_base_url = param.api_base_url
@@ -70,21 +78,10 @@ pipeline "correlate_data_across_jira" {
       issue_type   = param.issue_type
       user_email   = param.user_email
       project_key  = param.project_key
-      summary      = param.summary
-      description  = param.description
-    }
-  }
-
-  step "pipeline" "update_issue" {
-    if       = step.pipeline.search_issues_by_jql.output.count == 1
-    pipeline = jira.pipeline.update_issue
-    args = {
-      api_base_url = param.api_base_url
-      token        = param.token
-      user_email   = param.user_email
-      issue_id     = step.pipeline.search_issues_by_jql.output.issues.issues[0].id
-      summary      = param.summary
-      description  = param.description
+      summary      = "This issue is created by Flowpipe."
+      description  = "This issue is created by Flowpipe since search result was not matching."
+      priority     = "High"
+      assignee_id  = param.assignee_id
     }
   }
 }

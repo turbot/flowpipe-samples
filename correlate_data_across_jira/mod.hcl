@@ -4,7 +4,7 @@ mod "correlate_data_across_jira" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "*"
+      version = "v0.0.4-rc.0"
       args = {
         api_base_url = var.api_base_url
         token        = var.token
