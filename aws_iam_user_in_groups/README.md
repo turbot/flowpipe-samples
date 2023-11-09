@@ -5,7 +5,7 @@ A composite mod that runs a daily cron job at 9 AM UTC to check for AWS IAM user
 ## Usage
 
 - Add your AWS, GitHub API keys to `flowpipe.pvars`
-- Run the pipeline `flowpipe pipeline run aws_iam_user_in_groups`
+- This mod runs a daily cron job using Triggers, but if you wish to run the pipeline manually then use `flowpipe pipeline run aws_iam_user_in_groups`
 
 Example: When a GitHub issue already exists
 
@@ -21,7 +21,7 @@ Example: When a GitHub issue already exists
     "raj": {},
     "venu": {}
   },
-  "github_issue_comment": {
+  "github_comment_issue": {
     "krishna": {},
     "raj": {},
     "venu": {
@@ -133,7 +133,7 @@ Example: When a GitHub issue already exists
       }
     }
   },
-  "github_issue_comment": {
+  "github_comment_issue": {
     "krishna": {},
     "raj": {},
     "venu": {}
