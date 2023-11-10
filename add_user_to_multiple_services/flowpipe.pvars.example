@@ -1,0 +1,5 @@
+github_access_token = "ghpat-MyToken1234"
+github_organization = "NotAReal_Organization"
+
+okta_api_token = "MyToken1234"
+okta_domain    = "https://my-domain.okta.com"
