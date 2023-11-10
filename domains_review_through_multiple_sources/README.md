@@ -1,9 +1,8 @@
-# Send Top "Show HN" Stories From Hacker News
+# Analyze Domains Through Multiple Sources
 
-Send an email every day at 12 PM UTC showing the top "Show HN" stories from Hacker News ordered by score.
+Investigate suspicious domains and identify false positives by leveraging threat intelligence tools, including URLhaus, VirusTotal, and URLScan, to gather more context and respond faster.
 
 ## Usage
 
-- Add your SendGrid API key to `flowpipe.pvars`
-- Run the pipeline and specify `to` and `from`, e.g., `flowpipe pipeline run send_top_show_hn_email --pipeline-arg 'to=foo@example.com' --pipeline-arg 'from=bar@example.com'`
-- You can specify the number of stories with `--pipeline-arg hn_story_count=10`
+- Add your APIVoid, IP2Location, Urlscan and Virustotal API key to `flowpipe.pvars`
+- Run the pipeline and specify ` domain``, e.g.,  `flowpipe pipeline run domains_review_through_multiple_sources --pipeline-arg 'domain=example.com'`

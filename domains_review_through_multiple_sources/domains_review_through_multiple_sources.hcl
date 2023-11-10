@@ -1,6 +1,6 @@
 pipeline "domains_review_through_multiple_sources" {
   title       = "Analyze Domains Through Multiple Sources"
-  description = "A composite Flowpipe mod that analyze data from VirusTotal, Urlscan and other tools"
+  description = "A composite Flowpipe mod that analyze domain from VirusTotal, Urlscan and other tools"
 
   param "virustotal_api_key" {
     type        = string
