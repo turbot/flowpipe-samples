@@ -1,10 +1,10 @@
-mod "notify_azuread_user_updates" {
+mod "offboard_azuread_users" {
   title       = "Jira integration for Azure AD users"
   description = " TO DO."
 
   require {
     mod "github.com/turbot/flowpipe-mod-azure" {
-      version = "*"
+      version = "v0.0.1-rc.1"
       args = {
         subscription_id = var.subscription_id
         tenant_id       = var.tenant_id
@@ -13,7 +13,7 @@ mod "notify_azuread_user_updates" {
       }
     }
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "v0.0.3-rc.0"
+      version = "v0.0.1-rc.1"
       args = {
         token        = var.token
         user_email   = var.user_email
