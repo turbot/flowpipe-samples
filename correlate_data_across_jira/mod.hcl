@@ -9,7 +9,7 @@ mod "correlate_data_across_jira" {
         api_base_url = var.api_base_url
         token        = var.token
         user_email   = var.user_email
-        // project_key  = var.project_key
+        project_key  = var.project_key
       }
     }
   }
