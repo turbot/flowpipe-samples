@@ -1,3 +1,5 @@
+# AWS variables
+
 variable "aws_region" {
   type        = string
   description = "The name of the Region."
@@ -12,6 +14,8 @@ variable "aws_secret_access_key" {
   type        = string
   description = "The secret key used to sign requests."
 }
+
+# Jira variables
 
 variable "token" {
   type        = string
