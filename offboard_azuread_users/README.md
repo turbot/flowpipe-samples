@@ -10,7 +10,7 @@ Suspend, disable and enable accounts in Azure Active Directory through Jira issu
 - Start your Flowpipe server
 - Create the issue for Jira. This step is an independent pipeline to create issue e.g.
   ```
-  flowpipe pipeline run create_user_update_issue  --pipeline-arg user_id=test1@turbotad.onmicrosoft.com --pipeline-arg account_status=Delete
+  flowpipe pipeline run create_user_update_issue  --pipeline-arg user_id=test1@turbotad.onmicrosoft.com --pipeline-arg account_status=delete
 
   flowpipe pipeline run create_user_update_issue  --pipeline-arg user_id=test2@turbotad.onmicrosoft.com --pipeline-arg account_status=disable
 
