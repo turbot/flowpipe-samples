@@ -37,6 +37,11 @@ pipeline "notify_gitlab_project_visibility" {
     description = "Pass false to disable unfurling of media content."
   }
 
+  param "action_public_to_private" {
+    type        = bool
+    description = "Pass true to make unapproved public projects to private."
+  }
+
   step "pipeline" "list_group_projects" {
     pipeline = gitlab.pipeline.list_group_projects
 
@@ -44,6 +49,26 @@ pipeline "notify_gitlab_project_visibility" {
       access_token = param.gitlab_access_token
       group_id     = param.group_id
       visibility   = "public"
+    }
+
+    # throw {
+    #   if      = length(result) == 0
+    #   message = "No Public projects. Exiting the pipeline."
+    # }
+  }
+
+  step "pipeline" "update_project_visibility" {
+    if = param.action_public_to_private == true
+    for_each = {
+      for project in step.pipeline.list_group_projects.output.group_projects : project.name => project
+      if !contains(local.approved_public_projects, project.id)
+    }
+    pipeline = gitlab.pipeline.update_project
+
+    args = {
+      access_token = param.gitlab_access_token
+      visibility   = "private"
+      project_id   = tostring(each.value.id)
     }
   }
 
@@ -55,11 +80,15 @@ pipeline "notify_gitlab_project_visibility" {
       unfurl_links = param.unfurl_links
       unfurl_media = param.unfurl_media
       message      = <<-EOT
+      *Public Projects*:
+      ${join("\n", [for project in step.pipeline.list_group_projects.output.group_projects : format("Project_Id:%s, Project_Name:%s, Namespace:%s, Web_URL:%s, Visibility:%s", tostring(project.id), project.name, project.path_with_namespace, project.web_url, project.visibility)])}
 
-    Unapproved Public Projects:
+      *Approved Public Projects*:
+      ${join("\n", [for project in step.pipeline.list_group_projects.output.group_projects : format("Project_Id:%s, Project_Name:%s, Namespace:%s, Web_URL:%s, Visibility:%s", tostring(project.id), project.name, project.path_with_namespace, project.web_url, project.visibility) if contains(local.approved_public_projects, project.id)])}
 
-    ${join("\n", [for project in step.pipeline.list_group_projects.output.group_projects : format("Project_Id:%s, Project_Name:%s, Namespace:%s, Web_URL:%s, Visibility:%s", tostring(project.id), project.name, project.path_with_namespace, project.web_url, project.visibility) if !contains(local.approved_public_projects, project.id)])}
-    EOT
+      *Projects updated to Private visibility*:
+      ${join("\n", [for project, project_details in step.pipeline.update_project_visibility : format("Project_Id:%s, Project_Name:%s, Namespace:%s, Web_URL:%s, Visibility:%s", tostring(project_details.output.project.id), project_details.output.project.name, project_details.output.project.path_with_namespace, project_details.output.project.web_url, project_details.output.project.visibility)])}
+      EOT
     }
   }
 }
