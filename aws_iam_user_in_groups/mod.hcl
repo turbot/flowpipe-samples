@@ -4,7 +4,7 @@ mod "aws_iam_user_in_groups" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "v0.0.2-dev-samples.3"
+      version = "v0.0.1-rc.1"
       args = {
         region            = var.aws_region
         access_key_id     = var.aws_access_key_id
@@ -12,9 +12,9 @@ mod "aws_iam_user_in_groups" {
       }
     }
     mod "github.com/turbot/flowpipe-mod-github" {
-      version = "*"
+      version = "v0.0.1-rc.1"
       args = {
-        token                = var.github_token
+        access_token         = var.github_token
         repository_full_name = var.github_repository_full_name
       }
     }
