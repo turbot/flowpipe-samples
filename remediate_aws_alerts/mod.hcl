@@ -6,9 +6,9 @@ mod "remediate_aws_alerts" {
     mod "github.com/turbot/flowpipe-mod-aws" {
       version = "*"
       args = {
-        region            = var.aws_region
-        access_key_id     = var.aws_access_key_id
-        secret_access_key = var.aws_secret_access_key
+        region            = var.region
+        access_key_id     = var.access_key_id
+        secret_access_key = var.secret_access_key
       }
     }
 
@@ -18,6 +18,7 @@ mod "remediate_aws_alerts" {
         api_base_url = var.api_base_url
         token        = var.token
         user_email   = var.user_email
+        project_key  = var.project_key
       }
     }
   }
