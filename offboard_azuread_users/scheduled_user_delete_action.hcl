@@ -95,7 +95,7 @@ pipeline "user_delete_action" {
     depends_on = [step.pipeline.list_issues]
 
     // This below condition works with null check
-    for_each = step.pipeline.list_issues.output.issue.issues != null ? { for each_issue in step.pipeline.list_issues.output.issue.issues : each_issue.id => each_issue if strcontains(each_issue.fields.summary, "Delete") && each_issue.fields.status.name == "Approval Done" } : tomap({})
+    for_each = step.pipeline.list_issues.output.issues.issues != null ? { for each_issue in step.pipeline.list_issues.output.issues.issues : each_issue.id => each_issue if strcontains(each_issue.fields.summary, "Delete") && each_issue.fields.status.name == "Approval Done" } : tomap({})
 
 
     pipeline = azure.pipeline.delete_ad_user
@@ -108,11 +108,6 @@ pipeline "user_delete_action" {
     }
 
   }
-
-  // output "list_issues" {
-  //   description = "List issues."
-  //   value       = step.pipeline.list_issues
-  // }
 
   output "account_status" {
     description = "List issues."
