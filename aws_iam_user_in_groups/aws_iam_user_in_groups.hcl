@@ -32,11 +32,11 @@ pipeline "aws_iam_user_in_groups" {
       secret_access_key = var.aws_secret_access_key
     }
 
-    # When there are zero IAM users, the pipeline goes to error. Add when throw is implemented. - TODO
-    # throw {
-    #   if      = result.stdout.Users== null
-    #   message = "There are no IAM Users in the account."
-    # }
+    # When there are zero IAM users, exit the pipeline.
+    throw {
+      if      = result.output.stdout.Users == null
+      message = "There are no IAM Users in the account. Exiting the pipeline."
+    }
   }
 
   # Get the list of AWS IAM Groups for each user
@@ -55,9 +55,9 @@ pipeline "aws_iam_user_in_groups" {
   # If a GitHub issue is already in place, add a comment; otherwise, create a new issue in the following steps.
   step "pipeline" "github_search_issue" {
     for_each = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output.stdout }
-    pipeline = github.pipeline.search_issue
+    pipeline = github.pipeline.search_issues
     args = {
-      token            = param.github_token
+      access_token     = param.github_token
       repository_owner = local.repository_owner
       repository_name  = local.repository_name
       search_value     = "[AWS IAM User in Groups]: User '${each.key}' state:open"
@@ -67,10 +67,10 @@ pipeline "aws_iam_user_in_groups" {
   # If a GitHub issue in found in the above step for a particular user, add a comment to it.
   step "pipeline" "github_comment_issue" {
     for_each = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output.stdout.Groups }
-    if       = try((length(each.value)), 1) > 1 && step.pipeline.github_search_issue[each.key].output.issues != null
+    if       = try(length(each.value), 1) > 1 && step.pipeline.github_search_issue[each.key].output.issues != null
     pipeline = github.pipeline.create_issue_comment
     args = {
-      token            = param.github_token
+      access_token     = param.github_token
       repository_owner = local.repository_owner
       repository_name  = local.repository_name
       issue_number     = step.pipeline.github_search_issue[each.key].output.issues[0].number
@@ -81,10 +81,10 @@ pipeline "aws_iam_user_in_groups" {
   # If a GitHub issue is not found in the github_search_issue step for a particular user, create one.
   step "pipeline" "github_create_issue" {
     for_each = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output.stdout.Groups }
-    if       = try((length(each.value)), 1) > 1 && step.pipeline.github_search_issue[each.key].output.issues == null
+    if       = try(length(each.value), 1) > 1 && step.pipeline.github_search_issue[each.key].output.issues == null
     pipeline = github.pipeline.create_issue
     args = {
-      token            = param.github_token
+      access_token     = param.github_token
       repository_owner = local.repository_owner
       repository_name  = local.repository_name
       issue_title      = "[AWS IAM User in Groups]: User '${each.key}' is assigned with ${length(each.value)} IAM groups."
