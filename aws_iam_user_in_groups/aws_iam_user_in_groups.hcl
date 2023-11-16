@@ -78,6 +78,20 @@ pipeline "aws_iam_user_in_groups" {
     }
   }
 
+  # If a GitHub issue in found for a particular user, but user does not have multiple groups assigned anymore, close the issue.
+  step "pipeline" "github_close_issue" {
+    for_each = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output.stdout.Groups }
+    if       = try((length(each.value)), 1) <= 1 && step.pipeline.github_search_issue[each.key].output.issues != null
+    pipeline = github.pipeline.close_issue
+    args = {
+      token            = param.github_token
+      repository_owner = local.repository_owner
+      repository_name  = local.repository_name
+      issue_number     = step.pipeline.github_search_issue[each.key].output.issues[0].number
+      state_reason     = "COMPLETED"
+    }
+  }
+
   # If a GitHub issue is not found in the github_search_issue step for a particular user, create one.
   step "pipeline" "github_create_issue" {
     for_each = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output.stdout.Groups }
@@ -106,6 +120,10 @@ pipeline "aws_iam_user_in_groups" {
 
   output "github_comment_issue" {
     value = { for user, issues in step.pipeline.github_comment_issue : user => try(issues.output, issues) }
+  }
+
+  output "github_close_issue" {
+    value = { for user, issues in step.pipeline.github_close_issue : user => try(issues.output, issues) }
   }
 
   output "github_create_issue" {
