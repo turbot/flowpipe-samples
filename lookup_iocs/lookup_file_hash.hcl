@@ -26,7 +26,7 @@ pipeline "lookup_file_hash" {
   }
 
   # VirusTotal
-  step "pipeline" "virustotal" {
+  step "pipeline" "virustotal_file_hash_lookup" {
     pipeline = virustotal.pipeline.get_file_analysis
     args = {
       api_key   = param.virustotal_api_key
@@ -35,7 +35,7 @@ pipeline "lookup_file_hash" {
   }
 
   # Urlscan
-  step "pipeline" "urlscan" {
+  step "pipeline" "urlscan_file_hash_lookup" {
     pipeline = urlscan.pipeline.search_scan
     args = {
       api_key    = param.urlscan_api_key
@@ -44,7 +44,7 @@ pipeline "lookup_file_hash" {
   }
 
   # Hybrid Analysis
-  step "http" "hybrid" {
+  step "http" "hybrid_analysis_file_hash_lookup" {
     method = "post"
     url    = "https://www.hybrid-analysis.com/api/v2/search/hash"
 
@@ -65,6 +65,10 @@ pipeline "lookup_file_hash" {
   }
 
   output "lookup_file_hash" {
-    value = step.echo.lookup_file_hash.json
+    value = {
+      virustotal_file_hash_lookup : step.pipeline.virustotal_file_hash_lookup.output.file_analysis.data,
+      urlscan_file_hash_lookup : step.pipeline.urlscan_file_hash_lookup.output.scan_result,
+      hybrid_analysis_file_hash_lookup : step.http.hybrid_analysis_file_hash_lookup.response_body
+    }
   }
 }

@@ -20,7 +20,7 @@ pipeline "lookup_domain" {
   }
 
   # URLhaus
-  step "http" "urlhaus" {
+  step "http" "urlhaus_domain_lookup" {
     method = "post"
     url    = "https://urlhaus-api.abuse.ch/v1/host"
 
@@ -32,7 +32,7 @@ pipeline "lookup_domain" {
   }
 
   # VirusTotal
-  step "pipeline" "virustotal" {
+  step "pipeline" "virustotal_domain_lookup" {
     pipeline = virustotal.pipeline.get_domain
     args = {
       api_key = param.virustotal_api_key
@@ -41,7 +41,7 @@ pipeline "lookup_domain" {
   }
 
   # Urlscan
-  step "pipeline" "urlscan" {
+  step "pipeline" "urlscan_domain_lookup" {
     pipeline = urlscan.pipeline.search_scan
     args = {
       api_key    = param.urlscan_api_key
@@ -50,7 +50,7 @@ pipeline "lookup_domain" {
   }
 
   # Pulsedive
-  step "http" "pulsedive" {
+  step "http" "pulsedive_domain_lookup" {
     method = "post"
     url    = "https://pulsedive.com/api/explore.php?q=${param.domain}"
 
@@ -59,16 +59,12 @@ pipeline "lookup_domain" {
     }
   }
 
-  step "echo" "lookup_domain" {
-    json = {
-      urlhaus_domain_scan : step.http.urlhaus.response_body,
-      virustotal_domain_scan : step.pipeline.virustotal.output.domain_report.data,
-      pulsedive_domain_scan : step.http.pulsedive.response_body,
-      urlscan_domain_scan : step.pipeline.urlscan.output.scan_result
-    }
-  }
-
   output "lookup_domain" {
-    value = step.echo.lookup_domain.json
+    value = {
+      urlhaus_domain_lookup : step.http.urlhaus_domain_lookup.response_body,
+      virustotal_domain_lookup : step.pipeline.virustotal_domain_lookup.output.domain_report.data,
+      pulsedive_domain_lookup : step.http.pulsedive_domain_lookup.response_body,
+      urlscan_domain_lookup : step.pipeline.urlscan_domain_lookup.output.scan_result
+    }
   }
 }

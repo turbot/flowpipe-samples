@@ -20,7 +20,7 @@ pipeline "lookup_email" {
   }
 
   # Hunter
-  step "http" "hunter" {
+  step "http" "hunter_email_verify_status" {
     method = "get"
     url    = "https://api.hunter.io/v2/email-verifier?email=${param.email}&api_key=${param.hunter_api_key}"
 
@@ -30,7 +30,7 @@ pipeline "lookup_email" {
   }
 
   # Kickbox
-  step "http" "kickbox" {
+  step "http" "kickbox_email_verify_status" {
     method = "get"
     url    = "https://api.kickbox.com/v2/verify?email=${param.email}&apikey=${param.kickbox_api_key}"
 
@@ -39,14 +39,10 @@ pipeline "lookup_email" {
     }
   }
 
-  step "echo" "lookup_email" {
-    json = {
-      hunter_email_verify_status : step.http.hunter.response_body.data,
-      kickbox_email_verify_status : step.http.kickbox.response_body,
-    }
-  }
-
   output "lookup_email" {
-    value = step.echo.lookup_email.json
+    value = {
+      hunter_email_verify_status : step.http.hunter.response_body.data,
+      kickbox_email_verify_status : step.http.kickbox.response_body
+    }
   }
 }

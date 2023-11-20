@@ -32,7 +32,7 @@ pipeline "domains_review_through_multiple_sources" {
   }
 
   # URLhaus
-  step "http" "urlhaus" {
+  step "http" "urlhaus_domain_scan" {
     method = "post"
     url    = "https://urlhaus-api.abuse.ch/v1/host"
 
@@ -44,7 +44,7 @@ pipeline "domains_review_through_multiple_sources" {
   }
 
   # VirusTotal
-  step "pipeline" "virustotal" {
+  step "pipeline" "virustotal_domain_scan" {
     pipeline = virustotal.pipeline.get_domain
     args = {
       api_key = param.virustotal_api_key
@@ -53,7 +53,7 @@ pipeline "domains_review_through_multiple_sources" {
   }
 
   # Urlscan
-  step "pipeline" "urlscan" {
+  step "pipeline" "urlscan_domain_scan" {
     pipeline = urlscan.pipeline.search_scan
     args = {
       api_key    = param.urlscan_api_key
@@ -62,7 +62,7 @@ pipeline "domains_review_through_multiple_sources" {
   }
 
   # IP2Location
-  step "pipeline" "ip2location" {
+  step "pipeline" "ip2location_domain_scan" {
     pipeline = ip2location.pipeline.get_whois_info
     args = {
       api_key = param.ip2location_api_key
@@ -71,7 +71,7 @@ pipeline "domains_review_through_multiple_sources" {
   }
 
   # APIVoid
-  step "http" "domain_reputation" {
+  step "http" "apivoid_domain_reputation" {
     method = "get"
     url    = "https://endpoint.apivoid.com/domainbl/v1/pay-as-you-go/?key=${param.apivoid_api_key}&host=${param.domain}"
 
@@ -81,7 +81,7 @@ pipeline "domains_review_through_multiple_sources" {
   }
 
   # dnstwister
-  step "http" "dnstwister_hex" {
+  step "http" "dnstwister_get_hex" {
     method = "get"
     url    = "https://dnstwister.report/api/to_hex/${param.domain}"
 
@@ -92,25 +92,21 @@ pipeline "domains_review_through_multiple_sources" {
 
   step "http" "dnstwister_parked_score" {
     method = "get"
-    url    = "https://dnstwister.report/api/parked/${step.http.dnstwister_hex.response_body.domain_as_hexadecimal}"
+    url    = "https://dnstwister.report/api/parked/${step.http.dnstwister_get_hex.response_body.domain_as_hexadecimal}"
 
     request_headers = {
       Content-Type = "application/json"
     }
   }
 
-  step "echo" "domains_review" {
-    json = {
-      urlhaus_domain_scan : step.http.urlhaus.response_body,
-      virustotal_domain_scan : step.pipeline.virustotal.output.domain_report.data,
-      urlscan_domain_scan : step.pipeline.urlscan.output.scan_result
-      apivoid_domain_reputation : step.http.domain_reputation.response_body.data
+  output "domains_review" {
+    value = {
+      urlhaus_domain_scan : step.http.urlhaus_domain_scan.response_body,
+      virustotal_domain_scan : step.pipeline.virustotal_domain_scan.output.domain_report.data,
+      urlscan_domain_scan : step.pipeline.urlscan_domain_scan.output.scan_result
+      apivoid_domain_reputation : step.http.apivoid_domain_reputation.response_body.data
       domain_age : step.pipeline.ip2location.output.whois_info.domain_age,
       domain_parked_score : step.http.dnstwister_parked_score.response_body
     }
-  }
-
-  output "domains_review" {
-    value = step.echo.domains_review.json
   }
 }

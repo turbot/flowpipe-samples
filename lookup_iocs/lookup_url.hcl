@@ -20,7 +20,7 @@ pipeline "lookup_url" {
   }
 
   # VirusTotal
-  step "pipeline" "virustotal" {
+  step "pipeline" "virustotal_url_lookup" {
     pipeline = virustotal.pipeline.get_url_analysis
     args = {
       api_key = param.virustotal_api_key
@@ -29,7 +29,7 @@ pipeline "lookup_url" {
   }
 
   # APIVoid
-  step "http" "url_reputation" {
+  step "http" "apivoid_url_reputation" {
     method = "get"
     url    = "https://endpoint.apivoid.com/urlrep/v1/pay-as-you-go/?key=${param.apivoid_api_key}&url=${param.url}"
 
@@ -38,14 +38,10 @@ pipeline "lookup_url" {
     }
   }
 
-  step "echo" "lookup_url" {
-    json = {
-      virustotal_url_scan : step.pipeline.virustotal.output.url_analysis.data,
-      apivoid_url_reputation : step.http.url_reputation.response_body.data
-    }
-  }
-
   output "lookup_url" {
-    value = step.echo.lookup_url.json
+    value = {
+      virustotal_url_lookup : step.pipeline.virustotal_url_lookup.output.url_analysis.data,
+      apivoid_url_reputation : step.http.apivoid_url_reputation.response_body.data
+    }
   }
 }

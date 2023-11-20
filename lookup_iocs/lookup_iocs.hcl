@@ -56,7 +56,7 @@ pipeline "lookup_iocs" {
   }
 
   # Domain
-  step "pipeline" "domain" {
+  step "pipeline" "domain_lookup" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "domain" }
     pipeline = pipeline.lookup_domain
     args = {
@@ -67,7 +67,7 @@ pipeline "lookup_iocs" {
   }
 
   # Email
-  step "pipeline" "email" {
+  step "pipeline" "email_lookup" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "email" }
     pipeline = pipeline.lookup_email
     args = {
@@ -78,7 +78,7 @@ pipeline "lookup_iocs" {
   }
 
   # File hash
-  step "pipeline" "file_hash" {
+  step "pipeline" "file_hash_lookup" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "file_hash" }
     pipeline = pipeline.lookup_file_hash
     args = {
@@ -90,7 +90,7 @@ pipeline "lookup_iocs" {
   }
 
   # IP
-  step "pipeline" "ip" {
+  step "pipeline" "ip_lookup" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "ip" }
     pipeline = pipeline.lookup_ip
     args = {
@@ -102,7 +102,7 @@ pipeline "lookup_iocs" {
   }
 
   # URL
-  step "pipeline" "url" {
+  step "pipeline" "url_lookup" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "url" }
     pipeline = pipeline.lookup_url
     args = {
@@ -112,17 +112,13 @@ pipeline "lookup_iocs" {
     }
   }
 
-  step "echo" "lookup_iocs" {
-    json = {
-      domain_scan : step.pipeline.domain.output,
-      email_scan : step.pipeline.email.output,
-      file_hash_scan : step.pipeline.file_hash.output,
-      ip_scan : step.pipeline.ip.output,
-      url_scan : step.pipeline.url.output
-    }
-  }
-
   output "lookup_iocs" {
-    value = step.echo.lookup_iocs.json
+    value = {
+      domain_lookup : step.pipeline.domain_lookup.output,
+      email_lookup : step.pipeline.email_lookup.output,
+      file_hash_lookup : step.pipeline.file_hash_lookup.output,
+      ip_lookup : step.pipeline.ip_lookup.output,
+      url_lookup : step.pipeline.url_lookup.output
+    }
   }
 }

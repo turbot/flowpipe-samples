@@ -68,7 +68,7 @@ pipeline "lookup_ip" {
   }
 
   # IP2Location
-  step "pipeline" "ip2location" {
+  step "pipeline" "ip2location_ip_lookup" {
     pipeline = ip2location.pipeline.get_ip
     args = {
       api_key    = param.ip2location_api_key
@@ -77,7 +77,7 @@ pipeline "lookup_ip" {
   }
 
   # Urlscan
-  step "pipeline" "urlscan" {
+  step "pipeline" "urlscan_ip_lookup" {
     pipeline = urlscan.pipeline.search_scan
     args = {
       api_key    = param.urlscan_api_key
@@ -85,17 +85,12 @@ pipeline "lookup_ip" {
     }
   }
 
-  step "echo" "lookup_ip" {
-    json = {
-      ip2location_ip_location : step.pipeline.ip2location.output.ip_details,
+  output "lookup_ip" {
+    value = {
+      ip2location_ip_lookup : step.pipeline.ip2location_ip_lookup.output.ip_details,
       abuseipdb_ip_info : step.pipeline.abuseipdb_ip_info.output.report.data,
       abuseipdb_abuse_reports : step.pipeline.abuseipdb_reports.output.reports.data.results,
-      urlscan_ip_scan : step.pipeline.urlscan.output.scan_result
-
+      urlscan_ip_lookup : step.pipeline.urlscan_ip_lookup.output.scan_result
     }
-  }
-
-  output "lookup_ip" {
-    value = step.echo.lookup_ip.json
   }
 }
