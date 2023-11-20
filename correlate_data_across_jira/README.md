@@ -1,6 +1,6 @@
 # Correlate Data Across Jira
 
-Search for Jira issues, update the issue if found, and create a new issue if not found.
+This pipeline is responsible for searching Jira issues. If any issues are found, it updates their description, summary, priority, and assignee. In case no issues are found, the pipeline creates a new one.
 
 ## Usage
 
