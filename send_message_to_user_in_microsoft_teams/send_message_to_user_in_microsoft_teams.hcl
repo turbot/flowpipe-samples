@@ -50,19 +50,19 @@ pipeline "send_message_to_user_in_microsoft_teams" {
 
   // If the user_email not found then send team > channel message
 
-  // step "pipeline" "send_channel_message" {
-  //   if       = is_error(step.pipeline.get_user_by_email.output.user)
-  //   pipeline = teams.pipeline.send_channel_message
-  //   args = {
-  //     access_token = param.access_token
-  //     // team_id = param.team_id
-  //     // channel_id = param.channel_id
-  //     team_id    = "a85cca68-5844-40dd-a681-cd31b927a84f"
-  //     channel_id = "19:caba4cc3cb924306b5bb643c5a78d515@thread.tacv2"
-  //     // subject    = param.subject
-  //     message = " ${param.user_email} Not Found."
-  //   }
-  // }
+  step "pipeline" "send_channel_message" {
+    if       = is_error(step.pipeline.get_user_by_email.output.user)
+    pipeline = teams.pipeline.send_channel_message
+    args = {
+      access_token = param.access_token
+      // team_id = param.team_id
+      // channel_id = param.channel_id
+      team_id    = "a85cca68-5844-40dd-a681-cd31b927a84f"
+      channel_id = "19:caba4cc3cb924306b5bb643c5a78d515@thread.tacv2"
+      // subject    = param.subject
+      message = " ${param.user_email} Not Found."
+    }
+  }
 
   // If the user_email found then send team > channel message
 
@@ -81,7 +81,7 @@ pipeline "send_message_to_user_in_microsoft_teams" {
   // }
 
   step "pipeline" "send_email" {
-    if       = step.pipeline.get_user_by_email.output != null
+    if       = step.pipeline.get_user_by_email.output.user != null
     pipeline = teams.pipeline.send_email
     args = {
       access_token = param.access_token
@@ -91,10 +91,9 @@ pipeline "send_message_to_user_in_microsoft_teams" {
     }
   }
 
+  output "testout" {
+    description = "Details."
+    value       = step.pipeline.get_user_by_email.output
+  }
 
-  // output "details" {
-  //   description = "Details."
-  //   value       = step.pipeline.get_user_by_email.output
-
-  // }
 }
