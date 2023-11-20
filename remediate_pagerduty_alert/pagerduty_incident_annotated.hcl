@@ -49,7 +49,7 @@ pipeline "pagerduty_incident_annotated" {
     pipeline   = pagerduty.pipeline.create_note_on_incident
     args = {
       api_key     = param.pagerduty_api_token
-      from        = step.pipeline.get_current_user.output.user.user.email
+      from        = step.pipeline.get_current_user.output.current_user.user.email
       incident_id = param.incident_id
       content     = jsonencode(step.pipeline.geo_lookup_ip)
     }

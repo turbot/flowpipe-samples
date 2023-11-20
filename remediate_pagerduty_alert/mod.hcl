@@ -4,7 +4,7 @@ mod "remediate_pagerduty_alert" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-pagerduty" {
-      version = "v0.0.1-rc.4"
+      version = "v0.0.1-rc.6"
       args = {
         api_key = var.pagerduty_api_token
       }

@@ -1,6 +1,21 @@
+trigger "http" "pagerduty_webhook_incident_events" {
+  title       = "PagerDuty Webhook Incident Events"
+  description = "Webhook for PagerDuty incident events."
+
+  pipeline = pipeline.remediate_pagerduty_alert
+  args = {
+    event = jsondecode(self.request_body).event
+  }
+}
+
 pipeline "remediate_pagerduty_alert" {
   title       = "Remediate PagerDuty Alert"
   description = "Remediate PagerDuty alert."
+
+  param "event" {
+    type        = any
+    description = "PagerDuty event."
+  }
 
   param "pagerduty_api_token" {
     type        = string
@@ -8,43 +23,30 @@ pipeline "remediate_pagerduty_alert" {
     default     = var.pagerduty_api_token
   }
 
-  param "incident_id" {
-    type        = string
-    description = "The ID of the incident."
-  }
-
-  step "pipeline" "list_incident_log_entries" {
-    pipeline = pagerduty.pipeline.list_incident_log_entries
-    args = {
-      api_key     = param.pagerduty_api_token
-      incident_id = param.incident_id
-    }
-  }
-
   step "pipeline" "pagerduty_incident_acknowledged" {
-    if       = step.pipeline.list_incident_log_entries.output.incident_log_entries.log_entries[0].type == "acknowledge_log_entry"
+    if       = param.event.event_type == "incident.acknowledged"
     pipeline = pipeline.pagerduty_incident_acknowledged
     args = {
       api_key     = param.pagerduty_api_token
-      incident_id = param.incident_id
+      incident_id = param.event.data.id
     }
   }
 
   step "pipeline" "pagerduty_incident_triggered" {
-    if       = step.pipeline.list_incident_log_entries.output.incident_log_entries.log_entries[0].type == "trigger_log_entry"
+    if       = param.event.event_type == "incident.triggered"
     pipeline = pipeline.pagerduty_incident_triggered
     args = {
       api_key     = param.pagerduty_api_token
-      incident_id = param.incident_id
+      incident_id = param.event.data.id
     }
   }
 
   step "pipeline" "pagerduty_incident_annotated" {
-    if       = step.pipeline.list_incident_log_entries.output.incident_log_entries.log_entries[0].type == "annotate_log_entry"
+    if       = param.event.event_type == "incident.annotated"
     pipeline = pipeline.pagerduty_incident_annotated
     args = {
       api_key     = param.pagerduty_api_token
-      incident_id = param.incident_id
+      incident_id = param.event.data.incident.id
     }
   }
 
