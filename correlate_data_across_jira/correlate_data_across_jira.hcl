@@ -23,12 +23,12 @@ pipeline "correlate_data_across_jira" {
   param "jql_query" {
     type        = string
     description = "JQL query for searching issues."
-    default     = "project = SBT"
   }
 
   param "project_key" {
     type        = string
     description = "Project key for the new issue to be created."
+    default     = var.project_key
   }
 
   param "issue_type" {
