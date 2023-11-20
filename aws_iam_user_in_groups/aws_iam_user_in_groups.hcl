@@ -107,26 +107,32 @@ pipeline "aws_iam_user_in_groups" {
   }
 
   output "iam_users" {
-    value = step.pipeline.list_iam_users.output.stdout
+    description = "List of all AWS IAM Users."
+    value       = step.pipeline.list_iam_users.output.stdout
   }
 
   output "iam_groups_for_users" {
-    value = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output.stdout }
+    description = "List of all AWS IAM Groups for each user."
+    value       = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output.stdout }
   }
 
   output "github_search_issue" {
-    value = { for user, issues in step.pipeline.github_search_issue : user => try(issues.output, issues) }
+    description = "Search for list of GitHub issues for each user."
+    value       = { for user, issues in step.pipeline.github_search_issue : user => try(issues.output, issues) }
   }
 
   output "github_comment_issue" {
-    value = { for user, issues in step.pipeline.github_comment_issue : user => try(issues.output, issues) }
+    description = "Comment on existing GitHub issue for each user."
+    value       = { for user, issues in step.pipeline.github_comment_issue : user => try(issues.output, issues) }
   }
 
   output "github_close_issue" {
-    value = { for user, issues in step.pipeline.github_close_issue : user => try(issues.output, issues) }
+    description = "Close existing GitHub issue for each user."
+    value       = { for user, issues in step.pipeline.github_close_issue : user => try(issues.output, issues) }
   }
 
   output "github_create_issue" {
-    value = { for user, issue in step.pipeline.github_create_issue : user => try(issue.output, issue) }
+    description = "Create a new GitHub issue for each user."
+    value       = { for user, issue in step.pipeline.github_create_issue : user => try(issue.output, issue) }
   }
 }

@@ -5,6 +5,6 @@ A composite Flowpipe mod that runs every day using Triggers. The mod lists Azure
 ## Usage
 
 - Add your Azure credentials (Tenant ID, Client secret, Client ID and Subscription ID, Resource group) and Zendesk credentials (api_token, subdomain and user_email) to `flowpipe.pvars`
-- Run the pipeline using `flowpipe pipeline run deallocate_and_delete_unapproved_azure_vms.hcl`
+- This mod runs a daily cron job using Triggers, but if you wish to run the pipeline manually then run the pipeline using `flowpipe pipeline run deallocate_and_delete_unapproved_azure_vms`
 
 ![flowpipe_pipeline_run](flowpipe_pipeline_run.png)

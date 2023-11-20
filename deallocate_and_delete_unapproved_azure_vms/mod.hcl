@@ -4,7 +4,7 @@ mod "deallocate_and_delete_unapproved_azure_vms" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-azure" {
-      version = "v0.0.1-rc.2"
+      version = "v0.0.1-rc.3"
       args = {
         subscription_id = var.subscription_id
         tenant_id       = var.tenant_id

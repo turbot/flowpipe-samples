@@ -13,7 +13,7 @@ mod "ip_profiler" {
       version = "v0.0.1-rc.1"
     }
     mod "github.com/turbot/flowpipe-mod-virustotal" {
-      version = "v0.0.1-rc.2"
+      version = "v0.0.1-rc.3"
       args = {
         api_key = var.virustotal_api_key
       }
