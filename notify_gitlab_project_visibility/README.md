@@ -9,3 +9,5 @@ Notify a Slack channel with GitLab Public Projects of a group. Optionally, updat
 - Start your Flowpipe server
 - Run the pipeline and specify `group_id` e.g., `flowpipe pipeline run notify_gitlab_project_visibility --pipeline-arg group_id=77637670`
 - You can update the public projects to private with `--pipeline-arg action_public_to_private=true`
+
+![flowpipe_pipeline_run](flowpipe_pipeline_run.png)

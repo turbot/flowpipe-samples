@@ -91,4 +91,20 @@ pipeline "notify_gitlab_project_visibility" {
       EOT
     }
   }
+
+  output "public_projects" {
+    description = "List of all public projects in the group."
+    value       = [for project in step.pipeline.list_group_projects.output.group_projects : format("Project_Id:%s, Project_Name:%s, Namespace:%s, Web_URL:%s, Visibility:%s", tostring(project.id), project.name, project.path_with_namespace, project.web_url, project.visibility)]
+  }
+
+  output "approved_public_project_ids" {
+    description = "List of Approved public project Ids in the group."
+    value       = [for project in step.pipeline.list_group_projects.output.group_projects : format("Project_Id:%s, Project_Name:%s, Namespace:%s, Web_URL:%s, Visibility:%s", tostring(project.id), project.name, project.path_with_namespace, project.web_url, project.visibility) if contains(local.approved_public_projects, project.id)]
+  }
+
+  output "updated_projects" {
+    description = "List of Projects that are updated from Public to Private visibility."
+    value       = [for project, project_details in step.pipeline.update_project_visibility : format("Project_Id:%s, Project_Name:%s, Namespace:%s, Web_URL:%s, Visibility:%s", tostring(project_details.output.project.id), project_details.output.project.name, project_details.output.project.path_with_namespace, project_details.output.project.web_url, project_details.output.project.visibility)]
+  }
+
 }

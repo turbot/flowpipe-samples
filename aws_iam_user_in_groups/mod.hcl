@@ -4,7 +4,7 @@ mod "aws_iam_user_in_groups" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "v0.0.1-rc.1"
+      version = "v0.0.1-rc.2"
       args = {
         region            = var.aws_region
         access_key_id     = var.aws_access_key_id
