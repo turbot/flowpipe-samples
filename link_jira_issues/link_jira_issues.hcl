@@ -1,6 +1,6 @@
-pipeline "correlate_data_across_jira" {
-  title       = "Correlate data across Jira"
-  description = "Search for Jira issues, update issue if found, create a jira issue if not found."
+pipeline "link_jira_issues" {
+  title       = "Link Issues Across Jira"
+  description = "Search for Jira issues, update description, summary, priority, and assignee in an issue if found, create a jira issue if not found."
 
   param "api_base_url" {
     type        = string
