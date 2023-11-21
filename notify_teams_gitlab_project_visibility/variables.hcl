@@ -6,16 +6,14 @@ variable "gitlab_access_token" {
   #sensitive  = true
 }
 
-variable "slack_token" {
-  description = "Slack app token used to authenticate to your Slack workspace."
+variable "teams_access_token" {
+  description = "The Microsoft personal security access_token to authenticate to the Microsoft graph APIs."
+  type        = string
   # TODO: Add once supported
   #sensitive  = true
-  type = string
 }
 
-variable "slack_channel" {
-  description = "Encoded ID or name of the Slack channel to send the message. Encoded ID is recommended. Examples: C1234567890, general, random"
-  # TODO: Add once supported
-  #sensitive  = true
-  type = string
+variable "team_id" {
+  description = "The unique identifier of the Team."
+  type        = string
 }
