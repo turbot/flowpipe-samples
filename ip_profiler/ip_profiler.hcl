@@ -20,25 +20,25 @@ pipeline "ip_profiler" {
   }
 
   param "max_age_in_days" {
-    type    = number
-    default = 30
+    type        = number
+    default     = 30
     description = "Maximum age in days for the AbuseIPDB reports to retrieve. Defaults to 30 days."
   }
 
   param "page" {
-    type    = number
-    default = 1
+    type        = number
+    default     = 1
     description = "The page number of results to retrieve. Defaults to page 1."
   }
 
   param "per_page" {
-    type    = number
-    default = 25
+    type        = number
+    default     = 25
     description = "The number of reports per page. Defaults to 25 reports per page."
   }
 
   # Really Free Geo IP
-  step "pipeline" "reallyfreegeoip" {
+  step "pipeline" "reallyfreegeoip_check_ip" {
     for_each = { for ip in param.ip_addresses : ip => ip }
     pipeline = reallyfreegeoip.pipeline.check_ip
     args = {
@@ -70,11 +70,11 @@ pipeline "ip_profiler" {
   }
 
   # VirusTotal
-  step "pipeline" "virustotal" {
+  step "pipeline" "virustotal_get_ip_address_report" {
     # virustotal works only for ipv4
     for_each = { for ip in param.ip_addresses : ip => ip }
     if       = can(regex("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", each.value)) == true
-    pipeline = virustotal.pipeline.get_ip_address
+    pipeline = virustotal.pipeline.get_ip_address_report
     args = {
       api_key    = param.virustotal_api_key
       ip_address = each.value
@@ -84,14 +84,15 @@ pipeline "ip_profiler" {
   step "echo" "ip_profile" {
     for_each = { for ip in param.ip_addresses : ip => ip }
     json = {
-      reallyfreegeoip_ip_location : step.pipeline.reallyfreegeoip[each.value].output.report,
+      reallyfreegeoip_ip_location : step.pipeline.reallyfreegeoip_check_ip[each.value].output.report,
       abuseipdb_ip_info : step.pipeline.abuseipdb_ip_info[each.value].output.report.data,
       abuseipdb_abuse_reports : step.pipeline.abuseipdb_reports[each.value].output.reports.data.results,
-      virustotal_ip_scan : try(step.pipeline.virustotal[each.value].output.ip_report.data, "Must be a valid IPv4 for VirusTotal scan.")
+      virustotal_ip_scan : try(step.pipeline.virustotal_get_ip_address_report[each.value].output.ip_report.data, "Must be a valid IPv4 for VirusTotal scan.")
     }
   }
 
   output "ip_profile" {
-    value = { for ip, details in step.echo.ip_profile : ip => details.json }
+    description = "IP Profile"
+    value       = { for ip, details in step.echo.ip_profile : ip => details.json }
   }
 }
