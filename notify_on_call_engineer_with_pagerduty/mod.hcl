@@ -1,6 +1,6 @@
 mod "notify_on_call_engineer_with_pagerduty" {
   title       = "Notify On-Call Engineer With PagerDuty"
-  description = "Email an on-call engineer with PagerDuty."
+  description = "Notify an on-call engineer with PagerDuty."
 
   require {
     mod "github.com/turbot/flowpipe-mod-pagerduty" {
