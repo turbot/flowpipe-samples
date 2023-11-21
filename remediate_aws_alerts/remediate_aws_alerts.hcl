@@ -60,8 +60,8 @@ pipeline "remediate_aws_alerts" {
 
   step "pipeline" "create_block_s3_public_access_issue" {
     depends_on = [step.pipeline.get_guardduty_finding]
-    for_each = step.pipeline.get_guardduty_finding.output.stdout != null ? { for each_finding in step.pipeline.get_guardduty_finding.output.stdout.Findings : each_finding.Id => each_finding if strcontains(each_finding.Description, "Amazon S3 Block Public Access was disabled for S3 bucket")} : tomap({})
-    pipeline = jira.pipeline.create_issue
+    for_each   = step.pipeline.get_guardduty_finding.output.stdout != null ? { for each_finding in step.pipeline.get_guardduty_finding.output.stdout.Findings : each_finding.Id => each_finding if strcontains(each_finding.Description, "Amazon S3 Block Public Access was disabled for S3 bucket") } : tomap({})
+    pipeline   = jira.pipeline.create_issue
     args = {
       api_base_url = param.api_base_url
       token        = param.token
@@ -71,6 +71,8 @@ pipeline "remediate_aws_alerts" {
       issue_type   = param.issue_type
     }
   }
+
+// TO DO
 
   // step "pipeline" "create_set_new_security_group_issue" {
   //   pipeline = jira.pipeline.create_issue
@@ -84,27 +86,30 @@ pipeline "remediate_aws_alerts" {
   //   }
   // }
 
-  // step "pipeline" "create_dissociate_iam_instance_profile_issue" {
-  //   pipeline = jira.pipeline.create_issue
-  //   args = {
-  //     api_base_url = param.api_base_url
-  //     token        = param.token
-  //     user_email   = param.user_email
-  //     project_key  = param.project_key
-  //     summary      = "Dissociate i-0834b6dc568c4d381 IAM instance profile from."
-  //     issue_type   = param.issue_type
-  //   }
-  // }
+  step "pipeline" "create_dissociate_iam_instance_profile_issue" {
+  depends_on = [step.pipeline.get_guardduty_finding]
+  for_each   = step.pipeline.get_guardduty_finding.output.stdout != null ? { for each_finding in step.pipeline.get_guardduty_finding.output.stdout.Findings : each_finding.Id => each_finding if strcontains(each_finding.Description, "Credentials created exclusively for an EC2 instance using instance role") } : tomap({})
+  pipeline   = jira.pipeline.create_issue
+    args = {
+      api_base_url = param.api_base_url
+      token        = param.token
+      user_email   = param.user_email
+      project_key  = param.project_key
+      summary      = "Disasscociate ${each.value.Resource.InstanceDetails.InstanceId} IAM role."
+      issue_type   = param.issue_type
+    }
+  }
 
   output "block_s3_public_access_issue" {
     value = step.pipeline.create_block_s3_public_access_issue
   }
 
+// TO DO
   // output "set_new_security_group_issue" {
   //   value = step.pipeline.create_set_new_security_group_issue
   // }
 
-  // output "dissociate_iam_instance_profile_issue" {
-  //   value = step.pipeline.create_dissociate_iam_instance_profile_issue
-  // }
+  output "dissociate_iam_instance_profile_issue" {
+    value = step.pipeline.create_dissociate_iam_instance_profile_issue
+  }
 }
