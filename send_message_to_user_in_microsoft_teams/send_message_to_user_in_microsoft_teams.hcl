@@ -1,8 +1,7 @@
-// flowpipe pipeline run send_message_to_user_in_microsoft_teams -host http://localhost:7103 --arg subject="IMP MAIL" --arg content="CONTENT" --arg user_email="test11@turbotoffice.onmicrosoft.com"
 
 pipeline "send_message_to_user_in_microsoft_teams" {
-  title       = "Send Mail to specific Teams User"
-  description = "Send an email to Teams user."
+  title       = "Send Mail to Specific Teams User"
+  description = "Send an email to specific Team user and communicate to Team with a an update messge."
 
   param "access_token" {
     type        = string
@@ -35,6 +34,7 @@ pipeline "send_message_to_user_in_microsoft_teams" {
     description = "The unique identifier for the channel."
   }
 
+  // Check if the user exists in Teams by email-id
   step "pipeline" "get_user_by_email" {
     pipeline = teams.pipeline.get_user_by_email
     args = {
@@ -53,17 +53,22 @@ pipeline "send_message_to_user_in_microsoft_teams" {
     // }
   }
 
-  // step "echo" "lookup" {
-  //   text = step.pipeline.get_user_by_email
-  // }
+  // Check the user exists by matching userId in specified team_id
+  step "pipeline" "list_team_members" {
+    depends_on = [step.pipeline.get_user_by_email]
+    if         = step.pipeline.get_user_by_email.output.user.userPrincipalName != null
+    pipeline   = teams.pipeline.list_team_members
+    args = {
+      access_token = param.access_token
+      team_id      = param.team_id
+    }
+  }
 
-  // output "lookup_details" {
-  //   description = "Lookup details."
-  //   value       = step.echo.lookup
-  // }
-
+  // Send email when finds the userId match for the provided email-id
   step "pipeline" "send_email" {
     depends_on = [step.pipeline.get_user_by_email]
+    for_each   = { for user in step.pipeline.list_team_members.output.members.value : user.userId => user }
+    if         = step.pipeline.get_user_by_email.output.user.id == each.key
     pipeline   = teams.pipeline.send_email
     args = {
       access_token = param.access_token
@@ -88,11 +93,9 @@ pipeline "send_message_to_user_in_microsoft_teams" {
   //   }
   // }
 
-  // If the user_email found then send team > channel message
-
+  // Update specific team > channel with a message that mail is communicated
   step "pipeline" "send_channel_message" {
     depends_on = [step.pipeline.send_email]
-    if         = step.pipeline.get_user_by_email != null
     pipeline   = teams.pipeline.send_channel_message
     args = {
       access_token = param.access_token
@@ -100,12 +103,6 @@ pipeline "send_message_to_user_in_microsoft_teams" {
       channel_id   = param.channel_id
       message      = "${step.pipeline.get_user_by_email.output.user.displayName} with email-id as ${step.pipeline.get_user_by_email.output.user.userPrincipalName} is communicated."
     }
-  }
-
-
-  output "testout" {
-    description = "Details."
-    value       = step.pipeline.get_user_by_email.output
   }
 
 }
