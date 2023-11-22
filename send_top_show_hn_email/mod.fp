@@ -4,7 +4,7 @@ mod "send_top_show_hn_email" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-sendgrid" {
-      version = "*"
+      version = "0.0.1-rc.1"
       args = {
         api_key = var.sendgrid_api_key
       }
