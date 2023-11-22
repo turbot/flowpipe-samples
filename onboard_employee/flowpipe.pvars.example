@@ -1,0 +1,15 @@
+# Employee details
+employee_email ="johnd@example.org"
+employee_name ="John Doe"
+
+# GitHub token
+github_access_token         ="ghpat-NotAReal_Token"
+github_repository_full_name ="turbot/steampipe"
+
+# GitLab personal, project, or group access token
+gitlab_access_token="glpat-NotAReal_Token"
+
+# Zendesk token
+zendesk_api_token="my-token"
+zendesk_subdomain="my-subdomain"
+zendesk_user_email="my@email.here"
