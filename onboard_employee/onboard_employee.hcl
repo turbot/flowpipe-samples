@@ -69,9 +69,9 @@ pipeline "onboard_employee" {
 
   # Gitlab
   param "gitlab_access_token" {
-    type = string
-    # description = local.access_token_param_description
-    default = var.gitlab_access_token
+    type        = string
+    description = "GitLab personal, project, or group access token to authenticate to the API. Example: glpat-ABC123_456-789."
+    default     = var.gitlab_access_token
   }
 
   param "gitlab_group_id" {
@@ -129,15 +129,8 @@ pipeline "onboard_employee" {
     }
   }
 
-  output "github_invitation" {
-    value = contains(param.tools_needed, "github") ? step.pipeline.github_create_organization_invitation.output.invitation : null
-  }
-
-  output "zendesk_user" {
-    value = contains(param.tools_needed, "zendesk") ? step.pipeline.zendesk_create_user.output.user : null
-  }
-
   output "onboard_employee" {
+    description = "Onboard Employee details."
     value = {
       github  = contains(param.tools_needed, "github") ? step.pipeline.github_create_organization_invitation.output.invitation : null
       gitlab  = contains(param.tools_needed, "gitlab") ? step.pipeline.gitlab_create_group_invitation.output.invitation : null
@@ -151,9 +144,9 @@ pipeline "create_group_invitation" {
   description = "Adds a new member."
 
   param "access_token" {
-    type = string
-    # description = local.access_token_param_description
-    default = var.gitlab_access_token
+    type        = string
+    description = "GitLab personal, project, or group access token to authenticate to the API. Example: glpat-ABC123_456-789."
+    default     = var.gitlab_access_token
   }
 
   param "group_id" {
