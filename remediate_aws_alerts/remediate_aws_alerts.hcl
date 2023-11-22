@@ -1,3 +1,23 @@
+trigger "http" "remediate_aws_alerts" {
+  title       = "PagerDuty Webhook Incident Events"
+  description = "Webhook for PagerDuty incident events."
+
+  pipeline = pipeline.remediate_aws_alerts_test
+  args = {
+    alert = jsondecode(self.request_body).Message
+  }
+}
+pipeline "remediate_aws_alerts_test" {
+  param "alert" {
+    type = any
+  }
+  output "flowpipe_123" {
+    value = try(param.alert.type,"qwerty")
+  }
+  output "flowpipe_aws_t" {
+    value = param.alert.type == "Policy:S3/BucketBlockPublicAccessDisabled"? "mil gaya" : "nahi mila"
+  }
+}
 pipeline "remediate_aws_alerts" {
 
   param "issue_type" {
@@ -60,7 +80,7 @@ pipeline "remediate_aws_alerts" {
 
   step "pipeline" "create_block_s3_public_access_issue" {
     depends_on = [step.pipeline.get_guardduty_finding]
-    for_each   = step.pipeline.get_guardduty_finding.output.stdout != null ? { for each_finding in step.pipeline.get_guardduty_finding.output.stdout.Findings : each_finding.Id => each_finding if strcontains(each_finding.Description, "Amazon S3 Block Public Access was disabled for S3 bucket") } : tomap({})
+    // for_each   = step.pipeline.get_guardduty_finding.output.stdout != null ? { for each_finding in step.pipeline.get_guardduty_finding.output.stdout.Findings : each_finding.Id => each_finding if strcontains(each_finding.Description, "Amazon S3 Block Public Access was disabled for S3 bucket") } : tomap({})
     pipeline   = jira.pipeline.create_issue
     args = {
       api_base_url = param.api_base_url
@@ -72,6 +92,23 @@ pipeline "remediate_aws_alerts" {
     }
   }
 
+step "pipeline" "block_s3_public_access" {
+  depends_on = [step.pipeline.create_block_s3_public_access_issue]
+  // pipeline   = pipeline.block_s3_public_access
+}
+
+  // step "pipeline" "create_set_new_security_group_issue" {
+  //   pipeline = jira.pipeline.create_issue
+  //   args = {
+  //     api_base_url = param.api_base_url
+  //     token        = param.token
+  //     user_email   = param.user_email
+  //     project_key  = param.project_key
+  //     summary      = "Update i-0834b6dc568c4d381 with a new security group."
+  //     issue_type   = param.issue_type
+  //   }
+  // 
+// }
 // TO DO
 
   // step "pipeline" "create_set_new_security_group_issue" {

@@ -1,10 +1,10 @@
 //  Schedule Trigger
-trigger "schedule" "schedule_block_s3_public_access" {
-  description = "A cron that checks xxxxx."
-  schedule    = "* * * * *"
-  // schedule    = "*/5 * * * *" // Run every 5 min
-  pipeline = pipeline.block_s3_public_access
-}
+// trigger "schedule" "schedule_block_s3_public_access" {
+//   description = "A cron that checks xxxxx."
+//   schedule    = "* * * * *"
+//   // schedule    = "*/5 * * * *" // Run every 5 min
+//   pipeline = pipeline.block_s3_public_access
+// }
 
 pipeline "block_s3_public_access" {
 
