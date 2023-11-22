@@ -7,11 +7,13 @@ pipeline "block_s3_public_access" {
     # sensitive  = true
     default = var.token
   }
+
   param "region" {
     type        = string
     description = "AWS region."
     default     = var.region
   }
+
   param "access_key_id" {
     type        = string
     description = "AWS access key id."
