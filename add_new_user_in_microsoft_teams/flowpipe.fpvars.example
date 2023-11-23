@@ -1,4 +1,6 @@
-apivoid_api_key=<APIVoid_API_Key>
-ip2location_api_key=<IP2Location_API_Key>
-urlscan_api_key=<Urlscan_API_Key>
-virustotal_api_key=<Virustotal_API_Key>
+teams_access_token=<Teams_Access_Token>
+team_id=<Team_ID>
+jira_token=<JIRA_Token>
+jira_user_email=<JIRA_User_Email>
+jira_api_base_url=<JIRA_API_Base_URL>
+jira_project_key=<JIRA_Project_Key>
