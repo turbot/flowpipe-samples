@@ -4,7 +4,7 @@ pipeline "local_csv_values_to_json" {
 
   # Using local CSV values
   step "transform" "local_csv_values_to_json" {
-    value = csvdecode(local.csv_data)
+    value = jsonencode(csvdecode(local.csv_data))
   }
 
   output "local_csv_values_to_json" {

@@ -10,16 +10,11 @@ pipeline "local_csv_file_to_json" {
 
   # Using a local file
   step "transform" "local_csv_file_to_json" {
-    value = file("${param.local_csv_file_path}")
+    value = jsonencode(csvdecode(file("${param.local_csv_file_path}")))
   }
 
   output "local_csv_file_to_json" {
-    value = csvdecode(step.transform.local_csv_file_to_json.value)
+    value = step.transform.local_csv_file_to_json.value
   }
 
-
 }
-
-
-
-
