@@ -1,6 +1,6 @@
-mod "add_new_user_in_microsoft_teams" {
-  title       = "Add New User in Microsoft Teams"
-  description = "Add a new user in Microsoft Teams."
+mod "add_new_user_in_microsoft_office_365" {
+  title       = "Add New User in Microsoft Office 365"
+  description = "Add a new user in Microsoft Office 365."
 
   require {
     mod "github.com/turbot/flowpipe-mod-teams" {
