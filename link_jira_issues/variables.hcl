@@ -10,7 +10,7 @@ variable "jira_user_email" {
   description = "Email-id of the user."
 }
 
-variable "api_base_url" {
+variable "jira_api_base_url" {
   type        = string
   description = "API base URL."
 }
