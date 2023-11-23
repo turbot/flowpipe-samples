@@ -1,14 +1,14 @@
-trigger "http" "remediate_aws_alerts" {
+trigger "http" "remediate_aws_guardduty_alerts" {
   title       = "Guard Duty Findings Webhook Events"
   description = "Webhook for Guard Duty Findings events."
 
-  pipeline = pipeline.remediate_aws_alerts
+  pipeline = pipeline.remediate_aws_guardduty_alerts
   args = {
     alert = jsondecode(self.request_body).Message
   }
 }
 
-pipeline "remediate_aws_alerts" {
+pipeline "remediate_aws_guardduty_alerts" {
 
   param "issue_type" {
     type        = string
@@ -17,7 +17,7 @@ pipeline "remediate_aws_alerts" {
   }
 
   param "alert" {
-    type    = any
+    type = any
   }
 
   param "api_base_url" {

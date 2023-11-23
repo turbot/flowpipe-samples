@@ -1,6 +1,6 @@
 mod "remediate_aws_guardduty_alerts" {
   title       = "Remediate AWS GuardDuty Alerts"
-  description = "Leverage GuardDuty to enrich AWS alerts, proactively respond to threats by isolating new connections, and manage security incidents seamlessly in Jira while reviewing and reapplying access restrictions."
+  description = "Remediate AWS GuardDuty Alerts pipeline responds to AWS GuardDuty alerts by creating Jira issues and executing remediation actions, such as blocking public access to S3 buckets or disassociating IAM roles from instances."
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
