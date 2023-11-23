@@ -1,5 +1,5 @@
-mod "remediate_aws_alerts" {
-  title       = "Enhancing AWS Security Posture with GuardDuty and Jira Integration"
+mod "remediate_aws_guardduty_alerts" {
+  title       = "Remediate AWS GuardDuty Alerts"
   description = "Leverage GuardDuty to enrich AWS alerts, proactively respond to threats by isolating new connections, and manage security incidents seamlessly in Jira while reviewing and reapplying access restrictions."
 
   require {

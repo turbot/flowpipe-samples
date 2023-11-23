@@ -4,6 +4,6 @@ token=""
 user_email=""
 project_key=""
 
-aws_region = "us-east-1"
-aws_access_key_id = "YourAccessKeyID"
+aws_region            = "us-east-1"
+aws_access_key_id     = "YourAccessKeyID"
 aws_secret_access_key = "YourSecretAccessKey"
