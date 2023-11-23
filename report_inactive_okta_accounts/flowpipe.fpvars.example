@@ -1,2 +1,3 @@
 api_token="00r0VvI2caEy5ocvBdsfsdfsdwPAosEoN0dzPK4"
 okta_domain="https://dev-1234566-admin.okta.com"
+inactive_hours=720

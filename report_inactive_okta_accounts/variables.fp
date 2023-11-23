@@ -36,3 +36,8 @@ variable "issue_type" {
   type        = string
   description = "Issue type."
 }
+
+variable "inactive_hours" {
+  description = "Number of hours the user is inactive since current timestamp."
+  type        = number
+}

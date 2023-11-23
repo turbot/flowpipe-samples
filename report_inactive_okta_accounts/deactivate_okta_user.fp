@@ -1,3 +1,10 @@
+//  Schedule Trigger
+trigger "schedule" "scheduled_user_deactivate_action" {
+  description = "A cron that checks inactive Okta user and initiates deactivation."
+  schedule    = "*/5 * * * *" // Run every 5 min
+  pipeline    = pipeline.deactivate_okta_accounts
+}
+
 pipeline "deactivate_okta_accounts" {
   title       = "Report on Inactive Okta Accounts and Deactivate"
   description = "Routinely scan Okta environments for potential inactive accounts and deactivate accounts."
@@ -17,6 +24,7 @@ pipeline "deactivate_okta_accounts" {
   param "inactive_hours" {
     description = "Number of hours the user is inactive since current timestamp."
     type        = number
+    default     = var.inactive_hours
   }
 
   //Jira Setup
@@ -27,12 +35,6 @@ pipeline "deactivate_okta_accounts" {
     # sensitive  = true
     default = var.token
   }
-
-  // param "user_email" {
-  //   type        = string
-  //   description = "Email-id of the user."
-  //   default     = var.user_email
-  // }
 
   param "api_base_url" {
     type        = string
@@ -62,7 +64,7 @@ pipeline "deactivate_okta_accounts" {
   step "pipeline" "deactivate_inactive_users" {
     depends_on = [step.pipeline.list_users]
     for_each = { for user in step.pipeline.list_users.output.users : user.id => user
-    if user.status == "ACTIVE" && ((timecmp(user.lastLogin, timeadd(timestamp(), "-${param.inactive_hours}m"))) < 0) }
+    if user.status == "ACTIVE" && ((timecmp(user.lastLogin, timeadd(timestamp(), "-${param.inactive_hours}h"))) < 0) }
     pipeline = okta.pipeline.deactivate_user_synchronously
     args = {
       api_token = param.api_token
@@ -74,7 +76,7 @@ pipeline "deactivate_okta_accounts" {
   step "pipeline" "create_jira_issue" {
     depends_on = [step.pipeline.deactivate_inactive_users]
     for_each = { for user in step.pipeline.list_users.output.users : user.id => user
-    if user.status == "ACTIVE" && ((timecmp(user.lastLogin, timeadd(timestamp(), "-${param.inactive_hours}m"))) < 0) }
+    if user.status == "ACTIVE" && ((timecmp(user.lastLogin, timeadd(timestamp(), "-${param.inactive_hours}h"))) < 0) }
     pipeline = jira.pipeline.create_issue
 
     args = {
@@ -89,7 +91,7 @@ pipeline "deactivate_okta_accounts" {
 
   step "echo" "condition_info" {
     for_each = { for user in step.pipeline.list_users.output.users : user.id => user }
-    text     = "${timecmp(each.value.lastLogin, timeadd(timestamp(), "-${param.inactive_hours}m"))} user ${each.value.profile.email} lastlogin ${each.value.lastLogin} status ${each.value.status}"
+    text     = "${timecmp(each.value.lastLogin, timeadd(timestamp(), "-${param.inactive_hours}h"))} user ${each.value.profile.email} lastlogin ${each.value.lastLogin} status ${each.value.status}"
   }
 
   output "jira_issue" {
