@@ -23,7 +23,6 @@ pipeline "link_jira_issues" {
   param "jql_query" {
     type        = string
     description = "JQL query for searching issues."
-    default = "summary~'biriyani'"
   }
 
   param "jira_project_key" {
@@ -35,7 +34,6 @@ pipeline "link_jira_issues" {
   param "issue_type" {
     type        = string
     description = "Issue type for the new issue to be created."
-    default = "Bug"
   }
 
   step "pipeline" "search_issues_by_jql" {
