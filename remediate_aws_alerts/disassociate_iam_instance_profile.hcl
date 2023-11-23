@@ -66,12 +66,12 @@ pipeline "disassociate_iam_instance_profile_actions" {
 
   step "pipeline" "disassociate_iam_instance_profile" {
     depends_on = [step.pipeline.describe_iam_instance_profile_associations]
-    for_each   = values(step.pipeline.describe_iam_instance_profile_associations)[0].output.stdout.IamInstanceProfileAssociations != null ? { for each_association in values(step.pipeline.describe_iam_instance_profile_associations)[0].output.stdout.IamInstanceProfileAssociations : each_association.InstanceId => each_association.AssociationId } : tomap({})
+    for_each   = values(step.pipeline.describe_iam_instance_profile_associations)[0].stdout.IamInstanceProfileAssociations != null ? { for each_association in values(step.pipeline.describe_iam_instance_profile_associations)[0].stdout.IamInstanceProfileAssociations : each_association.InstanceId => each_association.AssociationId } : tomap({})
     pipeline   = aws.pipeline.disassociate_iam_instance_profile
     args = {
-      region            = var.region
-      access_key_id     = var.access_key_id
-      secret_access_key = var.secret_access_key
+      region            = param.region
+      access_key_id     = param.access_key_id
+      secret_access_key = param.secret_access_key
       association_id    = each.value
       instance_id       = each.key
     }
