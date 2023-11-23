@@ -1,8 +1,8 @@
-# Analyze Domains Through Multiple Sources
+# Add New User in Microsoft Teams
 
-Investigate suspicious domains and identify false positives by leveraging threat intelligence tools, including URLhaus, VirusTotal, and URLScan, to gather more context and respond faster.
+Add a new user in Microsoft Teams.
 
 ## Usage
 
-- Add your APIVoid, IP2Location, Urlscan and Virustotal API key to `flowpipe.pvars`
-- Run the pipeline and specify `domain`, e.g.,  `flowpipe pipeline run domains_review_through_multiple_sources --pipeline-arg 'domain=example.com'`
+- Add your Teams Access Token, Team Id, JIRA Token, JIRA User Email, JIRA API Base URL and JIRA Project Key to `flowpipe.fpvars`
+- Run the pipeline and specify `domain`, e.g., `flowpipe pipeline run add_new_user_in_microsoft_teams --pipeline-arg 'domain=example.com'`
