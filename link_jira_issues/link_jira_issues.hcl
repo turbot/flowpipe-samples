@@ -11,13 +11,13 @@ pipeline "link_jira_issues" {
   param "token" {
     type        = string
     description = "API access token for authentication."
-    default     = var.token
+    default     = var.jira_token
   }
 
-  param "user_email" {
+  param "jira_user_email" {
     type        = string
     description = "The email ID of the Jira user."
-    default     = var.user_email
+    default     = var.jira_user_email
   }
 
   param "jql_query" {
@@ -25,10 +25,10 @@ pipeline "link_jira_issues" {
     description = "JQL query for searching issues."
   }
 
-  param "project_key" {
+  param "jira_project_key" {
     type        = string
     description = "Project key for the new issue to be created."
-    default     = var.project_key
+    default     = var.jira_project_key
   }
 
   param "issue_type" {
@@ -44,10 +44,10 @@ pipeline "link_jira_issues" {
   step "pipeline" "search_issues_by_jql" {
     pipeline = jira.pipeline.search_issues_by_jql
     args = {
-      api_base_url = param.api_base_url
-      token        = param.token
-      user_email   = param.user_email
-      jql_query    = param.jql_query
+      api_base_url    = param.api_base_url
+      token           = param.jira_token
+      jira_user_email = param.jira_user_email
+      jql_query       = param.jql_query
     }
   }
 
@@ -58,14 +58,12 @@ pipeline "link_jira_issues" {
 
     pipeline = jira.pipeline.update_issue
     args = {
-      api_base_url = param.api_base_url
-      token        = param.token
-      user_email   = param.user_email
-      issue_id     = each.key
-      summary      = "This issue is updated by Flowpipe."
-      description  = "This issue is related to issues ${join(", ", [for issue in step.pipeline.search_issues_by_jql.output.issues : "##${issue.id}"])}"
-      priority     = "High"
-      assignee_id  = param.assignee_id
+      api_base_url    = param.api_base_url
+      token           = param.jira_token
+      jira_user_email = param.jira_user_email
+      issue_id        = each.key
+      summary         = "This issue is updated by Flowpipe."
+      description     = "This issue is related to issues ${join(", ", [for issue in step.pipeline.search_issues_by_jql.output.issues : "##${issue.id}"])}"
     }
   }
 
@@ -73,15 +71,21 @@ pipeline "link_jira_issues" {
     if       = step.pipeline.search_issues_by_jql.output.issues == null
     pipeline = jira.pipeline.create_issue
     args = {
-      api_base_url = param.api_base_url
-      token        = param.token
-      issue_type   = param.issue_type
-      user_email   = param.user_email
-      project_key  = param.project_key
-      summary      = "This issue is created by Flowpipe."
-      description  = "This issue is created by Flowpipe since search result was not matching."
-      priority     = "High"
-      assignee_id  = param.assignee_id
+      api_base_url     = param.api_base_url
+      token            = param.jira_token
+      issue_type       = param.issue_type
+      jira_user_email  = param.jira_user_email
+      jira_project_key = param.jira_project_key
+      summary          = "This issue was created by Flowpipe since there were no matches for the search query ${param.jql_query}"
+      description      = "New issue related to ${param.jql_query} query."
     }
+  }
+
+  output "created_issue" {
+    value = step.pipeline.create_issue.output.issue
+  }
+
+  output "updated_issues" {
+    value = step.pipeline.update_issue.output.issues
   }
 }

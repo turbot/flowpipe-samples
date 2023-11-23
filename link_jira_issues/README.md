@@ -1,6 +1,6 @@
 # Link Issues Across Jira
 
-This pipeline is responsible for searching Jira issues. If any issues are found, it updates their description, summary, priority, and assignee. In case no issues are found, the pipeline creates a new one.
+Search for related Jira issues using [Jira Query Language (JQL) query](https://support.atlassian.com/jira-service-management-cloud/docs/use-advanced-search-with-jira-query-language-jql/). If there are any issues found, update their descriptions with the related issue numbers, but if none are found, create a new issue with the query details.
 
 ## Usage
 
