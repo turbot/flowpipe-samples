@@ -1,12 +1,12 @@
 trigger "schedule" "list_iam_user_groups_associations" {
-  description = "A daily cron job at 9 AM UTC that checks for AWS IAM users with multiple group assignments, creates issues in Github."
+  description = "Runs daily at 9 AM UTC, this trigger scans for IAM users in multiple groups and creates/updates corresponding GitHub issues."
   schedule    = "0 9 * * *"
-  pipeline    = pipeline.aws_iam_user_in_groups
+  pipeline    = pipeline.aws_iam_user_group_membership
 }
 
-pipeline "aws_iam_user_in_groups" {
-  title       = "List AWS IAM User Group Associations"
-  description = "List IAM Users associated with more than a Group. Create a GitHub issue for User if there isn't one already. If an issue is already present then update the same."
+pipeline "aws_iam_user_group_membership" {
+  title       = "Check AWS IAM User Group Membership"
+  description = "Tracks IAM users in multiple groups and manages related GitHub issues. It creates a new issue for each user found in more than one group and updates existing issues if needed."
 
   param "github_token" {
     type    = string
@@ -106,33 +106,33 @@ pipeline "aws_iam_user_in_groups" {
     }
   }
 
-  output "iam_users" {
-    description = "List of all AWS IAM Users."
-    value       = step.pipeline.list_iam_users.output.stdout
-  }
+  # output "iam_users" {
+  #   description = "List of all AWS IAM Users."
+  #   value       = step.pipeline.list_iam_users.output.stdout
+  # }
 
-  output "iam_groups_for_users" {
-    description = "List of all AWS IAM Groups for each user."
-    value       = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output.stdout }
-  }
+  # output "iam_users_group_membership" {
+  #   description = "List of all AWS IAM Groups for each user."
+  #   value       = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output.stdout }
+  # }
 
-  output "github_search_issue" {
-    description = "Search for list of GitHub issues for each user."
-    value       = { for user, issues in step.pipeline.github_search_issue : user => try(issues.output, issues) }
-  }
+  # output "github_search_issue" {
+  #   description = "Search for list of GitHub issues for each user."
+  #   value       = { for user, issues in step.pipeline.github_search_issue : user => try(issues.output, issues) }
+  # }
 
   output "github_comment_issue" {
-    description = "Comment on existing GitHub issue for each user."
+    description = "Existing GitHub issues commented for each user in multiple groups."
     value       = { for user, issues in step.pipeline.github_comment_issue : user => try(issues.output, issues) }
   }
 
   output "github_close_issue" {
-    description = "Close existing GitHub issue for each user."
+    description = "GitHub issues closed for each user no longer in multiple groups."
     value       = { for user, issues in step.pipeline.github_close_issue : user => try(issues.output, issues) }
   }
 
   output "github_create_issue" {
-    description = "Create a new GitHub issue for each user."
+    description = "GitHub issues created for each user in multiple groups."
     value       = { for user, issue in step.pipeline.github_create_issue : user => try(issue.output, issue) }
   }
 }

@@ -15,7 +15,7 @@ variable "aws_secret_access_key" {
 
 variable "github_repository_full_name" {
   type        = string
-  description = "The full name of the GitHub repository. Examples: turbot/steampipe, turbot/flowpipe"
+  description = "The full name of the GitHub repository. Examples: turbot/steampipe, turbot/flowpipe."
 }
 
 variable "github_token" {

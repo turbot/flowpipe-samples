@@ -1,11 +1,11 @@
-# AWS IAM User in Groups
+# AWS IAM User Group Membership
 
-A composite mod that runs a daily cron job at 9 AM UTC to check for AWS IAM users with multiple group assignments, creates issues in Github. List IAM Users associated with more than a Group. Create a GitHub issue for User if there isn't one already. If an issue is already present then update the same."
+This composite module performs a daily check at 9 AM UTC for AWS IAM users belonging to multiple groups. It creates or updates GitHub issues for each user found in this situation.
 
 ## Usage
 
-- Add your AWS, GitHub API keys to `flowpipe.pvars`
-- This mod runs a daily cron job using Triggers, but if you wish to run the pipeline manually then use `flowpipe pipeline run aws_iam_user_in_groups`
+- Add your AWS, GitHub API keys to `flowpipe.fpvars`
+- This mod runs a daily cron job using Triggers, but if you wish to run the pipeline manually then use `flowpipe pipeline run aws_iam_user_group_membership`
 
 Example: When a GitHub issue already exists for a user with multiple groups assigned, update the issue.
 
