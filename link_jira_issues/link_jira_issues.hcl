@@ -47,7 +47,6 @@ pipeline "link_jira_issues" {
   }
 
   step "pipeline" "update_issue" {
-    if = step.pipeline.search_issues_by_jql.output.issues != null
     for_each = step.pipeline.search_issues_by_jql.output.issues == null ? tomap({}) : { for issue in step.pipeline.search_issues_by_jql.output.issues : issue.id => issue }
     pipeline = jira.pipeline.update_issue
     args = {
@@ -64,7 +63,7 @@ pipeline "link_jira_issues" {
     value = step.pipeline.search_issues_by_jql.output.issues
   }
 
-  step "pipeline" "create_issue" {
+  step "pipeline" "create_issue" { 
     if       = step.pipeline.search_issues_by_jql.output.issues == null
     pipeline = jira.pipeline.create_issue
     args = {
