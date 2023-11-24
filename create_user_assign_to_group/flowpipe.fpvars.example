@@ -1,0 +1,8 @@
+domain = "<Domain>"
+api_token = "<API Token>"
+group_id = "<Group ID>"
+first_name = "<First Name>"
+last_name = "<Last Name>"
+email = "<Email>"
+login = "<Username>"
+password = "<Password>"
