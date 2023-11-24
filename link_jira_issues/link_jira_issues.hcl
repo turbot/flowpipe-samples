@@ -63,7 +63,7 @@ pipeline "link_jira_issues" {
     value = step.pipeline.search_issues_by_jql.output.issues
   }
 
-  step "pipeline" "create_issue" { 
+  step "pipeline" "create_issue" {
     if       = step.pipeline.search_issues_by_jql.output.issues == null
     pipeline = jira.pipeline.create_issue
     args = {
