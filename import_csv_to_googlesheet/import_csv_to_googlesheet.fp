@@ -18,6 +18,12 @@ pipeline "import_csv_to_googlesheet" {
     # sensitive  = true
   }
 
+  param "spreadsheet_title" {
+    description = "The title of the google spreadsheet."
+    type        = string
+    default     = "MY-FPTEST"
+  }
+
   step "http" "remote_csv_url_to_csv" {
     url = param.url
   }
@@ -27,16 +33,16 @@ pipeline "import_csv_to_googlesheet" {
     pipeline   = googleworkspace.pipeline.create_blank_spreadsheet
     args = {
       access_token      = param.access_token
-      spreadsheet_title = "spreadsheet_title"
+      spreadsheet_title = param.spreadsheet_title
     }
   }
 
 
-// curl -X POST \
-//   -H "Authorization: Bearer ya29.a0AfB_byAjigATBITvH-0hrdFGr7QKwwShfc7DhFbbHZx-a-et7x2i5sah2gi54hp6inCW0D8n7H-CX06xdxIG7pSI9KsEYgTUYc4ZIz5ChoCV9USlPxeCqFW8Zkg3cAVuvi4tgnMfOdaLSsNDsmOEf5iIxQgmz_xMwkjaaCgYKAWESARISFQHGX2MiYVytizNc9_KJUSSQYisqkA0171" \
-//   -H "Content-Type: application/json" \
-//   --data-binary @/Users/raj/raj-professional-tasks/flowpipes/flowpipe-mod-googleworkspace/test.json \
-//   "https://sheets.googleapis.com/v4/spreadsheets/1U8jWIV4t6O_EudFkL9MVyA7kwqsqgCVHcdJxLyN5N4M/values/Sheet1\!A1:append?valueInputOption=RAW"
+  // curl -X POST \
+  //   -H "Authorization: Bearer ya29.a0AfB_byAjigATBITvH-0hrdFGr7QKwwShfc7DhFbbHZx-a-et7x2i5sah2gi54hp6inCW0D8n7H-CX06xdxIG7pSI9KsEYgTUYc4ZIz5ChoCV9USlPxeCqFW8Zkg3cAVuvi4tgnMfOdaLSsNDsmOEf5iIxQgmz_xMwkjaaCgYKAWESARISFQHGX2MiYVytizNc9_KJUSSQYisqkA0171" \
+  //   -H "Content-Type: application/json" \
+  //   --data-binary @/Users/raj/raj-professional-tasks/flowpipes/flowpipe-mod-googleworkspace/test.json \
+  //   "https://sheets.googleapis.com/v4/spreadsheets/1U8jWIV4t6O_EudFkL9MVyA7kwqsqgCVHcdJxLyN5N4M/values/Sheet1\!A1:append?valueInputOption=RAW"
 
 
   output "remote_csv_data" {
