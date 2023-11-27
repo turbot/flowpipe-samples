@@ -1,0 +1,2 @@
+gcp_project_id="your-project-id"
+gcp_application_credentials_path="your-credentials-file-path"
