@@ -1,0 +1,24 @@
+[
+  {
+    "description": "\u003cp\u003eThis data was recorded during Flight 1 of the Blue Origin Deorbit, Descent, and Landing Tipping Point (BODDL-TP) Game Changing Development (GCD) Program. The flight included IMU, cameras for terrain relative navigation, and range and velocity lidar sensors. The flight was completed under NASA contract 80LARC19C0005 in October 2020. \u003c/p\u003e",
+    "fileid": "143213",
+    "filename": "DDL-F1_Dataset-20201013",
+    "filetype": "zip",
+    "projectapiurl": "https://techport.nasa.gov/api/projects/116144",
+    "projecturl": "Blue Origin Demo of Deorbit, Descent, and Landing Sensors (https://techport.nasa.gov/view/116144)",
+    "publishedby": "Kevin M Somervill",
+    "publisheddate": "Dec 2021",
+    "title": "Flight 1 Dataset"
+  },
+  {
+    "description": "\u003cp\u003eThis data was recorded during Flight 2 of the Blue Origin Deorbit, Descent, and Landing Tipping Point (BODDL-TP) Game Changing Development (GCD) Program. The flight included IMU, cameras for terrain relative navigation, and range and velocity lidar sensors. The flight was completed under NASA contract 80LARC19C0005 in August 2021. \u003c/p\u003e",
+    "fileid": "143242",
+    "filename": "DDL-F2_Dataset-20210826",
+    "filetype": "zip",
+    "projectapiurl": "https://techport.nasa.gov/api/projects/116144",
+    "projecturl": "Blue Origin Demo of Deorbit, Descent, and Landing Sensors (https://techport.nasa.gov/view/116144)",
+    "publishedby": "Kevin M Somervill",
+    "publisheddate": "Dec 2021",
+    "title": "Flight 2 Dataset"
+  }
+]
