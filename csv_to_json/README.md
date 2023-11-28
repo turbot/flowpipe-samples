@@ -1,6 +1,6 @@
 # CSV to JSON Converter
 
-The CSV to JSON mod provides a convenient and efficient way to convert CSV data, such as from a local CSV file, local values or remote Google Sheet, into a JSON format.
+The CSV to JSON mod provides a convenient and efficient way to convert CSV data from a local CSV file into a JSON format.
 
 ## Usage
 
