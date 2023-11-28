@@ -1,0 +1,4 @@
+aws_region = "us-east-1"
+aws_access_key_id = "aws_access_key_goes_here"
+aws_secret_access_key = "aws_secret_goes_here"
+slack_token="xoxp-12345-67890"
