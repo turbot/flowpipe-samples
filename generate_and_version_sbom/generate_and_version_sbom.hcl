@@ -20,7 +20,6 @@ pipeline "generate_and_version_sbom" {
 
   step "pipeline" "create_findings_report" {
     pipeline = aws.pipeline.create_findings_report
-    // pipeline = create_findings_report
     args = {
       filter_criteria = param.filter_criteria
       report_format = param.report_format
@@ -30,7 +29,6 @@ pipeline "generate_and_version_sbom" {
 
   step "pipeline" "get_findings_report_status" {
     pipeline = aws.pipeline.get_findings_report_status
-    // pipeline = get_findings_report_status
     args = {
       report_id = step.pipeline.create_findings_report.output.stdout
     }

@@ -4,7 +4,7 @@ mod "generate_and_version_sbom" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "v0.0.2-dev-samples.3"
+      version = "v0.0.1-rc.4"
       args = {
         region            = var.aws_region
         access_key_id     = var.aws_access_key_id
@@ -15,7 +15,7 @@ mod "generate_and_version_sbom" {
     mod "github.com/turbot/flowpipe-mod-github" {
       version = "v0.0.1-rc.2"
       args = {
-        access_token         = var.github_token
+        access_token         = "${var.github_access_token}"
         repository_full_name = var.github_repository_full_name
       }
     }
