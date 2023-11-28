@@ -4,7 +4,7 @@ mod "notify_slack_new_github_release" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "*"
+      version = "0.0.1-rc.1"
       args = {
         token   = var.slack_token
         channel = var.slack_channel

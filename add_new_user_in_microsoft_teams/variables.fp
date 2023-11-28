@@ -13,8 +13,6 @@ variable "team_id" {
 variable "jira_token" {
   type        = string
   description = "Jira API access token."
-  # TODO: Add once supported
-  # sensitive  = true
 }
 
 variable "jira_user_email" {
@@ -30,4 +28,9 @@ variable "jira_api_base_url" {
 variable "jira_project_key" {
   type        = string
   description = "The key identifying the Jira project."
+}
+
+variable "teams_access_token" {
+  description = "The Microsoft personal security access_token to authenticate to the Microsoft graph APIs."
+  type        = string
 }

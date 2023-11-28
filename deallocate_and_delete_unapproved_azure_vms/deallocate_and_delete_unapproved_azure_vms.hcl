@@ -10,8 +10,6 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     type        = string
     description = local.subscription_id_param_description
     default     = var.subscription_id
-    # TODO: Add once supported
-    #sensitive   = true
   }
 
   param "resource_group" {
@@ -24,24 +22,18 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     type = string
     # description = local.tenant_id_param_description
     default = var.tenant_id
-    # TODO: Add once supported
-    #sensitive   = true
   }
 
   param "client_secret" {
     type        = string
     description = local.client_secret_param_description
     default     = var.client_secret
-    # TODO: Add once supported
-    #sensitive   = true
   }
 
   param "client_id" {
     type        = string
     description = local.client_id_param_description
     default     = var.client_id
-    # TODO: Add once supported
-    #sensitive   = true
   }
 
   param "tags_query" {
