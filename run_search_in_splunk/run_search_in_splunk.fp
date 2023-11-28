@@ -19,10 +19,15 @@ pipeline "run_search_in_splunk" {
     description = "The query to be searched."
   }
 
+  param "insecure" {
+    type        = bool
+    description = "Disable TLS verification."
+  }
+
   # Initiate search request
   step "http" "initiate_search" {
     method   = "post"
-    insecure = true
+    insecure = param.insecure
     url      = "https://${param.splunk_server}:8089/services/search/v2/jobs/?output_mode=json"
 
     request_headers = {
@@ -39,7 +44,7 @@ pipeline "run_search_in_splunk" {
   step "http" "search_status" {
     depends_on = [step.http.initiate_search]
     method     = "post"
-    insecure   = true
+    insecure   = param.insecure
     url        = "https://${param.splunk_server}:8089/services/search/v2/jobs/${step.http.initiate_search.response_body.entry[0].content.sid}/?output_mode=json"
 
     request_headers = {
@@ -48,7 +53,7 @@ pipeline "run_search_in_splunk" {
     }
 
     loop {
-      until = result.response_body.entry[0].content.dispatchState == "DONE"
+      until = result.response_body.entry[0].content.dispatchState == "DONE" || loop.index < 20
       url   = "https://${param.splunk_server}:8089/services/search/v2/jobs/${step.http.initiate_search.response_body.entry[0].content.sid}/?output_mode=json"
     }
   }
@@ -57,7 +62,7 @@ pipeline "run_search_in_splunk" {
   step "http" "search_result" {
     depends_on = [step.http.search_status]
     method     = "post"
-    insecure   = true
+    insecure   = param.insecure
     url        = "https://${param.splunk_server}:8089/services/search/v2/jobs/${step.http.initiate_search.response_body.entry[0].content.sid}/results/?output_mode=json"
 
     request_headers = {
