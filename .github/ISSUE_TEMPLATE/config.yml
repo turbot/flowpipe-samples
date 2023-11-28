@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions
+    url: https://turbot.com/community/join
+    about: GitHub issues in this repository are only intended for bug reports and feature requests. Other issues will be closed. Please ask and answer questions through the Turbot Slack community.
+  - name: Flowpipe CLI Bug Reports and Feature Requests
+    url: https://github.com/turbot/flowpipe/issues/new/choose
+    about: Flowpipe CLI has its own codebase. Bug reports and feature requests for those pieces of functionality should be directed to that repository.
