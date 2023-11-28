@@ -65,7 +65,7 @@ pipeline "send_top_show_hn_email" {
   }
   */
 
-  output "send_email_response_check" {
-    value = !is_error(step.pipeline.send_email) ? "Email sent successfully" : "Error sending email: ${step.pipeline.send_email.error}"
+  output "send_email_check" {
+    value = !is_error(step.pipeline.send_email) ? "Email sent successfully" : "Error sending email: ${error_message(step.pipeline.send_email)}"
   }
 }
