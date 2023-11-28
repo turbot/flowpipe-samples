@@ -38,7 +38,7 @@ pipeline "router_pipeline" {
   step "pipeline" "post_message" {
     if = param.event == "release" && param.request_body.action == "published"
 
-    pipeline = slack.pipeline.chat_post_message
+    pipeline = slack.pipeline.post_message
     args = {
       token   = param.slack_token
       channel = param.slack_channel
