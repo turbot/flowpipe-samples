@@ -10,20 +10,16 @@ pipeline "user_delete_action" {
   title       = "Delete Azure AD user"
   description = "Delete user from Azure AD based on approval status."
 
-  //Azure Setup
+  # Azure Setup
   param "tenant_id" {
     type        = string
     description = "The Microsoft Entra ID tenant (directory) ID."
     default     = var.tenant_id
-    # TODO: Add once supported
-    #sensitive  = true
   }
 
   param "subscription_id" {
     type        = string
     description = "Azure Subscription Id. Examples: d46d7416-f95f-4771-bbb5-529d4c766."
-    # TODO: Add once supported
-    #sensitive  = true
     default = var.subscription_id
   }
 
@@ -31,25 +27,19 @@ pipeline "user_delete_action" {
     type        = string
     description = "A client secret that was generated for the App Registration."
     default     = var.client_secret
-    # TODO: Add once supported
-    #sensitive  = true
   }
 
   param "client_id" {
     type        = string
     description = "The client (application) ID of an App Registration in the tenant."
     default     = var.client_id
-    # TODO: Add once supported
-    #sensitive  = true
   }
 
-  //Jira Setup
+  # Jira Setup
   param "token" {
     type        = string
     description = "API access token"
-    # TODO: Add once supported
-    # sensitive  = true
-    default = var.token
+    default     = var.token
   }
 
   param "user_email" {

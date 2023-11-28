@@ -25,13 +25,13 @@ pipeline "router_pipeline" {
 
   param "slack_token" {
     type        = string
-    description = "Slack app token used to connect to the API."
+    description = "Authentication token bearing required scopes."
     default     = var.slack_token
   }
 
   param "slack_channel" {
     type        = string
-    description = "Channel containing the message to be updated."
+    description = "Channel, private group, or IM channel to send message to."
     default     = var.slack_channel
   }
 
@@ -46,7 +46,7 @@ pipeline "router_pipeline" {
     }
   }
 
-  output "message" {
-    value = step.pipeline.post_message.output.message
+  output "post_message_check" {
+    value = !is_error(step.pipeline.post_message) ? "Message sent to ${param.channel}" : "Error sending message: ${error_message(step.pipeline.post_message)}"
   }
 }
