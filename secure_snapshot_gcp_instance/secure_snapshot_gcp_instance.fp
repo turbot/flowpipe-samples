@@ -1,6 +1,6 @@
-pipeline "gcp_isolate_instance" {
-  title       = "Isolate GCP Instance"
-  description = "Isolate GCP Instance."
+pipeline "secure_snapshot_gcp_instance" {
+  title       = "Snapshotting and Isolating Google Cloud Instance with Disk Detachment and Firewall Rules"
+  description = "Capturing instance state with Snapshot, detaching disks, and enforcing isolation with firewall rules for enhanced security in Google Cloud."
 
   param "application_credentials_path" {
     type        = string
