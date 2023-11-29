@@ -1,4 +1,4 @@
-pipeline "create_user_assign_to_group" {
+pipeline "create_okta_user_assign_to_group" {
   title       = "Create User Assign Group"
   description = "Create a user and assign it to a group."
 
@@ -11,48 +11,44 @@ pipeline "create_user_assign_to_group" {
   param "domain" {
     description = "The domain of your Okta account."
     type        = string
-    default     = var.okta_domain
-  }
-
-  param "group_id" {
-    description = "The ID of the group."
-    type        = string
-    default     = var.group_id
+    default     = var.domain
   }
 
   param "first_name" {
     description = "Given name of the user."
     type        = string
-    default     = var.first_name
   }
 
   param "last_name" {
     description = "The family name of the user."
     type        = string
-    default     = var.last_name
   }
 
   param "email" {
     description = "The primary email address of the user."
     type        = string
-    default     = var.email
   }
 
   param "login" {
     description = "The unique identifier for the user."
     type        = string
-    default     = var.login
   }
 
   param "password" {
     description = "Specifies the password for a user."
     type        = string
-    default     = var.password
+  }
+
+  param "group_id" {
+    description = "The ID of the group."
+    type        = string
   }
 
   step "pipeline" "create_user" {
-    pipeline = pipeline.create_user
+    pipeline = okta.pipeline.create_user
     args = {
+      api_token  = param.api_token
+      domain     = param.domain
       first_name = param.first_name
       last_name  = param.last_name
       email      = param.email
@@ -62,20 +58,33 @@ pipeline "create_user_assign_to_group" {
   }
 
   step "pipeline" "assign_user" {
-    pipeline = pipeline.assign_user
+    pipeline = okta.pipeline.assign_user
     args = {
-      group_id = param.group_id
-      user_id  = jsondecode(step.pipeline.create_user.user).id
+      api_token = param.api_token
+      domain    = param.domain
+      group_id  = param.group_id
+      user_id   = step.pipeline.create_user.output.user.id
+    }
+  }
+
+  step "pipeline" "list_member_users" {
+    depends_on = [step.pipeline.assign_user]
+
+    pipeline = okta.pipeline.list_member_users
+    args = {
+      api_token = param.api_token
+      domain    = param.domain
+      group_id  = param.group_id
     }
   }
 
   output "user" {
-    value       = step.pipeline.create_user.response_body
     description = "User details."
+    value       = step.pipeline.create_user.output
   }
 
-  output "assignment" {
-    value       = step.pipeline.assign_user.response_body
-    description = "Group assignment details for a user."
+  output "group_members" {
+    description = "List of users that are members of the group."
+    value       = step.pipeline.list_member_users.output
   }
 }
