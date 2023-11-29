@@ -1,6 +1,6 @@
 pipeline "invite_org_members_by_email" {
-  title       = "Add Pipes Organization to Invite Members"
-  description = "Add organization in pipe and invite members to join by email."
+  title       = "Invite Members to Organization"
+  description = "Add members by email invite to the organization in pipe."
 
   param "token" {
     type        = string
@@ -15,14 +15,13 @@ pipeline "invite_org_members_by_email" {
 
   param "member_email" {
     type        = list(string)
-    description = "Email-id of member to be invited to join orgnization."
-    // Example ["test1@gmail.com", "test2@gmail.com"]
-    default = ["test1@gmail.com", "test2@gmail.com"]
+    description = "Email-ids of members to be invited to join organization."
+    # Example ["test1@gmail.com", "test2@gmail.com"]
   }
 
   param "role" {
     type        = string
-    description = "The role to be assigned to the member."
+    description = "The role assigned to the member."
     default     = "member"
   }
 

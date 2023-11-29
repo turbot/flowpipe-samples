@@ -1,27 +1,25 @@
-<!-- # Suspend, disable & enable users in Azure Active Directory
+# Invite members to join organization by email, create pipes workspace, add members to workspace
 
-Suspend, disable and enable accounts in Azure Active Directory through Jira issues.
+- Send email invitation to users to join as member in the organization.
+- Create workspace in the organization and add members with role in the workspace.
 
 ## Usage
 
 - Add following required credentials to `flowpipe.pvars`
-  - Jira token, API base url, user email and project key
-  - Azure tenant ID, client secret, client ID and subscription ID
+
+  - Pipes API token to access the services. Find more info to generate access token [here].(https://turbot.com/pipes/docs/da-settings#tokens)
+
 - Start your Flowpipe server
-- Create the issue for Jira. This step is an independent pipeline to create issue e.g.
-  ```
-  flowpipe pipeline run create_user_update_issue  --pipeline-arg user_id=test1@turbotad.onmicrosoft.com --pipeline-arg account_status=delete
+  - Send email invitation to users to join as member in the organization. e.g.
 
-  flowpipe pipeline run create_user_update_issue  --pipeline-arg user_id=test2@turbotad.onmicrosoft.com --pipeline-arg account_status=disable
+    ```
+    flowpipe pipeline run invite_org_members_by_email --arg org_handle="<YourOrgName>" --arg member_email='["member1@gmail.com", "member1@gmail.com"]'
 
-  flowpipe pipeline run create_user_update_issue  --pipeline-arg user_id=test2@turbotad.onmicrosoft.com --pipeline-arg account_status=enable
-  ```
-- When any issue is created in Jira, `scheduled_user_enable_action` scans the list of issues
-  - Checks for issue summary for the action to be taken such as `Delete`, `Disable` and `Enable`
-  - Checks the issues status as `Approval Done`
-  - Triggers respective Azure pipelines
+    ```
 
-**Note:**
-- Jira provides multiple project template to manage workflow within Jira project. This example uses `HSM: Default ESM workflow for Jira Service Management`, the issue status validation in the pipeline is based on the status name provided by this template.
-- The approval process is done manually in Jira
- -->
+  - Create workspace in the organization and add members with role in the workspace.
+
+    ```
+    flowpipe pipeline run add_pipes_org_workspace_and_members --arg org_handle="<YourOrgName>" --arg workspace_handle="<WorkspaceName>"
+
+    ```

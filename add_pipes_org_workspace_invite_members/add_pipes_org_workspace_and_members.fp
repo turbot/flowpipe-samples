@@ -1,6 +1,6 @@
 pipeline "add_pipes_org_workspace_and_members" {
-  title       = "Add Pipes Organization to Invite Members"
-  description = "Add organization in pipe and invite members to join by email."
+  title       = "Add Pipes Workspace Organization and Add Members"
+  description = "Add workspce to the organization and add organization members to the workspace."
 
   param "token" {
     type        = string
@@ -27,8 +27,7 @@ pipeline "add_pipes_org_workspace_and_members" {
   param "member_handles" {
     type        = list(string)
     description = "Orgnization member handles to be invited to join workspace."
-    // Example ["rkforever-fbuq", "rkm2021"]
-    // default = ["rkforever-fbuq", "rkm2021"]
+    # ["rk-fbuq", "rkm2023"]
   }
 
   param "role" {
@@ -71,4 +70,3 @@ pipeline "add_pipes_org_workspace_and_members" {
   }
 
 }
-
