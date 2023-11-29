@@ -11,7 +11,6 @@ pipeline "gcp_isolate_instance" {
   param "instance_name" {
     type        = "string"
     description = "Instance Name"
-    default     = "instance-1"
   }
 
   param "project_id" {
@@ -23,7 +22,6 @@ pipeline "gcp_isolate_instance" {
   param "zone" {
     type        = "string"
     description = "Zone"
-    default     = "us-central1-a"
   }
 
   step "pipeline" "get_compute_instance" {
@@ -61,6 +59,48 @@ pipeline "gcp_isolate_instance" {
     args = {
       application_credentials_path = param.application_credentials_path
       instance_name                = param.instance_name
+      project_id                   = param.project_id
+      zone                         = param.zone
+      disk_name                    = regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]
+    }
+  }
+
+  step "pipeline" "create_ingress_vpc_firewall_rule" {
+    depends_on = [step.pipeline.detach_compute_instance_from_disk]
+    pipeline   = gcp.pipeline.create_vpc_firewall_rule
+    args = {
+      application_credentials_path = param.application_credentials_path
+      project_id                   = param.project_id
+      network_name                 = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.stdout.networkInterfaces[0].network)[0]
+      firewall_rule_name           = "block-ingress"
+      priority                     = "1000"
+      direction                    = "INGRESS"
+      action                       = "DENY"
+      rules                        = ["all"]
+    }
+  }
+
+  step "pipeline" "create_egress_vpc_firewall_rule" {
+    depends_on = [step.pipeline.create_ingress_vpc_firewall_rule]
+    pipeline   = gcp.pipeline.create_vpc_firewall_rule
+    args = {
+      application_credentials_path = param.application_credentials_path
+      project_id                   = param.project_id
+      network_name                 = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.stdout.networkInterfaces[0].network)[0]
+      firewall_rule_name           = "block-egress"
+      priority                     = "1000"
+      direction                    = "EGRESS"
+      action                       = "DENY"
+      rules                        = ["all"]
+    }
+  }
+
+  step "pipeline" "delete_compute_disk" {
+    depends_on = [step.pipeline.create_egress_vpc_firewall_rule]
+    for_each   = { for disk in step.pipeline.get_compute_instance.output.stdout.disks : disk.source => disk }
+    pipeline   = gcp.pipeline.delete_compute_disk
+    args = {
+      application_credentials_path = param.application_credentials_path
       project_id                   = param.project_id
       zone                         = param.zone
       disk_name                    = regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]
