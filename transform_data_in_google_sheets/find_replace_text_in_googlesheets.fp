@@ -1,7 +1,7 @@
 
-pipeline "find_and_replace_in_google_sheets" {
-  title       = "Find and Replace Word"
-  description = "Find and replace spefic word across all google spreadsheet."
+pipeline "find_replace_text_in_googlesheets" {
+  title       = "Find and Replace Text"
+  description = "Find and replace specific text across all google spreadsheet."
 
   param "access_token" {
     type        = string
@@ -35,7 +35,7 @@ pipeline "find_and_replace_in_google_sheets" {
   }
 
   output "update_response" {
-    description = "Details of the find and replace."
+    description = "Find and replace statistics."
     value       = step.pipeline.find_and_replace_spreadsheet_data
   }
 }
