@@ -59,10 +59,6 @@ pipeline "link_jira_issues" {
     }
   }
 
-  output "found_issues" {
-    value = step.pipeline.search_issues_by_jql.output.issues
-  }
-
   step "pipeline" "create_issue" {
     if       = step.pipeline.search_issues_by_jql.output.issues == null
     pipeline = jira.pipeline.create_issue
@@ -75,6 +71,10 @@ pipeline "link_jira_issues" {
       summary      = "This issue was created by Flowpipe since there were no matches for the search query ${param.jql_query}"
       description  = "New issue related to ${param.jql_query} query."
     }
+  }
+
+  output "found_issues" {
+    value = step.pipeline.search_issues_by_jql.output.issues
   }
 
   output "created_issue" {
