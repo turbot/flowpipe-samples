@@ -1,6 +1,6 @@
-mod "secure_snapshot_gcp_instance" {
-  title       = "Snapshotting and Isolating Google Cloud Instance with Disk Detachment and Firewall Rules"
-  description = "Capturing instance state with Snapshot, detaching disks, and enforcing isolation with firewall rules for enhanced security in Google Cloud."
+mod "snapshot_isolate_gcp_compute_instance" {
+  title       = "Snapshot and Isolate GCP Compute Instance"
+  description = "For a given GCP Compute instance, create a snapshot for all of its disks, detach the disks, and then create ingress and egress firewall rules blocking all traffic."
 
   require {
     mod "github.com/turbot/flowpipe-mod-gcp" {
