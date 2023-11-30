@@ -4,7 +4,7 @@ mod "send_discord_message" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-discord" {
-      version = "0.0.1-rc.0"
+      version = "0.0.1-rc.1"
       args = {
         token = var.discord_token
       }
