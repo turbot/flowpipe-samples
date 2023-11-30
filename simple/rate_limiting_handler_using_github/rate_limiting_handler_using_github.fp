@@ -40,11 +40,6 @@ pipeline "rate_limiting_handler_using_github" {
       Content-Type  = "application/json"
       Authorization = "Bearer ${param.access_token}"
     }
-
-    retry {
-      if           = result.response_headers.status_code == 404
-      max_attempts = 10
-    }
   }
 
   output "issues" {
