@@ -1,27 +1,27 @@
 pipeline "snapshot_isolate_gcp_compute_instance" {
-  title       = "Snapshotting and Isolating Google Cloud Instance with Disk Detachment and Firewall Rules"
-  description = "Capturing instance state with Snapshot, detaching disks, and enforcing isolation with firewall rules for enhanced security in Google Cloud."
+  title       = "Snapshot and Isolate GCP Compute Instance"
+  description = "For a given GCP Compute instance, create a snapshot for all of its disks, detach the disks, and then create ingress and egress firewall rules blocking all traffic."
 
   param "application_credentials_path" {
     type        = string
-    description = "Application Credentials Path"
-    default     = var.gcp_application_credentials_path
-  }
-
-  param "instance_name" {
-    type        = "string"
-    description = "Instance Name"
+    description = "The GCP application credentials file path."
+    default     = var.application_credentials_path
   }
 
   param "project_id" {
-    type        = "string"
-    description = "Project ID"
-    default     = var.gcp_project_id
+    type        = string
+    description = "The GCP project ID."
+    default     = var.project_id
   }
 
   param "zone" {
-    type        = "string"
-    description = "Zone"
+    type        = string
+    description = "The GCP zone."
+  }
+
+  param "intance_name" {
+    type        = string
+    description = "The GCP instance name."
   }
 
   step "pipeline" "get_compute_instance" {
@@ -92,18 +92,6 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
       direction                    = "EGRESS"
       action                       = "DENY"
       rules                        = ["all"]
-    }
-  }
-
-  step "pipeline" "delete_compute_disk" {
-    depends_on = [step.pipeline.create_egress_vpc_firewall_rule]
-    for_each   = { for disk in step.pipeline.get_compute_instance.output.stdout.disks : disk.source => disk }
-    pipeline   = gcp.pipeline.delete_compute_disk
-    args = {
-      application_credentials_path = param.application_credentials_path
-      project_id                   = param.project_id
-      zone                         = param.zone
-      disk_name                    = regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]
     }
   }
 }

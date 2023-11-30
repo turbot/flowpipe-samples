@@ -1,6 +1,6 @@
 # Snapshot and Isolate GCP Compute Instance
 
-Capturing instance state with Snapshot, detaching disks, and enforcing isolation with firewall rules for enhanced security in Google Cloud.
+For a given GCP Compute instance, create a snapshot for all of its disks, detach the disks, and then create ingress and egress firewall rules blocking all traffic.
 
 ## Usage
 
