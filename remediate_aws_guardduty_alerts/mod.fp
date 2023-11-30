@@ -4,21 +4,21 @@ mod "remediate_aws_guardduty_alerts" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "*"
+      version = "v0.0.1-rc.5"
       args = {
-        region            = var.region
-        access_key_id     = var.access_key_id
-        secret_access_key = var.secret_access_key
+        region            = var.aws_region
+        access_key_id     = var.aws_access_key_id
+        secret_access_key = var.aws_secret_access_key
       }
     }
 
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "*"
+      version = "v0.0.1-rc.3"
       args = {
-        api_base_url = var.api_base_url
-        token        = var.token
-        user_email   = var.user_email
-        project_key  = var.project_key
+        api_base_url = var.jira_api_base_url
+        token        = var.jira_token
+        user_email   = var.jira_user_email
+        project_key  = var.jira_project_key
       }
     }
   }

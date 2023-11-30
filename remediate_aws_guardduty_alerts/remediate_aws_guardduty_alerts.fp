@@ -9,10 +9,12 @@ trigger "http" "remediate_aws_guardduty_alerts" {
 }
 
 pipeline "remediate_aws_guardduty_alerts" {
+  title       = "Remediate AWS Guard Duty Alerts"
+  description = "Automate AWS SNS notifications from Guard Duty Findings triggering Jira issue creation, execute actions in AWS for identified issues, and update issue state to done upon resolution."
 
   param "issue_type" {
     type        = string
-    description = "Issue type."
+    description = "Jira issue type."
     default     = "Task"
   }
 
@@ -20,38 +22,38 @@ pipeline "remediate_aws_guardduty_alerts" {
     type = any
   }
 
-  param "api_base_url" {
+  param "jira_api_base_url" {
     type        = string
     description = "Jira API base URL."
-    default     = var.api_base_url
+    default     = var.jira_api_base_url
   }
 
-  param "token" {
+  param "jira_token" {
     type        = string
     description = "Jira API token."
-    default     = var.token
+    default     = var.jira_token
   }
 
-  param "user_email" {
+  param "jira_user_email" {
     type        = string
     description = "Jira user email."
-    default     = var.user_email
+    default     = var.jira_user_email
   }
 
-  param "project_key" {
+  param "jira_project_key" {
     type        = string
     description = "Jira project key."
-    default     = var.project_key
+    default     = var.jira_project_key
   }
 
   step "pipeline" "create_block_s3_public_access_issue" {
     if       = jsondecode(param.alert).detail.type == "Policy:S3/BucketBlockPublicAccessDisabled"
     pipeline = jira.pipeline.create_issue
     args = {
-      api_base_url = param.api_base_url
-      token        = param.token
-      user_email   = param.user_email
-      project_key  = param.project_key
+      api_base_url = param.jira_api_base_url
+      token        = param.jira_token
+      user_email   = param.jira_user_email
+      project_key  = param.jira_project_key
       summary      = "Block ${jsondecode(param.alert).detail.resource.s3BucketDetails[0].name} S3 bucket public access."
       issue_type   = param.issue_type
     }
@@ -71,10 +73,10 @@ pipeline "remediate_aws_guardduty_alerts" {
     if       = jsondecode(param.alert).detail.type == "UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.InsideAWS"
     pipeline = jira.pipeline.create_issue
     args = {
-      api_base_url = param.api_base_url
-      token        = param.token
-      user_email   = param.user_email
-      project_key  = param.project_key
+      api_base_url = param.jira_api_base_url
+      token        = param.jira_token
+      user_email   = param.jira_user_email
+      project_key  = param.jira_project_key
       summary      = "Disasscociate ${jsondecode(param.alert).detail.resource.instanceDetails.instanceId} IAM role."
       issue_type   = param.issue_type
     }
