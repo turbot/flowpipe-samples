@@ -1,13 +1,11 @@
 variable "jira_token" {
   type        = string
   description = "API access token."
-  # TODO: Add once supported
-  # sensitive  = true
 }
 
 variable "jira_user_email" {
   type        = string
-  description = "Email-id of the user."
+  description = "Email of the user."
 }
 
 variable "jira_api_base_url" {

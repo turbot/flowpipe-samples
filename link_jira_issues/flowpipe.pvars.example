@@ -1,4 +1,3 @@
-# Jira jira_api_base_url, token, jira_user_email and jira_project_key
 jira_api_base_url="your-jira-base-url"
 jira_token="your-jira-token"
 jira_user_email="your-jira-user-email"

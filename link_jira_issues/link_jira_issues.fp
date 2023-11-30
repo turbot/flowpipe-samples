@@ -1,6 +1,6 @@
 pipeline "link_jira_issues" {
   title       = "Link Issues Across Jira"
-  description = "Search for Jira issues, update description, summary, priority, and assignee in an issue if found, create a jira issue if not found."
+  description = "Search for Jira issues, update description, summary, priority, and assignee in an issue if found, create a Jira issue if not found."
 
   param "jira_api_base_url" {
     type        = string
@@ -16,7 +16,7 @@ pipeline "link_jira_issues" {
 
   param "jira_user_email" {
     type        = string
-    description = "The email ID of the Jira user."
+    description = "The email of the Jira user."
     default     = var.jira_user_email
   }
 
@@ -46,7 +46,7 @@ pipeline "link_jira_issues" {
     }
   }
 
-  step "pipeline" "update_issue" {
+  step "pipeline" "update_issues" {
     for_each = step.pipeline.search_issues_by_jql.output.issues == null ? tomap({}) : { for issue in step.pipeline.search_issues_by_jql.output.issues : issue.id => issue }
     pipeline = jira.pipeline.update_issue
     args = {
@@ -82,6 +82,6 @@ pipeline "link_jira_issues" {
   }
 
   output "updated_issues" {
-    value = step.pipeline.update_issue
+    value = step.pipeline.update_issues
   }
 }
