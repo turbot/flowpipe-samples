@@ -42,7 +42,7 @@ pipeline "rate_limiting_handler_using_github" {
     }
 
     retry {
-      if           = result.status_code.status_code == 404
+      if           = result.response_headers.status_code == 404
       max_attempts = 10
     }
   }
