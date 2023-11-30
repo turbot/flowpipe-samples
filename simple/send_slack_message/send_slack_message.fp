@@ -8,7 +8,7 @@ pipeline "send_slack_message" {
     default     = var.slack_token
   }
 
-  param "slack_channel" {
+  param "channel" {
     type        = string
     description = "Channel, private group, or IM channel to send message to."
   }
@@ -22,12 +22,12 @@ pipeline "send_slack_message" {
     pipeline = slack.pipeline.post_message
     args = {
       token   = param.slack_token
-      channel = param.slack_channel
+      channel = param.channel
       message = param.message
     }
   }
 
   output "post_message_check" {
-    value = !is_error(step.pipeline.post_message) ? "Message '${param.message}' sent to ${param.slack_channel}" : "Error sending message: ${error_message(step.pipeline.post_message)}"
+    value = !is_error(step.pipeline.post_message) ? "Message '${param.message}' sent to ${param.channel}" : "Error sending message: ${error_message(step.pipeline.post_message)}"
   }
 }
