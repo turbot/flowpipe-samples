@@ -17,6 +17,7 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
   param "zone" {
     type        = string
     description = "The GCP zone."
+    default     = var.zone
   }
 
   param "intance_name" {
