@@ -1,6 +1,6 @@
 pipeline "ip_profiler" {
   title       = "IP Profiler"
-  description = "A composite Flowpipe mod that aggregates data from VirusTotal, AbuseIPDB, and ReallyFreeGeoIP, offering in-depth and actionable intelligence on IP addresses."
+  description = "Get valuable information about an IP address by combining data from AbuseIPDB, ReallyFreeGeoIP and VirusTotal."
 
   param "abuseipdb_api_key" {
     type        = string
@@ -37,19 +37,19 @@ pipeline "ip_profiler" {
     description = "The number of reports per page. Defaults to 25 reports per page."
   }
 
-  # Really Free Geo IP
-  step "pipeline" "reallyfreegeoip_check_ip" {
+  # ReallyFreeGeoIP - Get IP Geolocation
+  step "pipeline" "reallyfreegeoip_ip_geolocation" {
     for_each = { for ip in param.ip_addresses : ip => ip }
-    pipeline = reallyfreegeoip.pipeline.check_ip
+    pipeline = reallyfreegeoip.pipeline.get_ip_geolocation
     args = {
       ip_address = each.value
     }
   }
 
-  # AbuseIPDB
-  step "pipeline" "abuseipdb_ip_info" {
+  # AbuseIPDB - Check IP Address
+  step "pipeline" "abuseipdb_ip_report" {
     for_each = { for ip in param.ip_addresses : ip => ip }
-    pipeline = abuseipdb.pipeline.check_ip
+    pipeline = abuseipdb.pipeline.check_ip_address
     args = {
       api_key         = param.abuseipdb_api_key
       ip_address      = each.value
@@ -57,21 +57,20 @@ pipeline "ip_profiler" {
     }
   }
 
-  step "pipeline" "abuseipdb_reports" {
+  # AbuseIPDB - List IP Address Reports
+  step "pipeline" "abuseipdb_ip_abuse_reports" {
     for_each = { for ip in param.ip_addresses : ip => ip }
-    pipeline = abuseipdb.pipeline.list_reports
+    pipeline = abuseipdb.pipeline.list_ip_address_reports
     args = {
       api_key         = param.abuseipdb_api_key
       ip_address      = each.value
       max_age_in_days = param.max_age_in_days
-      page            = param.page
-      per_page        = param.per_page
     }
   }
 
-  # VirusTotal
+  # VirusTotal - Get IP Address Report
   step "pipeline" "virustotal_get_ip_address_report" {
-    # virustotal works only for ipv4
+    # Virustotal works only for IPv4
     for_each = { for ip in param.ip_addresses : ip => ip }
     if       = can(regex("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", each.value)) == true
     pipeline = virustotal.pipeline.get_ip_address_report
@@ -81,18 +80,18 @@ pipeline "ip_profiler" {
     }
   }
 
-  step "echo" "ip_profile" {
+  step "transform" "ip_profile" {
     for_each = { for ip in param.ip_addresses : ip => ip }
-    json = {
-      reallyfreegeoip_ip_location : step.pipeline.reallyfreegeoip_check_ip[each.value].output.report,
-      abuseipdb_ip_info : step.pipeline.abuseipdb_ip_info[each.value].output.report.data,
-      abuseipdb_abuse_reports : step.pipeline.abuseipdb_reports[each.value].output.reports.data.results,
+    value = {
+      reallyfreegeoip_ip_geolocation : step.pipeline.reallyfreegeoip_ip_geolocation[each.value].output.geolocation,
+      abuseipdb_ip_report : step.pipeline.abuseipdb_ip_report[each.value].output.ip_report,
+      abuseipdb_ip_abuse_reports : step.pipeline.abuseipdb_ip_abuse_reports[each.value].output.reports,
       virustotal_ip_scan : try(step.pipeline.virustotal_get_ip_address_report[each.value].output.ip_report.data, "Must be a valid IPv4 for VirusTotal scan.")
     }
   }
 
   output "ip_profile" {
     description = "IP Profile"
-    value       = { for ip, details in step.echo.ip_profile : ip => details.json }
+    value       = { for ip, details in step.transform.ip_profile : ip => details.value }
   }
 }
