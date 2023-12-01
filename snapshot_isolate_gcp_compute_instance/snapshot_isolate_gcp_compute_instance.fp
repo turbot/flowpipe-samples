@@ -104,6 +104,6 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
   }
 
   output "output" {
-    value = !is_error(step.pipeline.create_egress_vpc_firewall_rule) ? "Created snapshots for disks, detached disks, and blocked ingress/egress traffic for instance ${param.instance_name}" : "Failed "
+    value = !is_error(step.pipeline.create_egress_vpc_firewall_rule) ? "Created snapshots for disks, detached disks, and blocked ingress/egress traffic for instance ${param.instance_name}" : "Failed to snapshot and isolate instance"
   }
 }

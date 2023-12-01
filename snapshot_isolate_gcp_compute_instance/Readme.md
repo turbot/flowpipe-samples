@@ -5,4 +5,4 @@ For a given GCP Compute instance, create a snapshot for all of its disks, detach
 ## Usage
 
 - Add your GCP credentials, project ID, and zone to `flowpipe.fpvars`
-Run the pipeline and specify `instance_name`, e.g., flowpipe pipeline run secure_snapshot_gcp_instance --arg 'instance_name=my_instance'
+- Run the pipeline and specify `instance_name`, e.g., flowpipe pipeline run snapshot_isolate_gcp_compute_instance --arg 'instance_name=my_instance'
