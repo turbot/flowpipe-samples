@@ -4,7 +4,7 @@ mod "snapshot_isolate_gcp_compute_instance" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-gcp" {
-      version = "v0.0.1-rc.0"
+      version = "0.0.1-rc.1"
       args = {
         project_id                   = var.gcp_project_id
         application_credentials_path = var.gcp_application_credentials_path

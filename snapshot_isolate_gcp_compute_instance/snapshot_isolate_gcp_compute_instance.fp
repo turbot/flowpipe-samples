@@ -5,24 +5,25 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
   param "application_credentials_path" {
     type        = string
     description = "The GCP application credentials file path."
-    default     = var.application_credentials_path
+    default     = var.gcp_application_credentials_path
   }
 
   param "project_id" {
     type        = string
     description = "The GCP project ID."
-    default     = var.project_id
+    default     = var.gcp_project_id
   }
 
   param "zone" {
     type        = string
     description = "The GCP zone."
-    default     = var.zone
+    default     = var.gcp_zone
   }
 
-  param "intance_name" {
+  param "instance_name" {
     type        = string
     description = "The GCP instance name."
+    default     = "instance-1"
   }
 
   step "pipeline" "get_compute_instance" {
@@ -37,25 +38,31 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
 
   step "pipeline" "create_compute_snapshot" {
     depends_on = [step.pipeline.get_compute_instance]
-    for_each   = { for disk in step.pipeline.get_compute_instance.output.stdout.disks : disk.source => disk }
+    for_each   = { for disk in step.pipeline.get_compute_instance.output.instance.disks : disk.source => disk }
     pipeline   = gcp.pipeline.create_compute_snapshot
     args = {
       application_credentials_path = param.application_credentials_path
       source_disk_name             = regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]
       project_id                   = param.project_id
-      snapshot_name                = "snapshot-1"
+      snapshot_name                = "isolate-disk-${regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]}"
       source_disk_zone             = regex("projects/.+/zones/(.+)/disks/.+", each.key)[0]
     }
   }
 
-  step "sleep" "sleep" {
+  step "pipeline" "stop_compute_instance" {
     depends_on = [step.pipeline.create_compute_snapshot]
-    duration   = "20s"
+    pipeline   = gcp.pipeline.stop_compute_instance
+    args = {
+      application_credentials_path = param.application_credentials_path
+      instance_name                = param.instance_name
+      project_id                   = param.project_id
+      zone                         = param.zone
+    }
   }
 
   step "pipeline" "detach_compute_instance_from_disk" {
-    depends_on = [step.sleep.sleep]
-    for_each   = { for disk in step.pipeline.get_compute_instance.output.stdout.disks : disk.source => disk }
+    depends_on = [step.pipeline.stop_compute_instance]
+    for_each   = { for disk in step.pipeline.get_compute_instance.output.instance.disks : disk.source => disk }
     pipeline   = gcp.pipeline.detach_compute_instance_from_disk
     args = {
       application_credentials_path = param.application_credentials_path
@@ -72,7 +79,7 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     args = {
       application_credentials_path = param.application_credentials_path
       project_id                   = param.project_id
-      network_name                 = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.stdout.networkInterfaces[0].network)[0]
+      network_name                 = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.instance.networkInterfaces[0].network)[0]
       firewall_rule_name           = "block-ingress"
       priority                     = "1000"
       direction                    = "INGRESS"
@@ -87,12 +94,16 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     args = {
       application_credentials_path = param.application_credentials_path
       project_id                   = param.project_id
-      network_name                 = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.stdout.networkInterfaces[0].network)[0]
+      network_name                 = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.instance.networkInterfaces[0].network)[0]
       firewall_rule_name           = "block-egress"
       priority                     = "1000"
       direction                    = "EGRESS"
       action                       = "DENY"
       rules                        = ["all"]
     }
+  }
+
+  output "output" {
+    value = !is_error(step.pipeline.create_egress_vpc_firewall_rule) ? "Created snapshots for disks, detached disks, and blocked ingress/egress traffic for instance ${param.instance_name}" : "Failed "
   }
 }
