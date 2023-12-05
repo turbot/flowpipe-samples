@@ -89,7 +89,7 @@ pipeline "deactivate_okta_accounts" {
     }
   }
 
-  step "echo" "condition_info" {
+  step "transform" "condition_info" {
     for_each = { for user in step.pipeline.list_users.output.users : user.id => user }
     text     = "${timecmp(each.value.lastLogin, timeadd(timestamp(), "-${param.inactive_hours}h"))} user ${each.value.profile.email} lastlogin ${each.value.lastLogin} status ${each.value.status}"
   }

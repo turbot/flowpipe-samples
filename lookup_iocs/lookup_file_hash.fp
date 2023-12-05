@@ -56,7 +56,7 @@ pipeline "lookup_file_hash" {
     request_body = "hash=${param.file_hash}"
   }
 
-  step "echo" "lookup_file_hash" {
+  step "transform" "lookup_file_hash" {
     json = {
       virustotal_file_scan : step.pipeline.virustotal.output.file_analysis.data,
       urlscan_file_scan : step.pipeline.urlscan.output.scan_result,
