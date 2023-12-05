@@ -39,10 +39,10 @@ pipeline "link_jira_issues" {
   step "pipeline" "search_issues_by_jql" {
     pipeline = jira.pipeline.search_issues_by_jql
     args = {
-      jira_api_base_url = param.jira_api_base_url
-      token             = param.jira_token
-      jira_user_email   = param.jira_user_email
-      jql_query         = param.jql_query
+      api_base_url = param.jira_api_base_url
+      token        = param.jira_token
+      user_email   = param.jira_user_email
+      jql_query    = param.jql_query
     }
   }
 
