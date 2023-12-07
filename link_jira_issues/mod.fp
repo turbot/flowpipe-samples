@@ -4,13 +4,7 @@ mod "link_jira_issues" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "v0.0.1-rc.4"
-      args = {
-        api_base_url = var.jira_api_base_url
-        token        = var.jira_token
-        user_email   = var.jira_user_email
-        project_key  = var.jira_project_key
-      }
+      version = "0.0.1-rc.5"
     }
   }
 }
