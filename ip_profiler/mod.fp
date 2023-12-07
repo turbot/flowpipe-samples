@@ -4,19 +4,13 @@ mod "ip_profiler" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-abuseipdb" {
-      version = "v0.0.1-rc.3"
-      args = {
-        api_key = var.abuseipdb_api_key
-      }
+      version = "v0.0.1-rc.5"
     }
     mod "github.com/turbot/flowpipe-mod-reallyfreegeoip" {
-      version = "v0.0.1-rc.3"
+      version = "v0.0.1-rc.5"
     }
     mod "github.com/turbot/flowpipe-mod-virustotal" {
-      version = "v0.0.1-rc.5"
-      args = {
-        api_key = var.virustotal_api_key
-      }
+      version = "v0.0.1-rc.7"
     }
   }
 }
