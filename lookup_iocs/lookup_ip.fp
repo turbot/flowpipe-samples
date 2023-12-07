@@ -2,24 +2,6 @@ pipeline "lookup_ip" {
   title       = "Lookup IP in Different Tools"
   description = "A composite Flowpipe mod that lookup an IP in VirusTotal, Urlscan and other tools."
 
-  param "abuseipdb_api_key" {
-    type        = string
-    default     = var.abuseipdb_api_key
-    description = local.abuseipdb_api_key_param_description
-  }
-
-  param "ip2location_api_key" {
-    type        = string
-    default     = var.ip2location_api_key
-    description = local.ip2location_api_key_param_description
-  }
-
-  param "urlscan_api_key" {
-    type        = string
-    default     = var.urlscan_api_key
-    description = local.urlscan_api_key_param_description
-  }
-
   param "ip_address" {
     type        = string
     description = "The IP address to be scanned."
@@ -32,65 +14,45 @@ pipeline "lookup_ip" {
     description = "Maximum age in days for the AbuseIPDB reports to retrieve. Defaults to 30 days."
   }
 
-  param "page" {
-    type        = number
-    default     = 1
-    optional    = true
-    description = "The page number of results to retrieve. Defaults to page 1."
-  }
-
-  param "per_page" {
-    type        = number
-    default     = 25
-    optional    = true
-    description = "The number of reports per page. Defaults to 25 reports per page."
-  }
-
   # AbuseIPDB
   step "pipeline" "abuseipdb_ip_info" {
-    pipeline = abuseipdb.pipeline.check_ip
+    pipeline = abuseipdb.pipeline.check_ip_address
     args = {
-      api_key         = param.abuseipdb_api_key
       ip_address      = param.ip_address
       max_age_in_days = param.max_age_in_days
     }
   }
 
   step "pipeline" "abuseipdb_reports" {
-    pipeline = abuseipdb.pipeline.list_reports
+    pipeline = abuseipdb.pipeline.list_ip_address_reports
     args = {
-      api_key         = param.abuseipdb_api_key
       ip_address      = param.ip_address
       max_age_in_days = param.max_age_in_days
-      page            = param.page
-      per_page        = param.per_page
     }
   }
 
-  # IP2Location
+  # IP2Location.io
   step "pipeline" "ip2location_ip_lookup" {
-    pipeline = ip2location.pipeline.get_ip
+    pipeline = ip2locationio.pipeline.get_ip_info
     args = {
-      api_key    = param.ip2location_api_key
       ip_address = param.ip_address
     }
   }
 
-  # Urlscan
+  # Urlscan.io
   step "pipeline" "urlscan_ip_lookup" {
-    pipeline = urlscan.pipeline.search_scan
+    pipeline = urlscanio.pipeline.search_scan
     args = {
-      api_key    = param.urlscan_api_key
-      query_term = "domain:${param.ip_address}"
+      query = "domain:${param.ip_address}"
     }
   }
 
   output "lookup_ip" {
     value = {
-      ip2location_ip_lookup : step.pipeline.ip2location_ip_lookup.output.ip_details,
-      abuseipdb_ip_info : step.pipeline.abuseipdb_ip_info.output.report.data,
-      abuseipdb_abuse_reports : step.pipeline.abuseipdb_reports.output.reports.data.results,
-      urlscan_ip_lookup : step.pipeline.urlscan_ip_lookup.output.scan_result
+      ip2location_ip_lookup : step.pipeline.ip2location_ip_lookup.output.ip_address,
+      abuseipdb_ip_info : step.pipeline.abuseipdb_ip_info.output.ip_report,
+      abuseipdb_abuse_reports : step.pipeline.abuseipdb_reports.output.reports,
+      urlscan_ip_lookup : step.pipeline.urlscan_ip_lookup.output.search_results
     }
   }
 }

@@ -41,8 +41,8 @@ pipeline "lookup_email" {
 
   output "lookup_email" {
     value = {
-      hunter_email_verify_status : step.http.hunter.response_body.data,
-      kickbox_email_verify_status : step.http.kickbox.response_body
+      hunter_email_verify_status : step.http.hunter_email_verify_status.response_body.data,
+      kickbox_email_verify_status : step.http.kickbox_email_verify_status.response_body
     }
   }
 }

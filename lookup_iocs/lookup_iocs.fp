@@ -2,18 +2,6 @@ pipeline "lookup_iocs" {
   title       = "Lookup IOCs in Different Tools"
   description = "A composite Flowpipe mod that lookup IOCs in VirusTotal, Urlscan and other tools."
 
-  param "virustotal_api_key" {
-    type        = string
-    default     = var.virustotal_api_key
-    description = local.virustotal_api_key_param_description
-  }
-
-  param "urlscan_api_key" {
-    type        = string
-    default     = var.urlscan_api_key
-    description = local.urlscan_api_key_param_description
-  }
-
   param "hunter_api_key" {
     type        = string
     default     = var.hunter_api_key
@@ -32,18 +20,6 @@ pipeline "lookup_iocs" {
     description = local.hybrid_analysis_api_key_param_description
   }
 
-  param "abuseipdb_api_key" {
-    type        = string
-    default     = var.abuseipdb_api_key
-    description = local.abuseipdb_api_key_param_description
-  }
-
-  param "ip2location_api_key" {
-    type        = string
-    default     = var.ip2location_api_key
-    description = local.ip2location_api_key_param_description
-  }
-
   param "apivoid_api_key" {
     type        = string
     default     = var.apivoid_api_key
@@ -60,9 +36,7 @@ pipeline "lookup_iocs" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "domain" }
     pipeline = pipeline.lookup_domain
     args = {
-      virustotal_api_key = param.virustotal_api_key
-      urlscan_api_key    = param.urlscan_api_key
-      domain             = each.value.value
+      domain = each.value.value
     }
   }
 
@@ -82,8 +56,6 @@ pipeline "lookup_iocs" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "file_hash" }
     pipeline = pipeline.lookup_file_hash
     args = {
-      virustotal_api_key      = param.virustotal_api_key
-      urlscan_api_key         = param.urlscan_api_key
       hybrid_analysis_api_key = param.hybrid_analysis_api_key
       file_hash               = each.value.value
     }
@@ -94,10 +66,7 @@ pipeline "lookup_iocs" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "ip" }
     pipeline = pipeline.lookup_ip
     args = {
-      ip2location_api_key = param.ip2location_api_key
-      urlscan_api_key     = param.urlscan_api_key
-      abuseipdb_api_key   = param.abuseipdb_api_key
-      ip_address          = each.value.value
+      ip_address = each.value.value
     }
   }
 
@@ -106,9 +75,8 @@ pipeline "lookup_iocs" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "url" }
     pipeline = pipeline.lookup_url
     args = {
-      virustotal_api_key = param.virustotal_api_key
-      apivoid_api_key    = param.apivoid_api_key
-      url                = each.value.value
+      apivoid_api_key = param.apivoid_api_key
+      url             = each.value.value
     }
   }
 

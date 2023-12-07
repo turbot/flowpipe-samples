@@ -2,18 +2,6 @@ pipeline "lookup_domain" {
   title       = "Lookup Domain in Different Tools"
   description = "A composite Flowpipe mod that lookup a domain in VirusTotal, Urlscan and other tools."
 
-  param "virustotal_api_key" {
-    type        = string
-    default     = var.virustotal_api_key
-    description = local.virustotal_api_key_param_description
-  }
-
-  param "urlscan_api_key" {
-    type        = string
-    default     = var.urlscan_api_key
-    description = local.urlscan_api_key_param_description
-  }
-
   param "domain" {
     type        = string
     description = "The domain to be scanned."
@@ -33,19 +21,17 @@ pipeline "lookup_domain" {
 
   # VirusTotal
   step "pipeline" "virustotal_domain_lookup" {
-    pipeline = virustotal.pipeline.get_domain
+    pipeline = virustotal.pipeline.get_domain_report
     args = {
-      api_key = param.virustotal_api_key
-      domain  = param.domain
+      domain = param.domain
     }
   }
 
-  # Urlscan
+  # Urlscan.io
   step "pipeline" "urlscan_domain_lookup" {
-    pipeline = urlscan.pipeline.search_scan
+    pipeline = urlscanio.pipeline.search_scan
     args = {
-      api_key    = param.urlscan_api_key
-      query_term = "domain:${param.domain}"
+      query = "domain:${param.domain}"
     }
   }
 
@@ -64,7 +50,7 @@ pipeline "lookup_domain" {
       urlhaus_domain_lookup : step.http.urlhaus_domain_lookup.response_body,
       virustotal_domain_lookup : step.pipeline.virustotal_domain_lookup.output.domain_report.data,
       pulsedive_domain_lookup : step.http.pulsedive_domain_lookup.response_body,
-      urlscan_domain_lookup : step.pipeline.urlscan_domain_lookup.output.scan_result
+      urlscan_domain_lookup : step.pipeline.urlscan_domain_lookup.output.search_results
     }
   }
 }

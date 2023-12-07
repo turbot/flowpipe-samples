@@ -2,12 +2,6 @@ pipeline "lookup_url" {
   title       = "Lookup URL in Different Tools"
   description = "A composite Flowpipe mod that lookup an url in VirusTotal, Urlscan and other tools."
 
-  param "virustotal_api_key" {
-    type        = string
-    default     = var.virustotal_api_key
-    description = local.virustotal_api_key_param_description
-  }
-
   param "apivoid_api_key" {
     type        = string
     default     = var.apivoid_api_key
@@ -23,8 +17,7 @@ pipeline "lookup_url" {
   step "pipeline" "virustotal_url_lookup" {
     pipeline = virustotal.pipeline.get_url_analysis
     args = {
-      api_key = param.virustotal_api_key
-      url     = param.url
+      url = param.url
     }
   }
 
