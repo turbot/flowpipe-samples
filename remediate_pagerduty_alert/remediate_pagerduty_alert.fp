@@ -17,17 +17,10 @@ pipeline "remediate_pagerduty_alert" {
     description = "PagerDuty event."
   }
 
-  param "pagerduty_api_token" {
-    type        = string
-    description = "PagerDuty API token used for authentication."
-    default     = var.pagerduty_api_token
-  }
-
   step "pipeline" "pagerduty_incident_acknowledged" {
     if       = param.event.event_type == "incident.acknowledged"
     pipeline = pipeline.pagerduty_incident_acknowledged
     args = {
-      api_key     = param.pagerduty_api_token
       incident_id = param.event.data.id
     }
   }
@@ -36,7 +29,6 @@ pipeline "remediate_pagerduty_alert" {
     if       = param.event.event_type == "incident.triggered"
     pipeline = pipeline.pagerduty_incident_triggered
     args = {
-      api_key     = param.pagerduty_api_token
       incident_id = param.event.data.id
     }
   }
@@ -45,7 +37,6 @@ pipeline "remediate_pagerduty_alert" {
     if       = param.event.event_type == "incident.annotated"
     pipeline = pipeline.pagerduty_incident_annotated
     args = {
-      api_key     = param.pagerduty_api_token
       incident_id = param.event.data.incident.id
     }
   }
