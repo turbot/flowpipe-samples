@@ -1,9 +1,10 @@
-//  Schedule Trigger
+# Schedule Trigger
 trigger "schedule" "scheduled_user_enable_action" {
-  description = "A cron that checks xxxxx."
-  schedule    = "*/5 * * * *"
-  // schedule    = "*/5 * * * *" // Run every 5 min
-  pipeline    = pipeline.user_enable_action
+  description = "A cron schedule that checks specific time or interval."
+  # schedule    = "* * * * *" // Run every 1 min
+  # Run every 5 min
+  schedule = "*/5 * * * *"
+  pipeline = pipeline.user_enable_action
 }
 
 pipeline "user_enable_action" {
@@ -11,7 +12,6 @@ pipeline "user_enable_action" {
   description = "Enable user from Azure AD based on approval status."
 
   # Azure Setup
-
   param "tenant_id" {
     type        = string
     description = "The Microsoft Entra ID tenant (directory) ID."
@@ -36,25 +36,6 @@ pipeline "user_enable_action" {
     default     = var.client_id
   }
 
-  # Jira Setup
-  param "token" {
-    type        = string
-    description = "API access token"
-    default = var.token
-  }
-
-  param "user_email" {
-    type        = string
-    description = "Email-id of the user."
-    default     = var.user_email
-  }
-
-  param "api_base_url" {
-    type        = string
-    description = "API base URL."
-    default     = var.api_base_url
-  }
-
   param "project_key" {
     type        = string
     description = "The key identifying the project."
@@ -67,25 +48,16 @@ pipeline "user_enable_action" {
     default     = "Task"
   }
 
-  // param "user_id" {
-  //   type = string
-  // }
 
   step "pipeline" "list_issues" {
     pipeline = jira.pipeline.list_issues
     args = {
-      api_base_url = param.api_base_url
-      token        = param.token
-      user_email   = param.user_email
-      project_key  = param.project_key
+      project_key = param.project_key
     }
   }
 
-
   step "pipeline" "ad_user_account_status" {
     depends_on = [step.pipeline.list_issues]
-
-    // This below condition works with null check
     for_each = step.pipeline.list_issues.output.issues.issues != null ? { for each_issue in step.pipeline.list_issues.output.issues.issues : each_issue.id => each_issue if strcontains(each_issue.fields.summary, "Enable") && each_issue.fields.status.name == "Approval Done" } : tomap({})
 
     pipeline = azure.pipeline.update_user_status
@@ -93,17 +65,10 @@ pipeline "user_enable_action" {
       tenant_id       = param.tenant_id
       client_secret   = param.client_secret
       client_id       = param.client_id
-      subscription_id = param.subscription_id
       user_id         = split(" ", each.value.fields.summary)[1]
       account_enabled = split(" ", each.value.fields.summary)[0] == "Enable" ? "true" : "true"
     }
 
-  }
-
-
-  output "enable_status" {
-    description = "List issues."
-    value       = step.pipeline.ad_user_account_status
   }
 
 }

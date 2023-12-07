@@ -37,25 +37,6 @@ pipeline "create_user_update_issue" {
     description = "The account status to update for the user.  Here you can assign values as 'enable' or 'disable' or 'delete' to raise respective issues in jira"
   }
 
-  # Jira Setup
-  param "token" {
-    type        = string
-    description = "API access token"
-    default = var.token
-  }
-
-  param "user_email" {
-    type        = string
-    description = "Email-id of the user."
-    default     = var.user_email
-  }
-
-  param "api_base_url" {
-    type        = string
-    description = "API base URL."
-    default     = var.api_base_url
-  }
-
   param "project_key" {
     type        = string
     description = "The key identifying the project."
@@ -71,11 +52,10 @@ pipeline "create_user_update_issue" {
   step "pipeline" "get_ad_user" {
     pipeline = azure.pipeline.get_ad_user
     args = {
-      tenant_id       = param.tenant_id
-      client_secret   = param.client_secret
-      client_id       = param.client_id
-      subscription_id = param.subscription_id
-      user_id         = param.user_id
+      tenant_id     = param.tenant_id
+      client_secret = param.client_secret
+      client_id     = param.client_id
+      user_id       = param.user_id
     }
   }
 
@@ -83,13 +63,10 @@ pipeline "create_user_update_issue" {
     if       = param.account_status == "disable"
     pipeline = jira.pipeline.create_issue
     args = {
-      api_base_url = param.api_base_url
-      token        = param.token
-      user_email   = param.user_email
-      project_key  = param.project_key
-      summary      = "Disable ${step.pipeline.get_ad_user.output.stdout.userPrincipalName}"
-      description  = "User Details ${jsonencode(step.pipeline.get_ad_user.output.stdout)}"
-      issue_type   = param.issue_type
+      project_key = param.project_key
+      summary     = "Disable ${step.pipeline.get_ad_user.output.user.userPrincipalName}"
+      description = "User Details ${jsonencode(step.pipeline.get_ad_user.output.user)}"
+      issue_type  = param.issue_type
     }
   }
 
@@ -97,13 +74,10 @@ pipeline "create_user_update_issue" {
     if       = param.account_status == "enable"
     pipeline = jira.pipeline.create_issue
     args = {
-      api_base_url = param.api_base_url
-      token        = param.token
-      user_email   = param.user_email
-      project_key  = param.project_key
-      summary      = "Enable ${step.pipeline.get_ad_user.output.stdout.userPrincipalName}"
-      description  = "User Details ${jsonencode(step.pipeline.get_ad_user.output.stdout)}"
-      issue_type   = param.issue_type
+      project_key = param.project_key
+      summary     = "Enable ${step.pipeline.get_ad_user.output.user.userPrincipalName}"
+      description = "User Details ${jsonencode(step.pipeline.get_ad_user.output.user)}"
+      issue_type  = param.issue_type
     }
   }
 
@@ -111,20 +85,12 @@ pipeline "create_user_update_issue" {
     if       = param.account_status == "delete"
     pipeline = jira.pipeline.create_issue
     args = {
-      api_base_url = param.api_base_url
-      token        = param.token
-      user_email   = param.user_email
-      project_key  = param.project_key
-      summary      = "Delete ${step.pipeline.get_ad_user.output.stdout.userPrincipalName}"
-      description  = "User Details ${jsonencode(step.pipeline.get_ad_user.output.stdout)}"
-      issue_type   = param.issue_type
+      project_key = param.project_key
+      summary     = "Delete ${step.pipeline.get_ad_user.output.user.userPrincipalName}"
+      description = "User Details ${jsonencode(step.pipeline.get_ad_user.output.user)}"
+      issue_type = param.issue_type
     }
   }
-
-  // output "user" {
-  //   description = "User info."
-  //   value       = step.pipeline.get_ad_user
-  // }
 
   output "disable_issue" {
     description = "Issue metadata."
