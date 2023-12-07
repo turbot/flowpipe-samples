@@ -4,16 +4,12 @@ mod "notify_teams_gitlab_project_visibility" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-gitlab" {
-      version = "v0.0.1-rc-3"
-      args = {
-        access_token = var.gitlab_access_token
-      }
+      version = "v0.0.1-rc.4"
     }
     mod "github.com/turbot/flowpipe-mod-teams" {
-      version = "v0.0.1-rc.4"
+      version = "v0.0.1-rc.13"
       args = {
-        access_token = var.teams_access_token
-        team_id      = var.team_id
+        team_id = var.team_id
       }
     }
   }
