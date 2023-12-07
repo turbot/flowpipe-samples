@@ -25,12 +25,6 @@ pipeline "ip_profiler" {
     description = "Maximum age in days for the AbuseIPDB reports to retrieve. Defaults to 30 days."
   }
 
-  # param "page" {
-  #   type        = number
-  #   default     = 1
-  #   description = "The page number of results to retrieve. Defaults to page 1."
-  # }
-
   # ReallyFreeGeoIP - Get IP Geolocation
   step "pipeline" "reallyfreegeoip_ip_geolocation" {
     for_each = { for ip in param.ip_addresses : ip => ip }
