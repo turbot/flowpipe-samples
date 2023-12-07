@@ -2,24 +2,6 @@ pipeline "domains_review_through_multiple_sources" {
   title       = "Analyze Domains Through Multiple Sources"
   description = "A composite Flowpipe mod that analyze domain from VirusTotal, Urlscan and other tools"
 
-  param "virustotal_api_key" {
-    type        = string
-    default     = var.virustotal_api_key
-    description = "API key to authenticate requests with VirusTotal."
-  }
-
-  param "urlscan_api_key" {
-    type        = string
-    default     = var.urlscan_api_key
-    description = "The urlscan.io personal access token to authenticate to the urlscan APIs ."
-  }
-
-  param "ip2location_api_key" {
-    type        = string
-    default     = var.ip2location_api_key
-    description = "API key to authenticate requests with IP2Location."
-  }
-
   param "apivoid_api_key" {
     type        = string
     default     = var.apivoid_api_key
@@ -45,28 +27,25 @@ pipeline "domains_review_through_multiple_sources" {
 
   # VirusTotal
   step "pipeline" "virustotal_domain_scan" {
-    pipeline = virustotal.pipeline.get_domain
+    pipeline = virustotal.pipeline.get_domain_report
     args = {
-      api_key = param.virustotal_api_key
-      domain  = param.domain
+      domain = param.domain
     }
   }
 
-  # Urlscan
+  # Urlscan.io
   step "pipeline" "urlscan_domain_scan" {
-    pipeline = urlscan.pipeline.search_scan
+    pipeline = urlscanio.pipeline.search_scan
     args = {
-      api_key    = param.urlscan_api_key
-      query_term = "domain:${param.domain}"
+      query = "domain:${param.domain}"
     }
   }
 
-  # IP2Location
+  # IP2Location.io
   step "pipeline" "ip2location_domain_scan" {
-    pipeline = ip2location.pipeline.get_whois_info
+    pipeline = ip2locationio.pipeline.get_whois_info
     args = {
-      api_key = param.ip2location_api_key
-      domain  = param.domain
+      domain = param.domain
     }
   }
 
@@ -103,9 +82,9 @@ pipeline "domains_review_through_multiple_sources" {
     value = {
       urlhaus_domain_scan : step.http.urlhaus_domain_scan.response_body,
       virustotal_domain_scan : step.pipeline.virustotal_domain_scan.output.domain_report.data,
-      urlscan_domain_scan : step.pipeline.urlscan_domain_scan.output.scan_result
-      apivoid_domain_reputation : step.http.apivoid_domain_reputation.response_body.data
-      domain_age : step.pipeline.ip2location.output.whois_info.domain_age,
+      urlscan_domain_scan : step.pipeline.urlscan_domain_scan.output.search_results,
+      apivoid_domain_reputation : step.http.apivoid_domain_reputation.response_body.data,
+      domain_age : step.pipeline.ip2location_domain_scan.output.domain.domain_age,
       domain_parked_score : step.http.dnstwister_parked_score.response_body
     }
   }
