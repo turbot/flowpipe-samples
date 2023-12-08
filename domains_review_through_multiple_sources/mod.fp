@@ -1,6 +1,7 @@
 mod "domains_review_through_multiple_sources" {
   title       = "Analyze Domains Through Multiple Sources"
-  description = "A composite Flowpipe mod that analyze domain from VirusTotal, Urlscan and other tools"
+  description = "A composite Flowpipe mod that analyze domain from VirusTotal, Urlscan and other tools."
+  categories  = ["security"]
 
   require {
     mod "github.com/turbot/flowpipe-mod-virustotal" {
