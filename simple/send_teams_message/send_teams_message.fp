@@ -2,12 +2,6 @@ pipeline "send_teams_message" {
   title       = "Send Teams Message"
   description = "Send a new chat message in the specified channel."
 
-  param "access_token" {
-    type        = string
-    description = "The Microsoft personal security access token to authenticate to the Microsoft graph APIs."
-    default     = var.access_token
-  }
-
   param "team_id" {
     type        = string
     description = "The unique identifier of the team."
@@ -34,7 +28,6 @@ pipeline "send_teams_message" {
   step "pipeline" "send_teams_message" {
     pipeline = teams.pipeline.send_channel_message
     args = {
-      access_token         = param.access_token
       team_id              = param.team_id
       channel_id           = param.channel_id
       message              = param.message
