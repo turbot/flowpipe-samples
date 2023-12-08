@@ -22,24 +22,6 @@ pipeline "remediate_aws_guardduty_alerts" {
     type = any
   }
 
-  param "jira_api_base_url" {
-    type        = string
-    description = "Jira API base URL."
-    default     = var.jira_api_base_url
-  }
-
-  param "jira_token" {
-    type        = string
-    description = "Jira API token."
-    default     = var.jira_token
-  }
-
-  param "jira_user_email" {
-    type        = string
-    description = "Jira user email."
-    default     = var.jira_user_email
-  }
-
   param "jira_project_key" {
     type        = string
     description = "Jira project key."
@@ -50,9 +32,6 @@ pipeline "remediate_aws_guardduty_alerts" {
     if       = jsondecode(param.alert).detail.type == "Policy:S3/BucketBlockPublicAccessDisabled"
     pipeline = jira.pipeline.create_issue
     args = {
-      api_base_url = param.jira_api_base_url
-      token        = param.jira_token
-      user_email   = param.jira_user_email
       project_key  = param.jira_project_key
       summary      = "Block ${jsondecode(param.alert).detail.resource.s3BucketDetails[0].name} S3 bucket public access."
       issue_type   = param.issue_type
@@ -73,9 +52,6 @@ pipeline "remediate_aws_guardduty_alerts" {
     if       = jsondecode(param.alert).detail.type == "UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.InsideAWS"
     pipeline = jira.pipeline.create_issue
     args = {
-      api_base_url = param.jira_api_base_url
-      token        = param.jira_token
-      user_email   = param.jira_user_email
       project_key  = param.jira_project_key
       summary      = "Disasscociate ${jsondecode(param.alert).detail.resource.instanceDetails.instanceId} IAM role."
       issue_type   = param.issue_type
