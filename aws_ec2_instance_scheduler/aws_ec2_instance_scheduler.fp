@@ -2,49 +2,47 @@ pipeline "aws_ec2_instance_scheduler" {
   title       = "AWS EC2 Instance Scheduler"
   description = "Pipeline for AWS EC2 Instance Scheduling using cron jobs."
 
-  // param "schedule_name" {
-  //   type    = string
-  //   // default = "business_hours"
-  // }
+  param "schedule_name" {
+    description = "The name of the tag that is used to identify the schedule."
+    type    = string
+  }
 
-  // param "action" {
-  //   type    = string
-  // }
+  param "action" {
+    description = "The action to perform on the EC2 instances. Valid values are 'start' and 'stop'."
+    type    = string
+  }
 
   step "pipeline" "describe_ec2_instances" {
     pipeline = aws.pipeline.describe_ec2_instances
+    args = {
+      tags = {
+        schedule_name = param.schedule_name
+      }
+    }
   }
 
-  # Filter instances by tag and return a list of instance IDs
-  step "transform" "tagged_instances" {
-    // value = step.pipeline.describe_ec2_instances.output.instances[0][0].InstanceId
+  step "transform" "scheduled_instance_ids" {
     value = [for instance in step.pipeline.describe_ec2_instances.output.instances[*] : instance.InstanceId ]
-    // value = [for instance in step.pipeline.describe_ec2_instances.output : instance if contains(instance.Tags[0].Value, "scheduler")]
   }
 
-  output "insts" {
-    value = step.transform.tagged_instances.value
+  step "pipeline" "aws_ec2_instance_start" {
+    if          = param.action == "start"
+    description = "Starts the EC2 instances"
+    pipeline    = aws.pipeline.start_ec2_instances
+    args = {
+      instance_ids = step.transform.scheduled_instance_ids.value
+    }
   }
 
-  // step "pipeline" "aws_ec2_instance_start" {
-  //   // if          = param.action == "start"
-  //   description = "Starts the EC2 instances"
-  //   for_each    = step.transform.tagged_instances.value
-  //   pipeline    = aws.pipeline.start_ec2_instances
-  //   args = {
-  //     instance_ids = [each.value.InstanceId]
-  //   }
-  // }
-
-  // step "pipeline" "aws_ec2_instance_stop" {
-  //   if          = param.action == "stop"
-  //   description = "Stops the EC2 instances"
-  //   for_each    = step.transform.tagged_instances.value
-  //   pipeline    = aws.pipeline.stop_ec2_instance
-  //   args = {
-  //     instance_ids = [each.value.InstanceId]
-  //   }
-  // }
+  step "pipeline" "aws_ec2_instance_stop" {
+    if          = param.action == "stop"
+    description = "Stops the EC2 instances"
+    for_each    = step.transform.scheduled_instance_ids.value
+    pipeline    = aws.pipeline.stop_ec2_instance
+    args = {
+      instance_ids = step.transform.scheduled_instance_ids.value
+    }
+  }
 
 }
 
