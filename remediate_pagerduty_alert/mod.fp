@@ -1,6 +1,7 @@
 mod "remediate_pagerduty_alert" {
   title       = "Remediate PagerDuty Alert"
   description = "Remediate PagerDuty alert."
+  categories  = ["incident response"]
 
   require {
     mod "github.com/turbot/flowpipe-mod-pagerduty" {
