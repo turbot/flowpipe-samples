@@ -1,6 +1,1 @@
-teams_access_token=<Teams_Access_Token>
 team_id=<Team_ID>
-jira_token=<JIRA_Token>
-jira_user_email=<JIRA_User_Email>
-jira_api_base_url=<JIRA_API_Base_URL>
-jira_project_key=<JIRA_Project_Key>
