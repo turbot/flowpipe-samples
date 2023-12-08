@@ -1,4 +1,4 @@
-pipeline "summarize_a_github_issue_with_openai" {
+pipeline "summarize_github_issue_with_openai" {
   title       = "Summarize GitHub Issue with OpenAI"
   description = "Summarize a GitHub issue with OpenAI."
 
