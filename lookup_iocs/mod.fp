@@ -1,6 +1,7 @@
 mod "lookup_iocs" {
   title       = "Lookup IOCs in different tools"
-  description = "A composite Flowpipe mod that lookup IOCS in VirusTotal, Urlscan and other tools"
+  description = "A composite Flowpipe mod that lookup IOCS in VirusTotal, Urlscan and other tools."
+  categories  = ["security"]
 
   require {
     mod "github.com/turbot/flowpipe-mod-abuseipdb" {
