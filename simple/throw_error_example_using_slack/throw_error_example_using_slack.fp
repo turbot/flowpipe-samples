@@ -1,12 +1,11 @@
-# // usage: flowpipe pipeline run throw_error_example_using_slack --arg channel="C012ABCDZ"
 pipeline "throw_error_example_using_slack" {
   title       = "Throw Error Example Using Slack"
   description = "Throw an error if the requested Slack channel is unavailable."
 
-  param "slack_token" {
+  param "cred" {
     type        = string
-    default     = var.slack_token
     description = "Authentication token bearing required scopes."
+    default     = "default"
   }
 
   param "channel" {
@@ -15,20 +14,20 @@ pipeline "throw_error_example_using_slack" {
   }
 
   step "http" "get_channel" {
-    url    = "https://slack.com/api/conversations.info"
     method = "post"
+    url    = "https://slack.com/api/conversations.info"
 
     request_headers = {
       Content-Type  = "application/x-www-form-urlencoded"
-      Authorization = "Bearer ${param.slack_token}"
+      Authorization = "Bearer ${credential.slack[param.cred].token}"
     }
 
     request_body = "channel=${param.channel}"
 
     # When the requested channel is unavilable, exit the pipeline.
     throw {
-      if      = result.response_body.error == "channel_not_found"
-      message = "The requested channel is not found. Exiting the pipeline."
+      if      = result.response_body.ok == false
+      message = result.response_body.error == "channel_not_found" ? "The requested channel is not found. Exiting the pipeline." : result.response_body.error
     }
   }
 
