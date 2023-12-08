@@ -8,26 +8,28 @@ pipeline "send_top_show_hn_email" {
   title       = "Send Email with Top 'Show HN'"
   description = "Send an email using SendGrid containing top stories from 'Show HN'."
 
-  param "sendgrid_api_key" {
+  param "sendgrid_cred" {
     type        = string
-    description = "SendGrid API key used for authentication."
-    default     = var.sendgrid_api_key
+    description = "Name for SendGrid credentials to use. If not provided, the default credentials will be used."
+    default     = var.sendgrid_cred
   }
 
   param "hn_story_count" {
     type        = number
     description = "The number of stories to retrieve from Hacker News."
-    default     = 50
+    default     = var.hn_story_count
   }
 
   param "to" {
     type        = string
     description = "The intended recipient's email address."
+    default     = var.to
   }
 
   param "from" {
     type        = string
     description = "The 'From' email address used to deliver the message. This address should be a verified sender in your Twilio SendGrid account."
+    default     = var.from
   }
 
   step "query" "list_show_hn_stories" {
@@ -47,25 +49,18 @@ pipeline "send_top_show_hn_email" {
     EOQ
   }
 
-  step "pipeline" "send_email" {
-    pipeline = sendgrid.pipeline.send_email
+  step "pipeline" "send_mail" {
+    pipeline = sendgrid.pipeline.send_mail
     args = {
-      api_key = param.sendgrid_api_key
+      cred    = param.sendgrid_cred
       to      = param.to
       from    = param.from
       subject = "Top ${param.hn_story_count} Show HN stories on ${timestamp()}"
-      text    = length(step.query.list_show_hn_stories.rows) > 0 ? "Top ${param.hn_story_count} Show HN stories:\n\n${join("", [for story in step.query.list_show_hn_stories.rows : format("%v\n%v score by %v\n%v}\n%v\n\n", story.title, story.score, story.by, story.url, story.text)])}" : "No stories available."
+      content = length(step.query.list_show_hn_stories.rows) > 0 ? "Top ${param.hn_story_count} Show HN stories:\n\n${join("", [for story in step.query.list_show_hn_stories.rows : format("%v\n%v score by %v\n%v}\n%v\n\n", story.title, story.score, story.by, story.url, story.text)])}" : "No stories available."
     }
   }
 
-  // Re-enable for debugging
-  /*
-  output "hn_stories" {
-    value = step.query.list_show_hn_stories.rows
-  }
-  */
-
-  output "send_email_check" {
-    value = !is_error(step.pipeline.send_email) ? "Email sent successfully" : "Error sending email: ${error_message(step.pipeline.send_email)}"
+  output "send_mail_check" {
+    value = !is_error(step.pipeline.send_mail) ? "Email sent to ${param.to}" : "Error sending email: ${error_message(step.pipeline.send_mail)}"
   }
 }
