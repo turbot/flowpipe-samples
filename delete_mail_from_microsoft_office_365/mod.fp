@@ -4,9 +4,9 @@ mod "delete_mail_from_microsoft_office_365" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-teams" {
-      version = "v0.0.1-rc.9"
+      version = "v0.0.1-rc.14"
       args = {
-        access_token = var.teams_access_token
+        team_id = ""
       }
     }
   }
