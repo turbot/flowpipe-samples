@@ -2,6 +2,18 @@ pipeline "aws_ec2_instance_scheduler" {
   title       = "AWS EC2 Instance Scheduler"
   description = "Pipeline for AWS EC2 Instance Scheduling using cron jobs."
 
+  param "aws_region" {
+    description = "The AWS region to use."
+    type        = string
+    default     = var.aws_region
+  }
+
+  param "aws_cred" {
+    description = "Name for credentials to use. If not provided, the default credentials will be used."
+    type        = string
+    default     = "default"
+  }
+
   param "schedule_name" {
     description = "The name of the tag that is used to identify the schedule."
     type    = string
@@ -15,7 +27,9 @@ pipeline "aws_ec2_instance_scheduler" {
   step "pipeline" "describe_ec2_instances" {
     pipeline = aws.pipeline.describe_ec2_instances
     args = {
-      tags = {
+      region = param.aws_region
+      cred   = param.aws_cred
+      tags   = {
         schedule_name = param.schedule_name
       }
     }
@@ -30,6 +44,8 @@ pipeline "aws_ec2_instance_scheduler" {
     description = "Starts the EC2 instances"
     pipeline    = aws.pipeline.start_ec2_instances
     args = {
+      region       = param.aws_region
+      cred         = param.aws_cred
       instance_ids = step.transform.scheduled_instance_ids.value
     }
   }
@@ -38,8 +54,10 @@ pipeline "aws_ec2_instance_scheduler" {
     if          = param.action == "stop"
     description = "Stops the EC2 instances"
     for_each    = step.transform.scheduled_instance_ids.value
-    pipeline    = aws.pipeline.stop_ec2_instance
+    pipeline    = aws.pipeline.stop_ec2_instances
     args = {
+      region       = param.aws_region
+      cred         = param.aws_cred
       instance_ids = step.transform.scheduled_instance_ids.value
     }
   }
