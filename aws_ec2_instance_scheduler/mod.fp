@@ -4,10 +4,16 @@ mod "aws_ec2_instance_scheduler" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "v0.0.1-rc.7"
+      version = "v0.0.1-rc.9"
       args = {
         region = var.aws_region
-        // region = "us-east-1"
+      }
+    }
+    mod "github.com/turbot/flowpipe-mod-teams" {
+      version = "v0.0.1-rc.15"
+      args = {
+        access_token = var.teams_access_token
+        team_id      = var.team_id
       }
     }
   }
