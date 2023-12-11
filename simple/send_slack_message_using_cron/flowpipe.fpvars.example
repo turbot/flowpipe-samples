@@ -1,3 +1,0 @@
-slack_token = "xoxb-2556146250-5954"
-slack_channel = "mychannel"
-message = "test trigger 1 min"
