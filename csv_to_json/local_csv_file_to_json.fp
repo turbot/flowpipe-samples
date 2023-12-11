@@ -1,28 +1,33 @@
 pipeline "local_csv_file_to_json" {
-  title       = "Local CSV File To JSON"
-  description = "Read a CSV file and convert the contents to JSON."
+  title       = "Convert Local CSV File To JSON"
+  description = "Read a CSV file and transform it into JSON format."
 
+  # Input: Path to the CSV file
   param "local_csv_file_path" {
     type        = string
-    description = "The path to the CSV file."
+    description = "Path to the CSV file."
     default     = "./users.csv"
   }
 
-  # Using a local file
+  # Step: Transform CSV to JSON
   step "transform" "local_csv_file_to_json" {
     value = jsonencode(csvdecode(file("${param.local_csv_file_path}")))
   }
 
+  # Outputs
   output "csv_contents" {
-    value = file("${param.local_csv_file_path}")
+    description = "Contents of the local CSV file."
+    value       = file("${param.local_csv_file_path}")
   }
 
-  output "csvdecoded" {
-    value = csvdecode(file("${param.local_csv_file_path}"))
+  output "csv_decoded" {
+    description = "Decoded data from the CSV file."
+    value       = csvdecode(file("${param.local_csv_file_path}"))
   }
 
-  output "csv2json" {
-    value = step.transform.local_csv_file_to_json.value
+  output "csv_to_json" {
+    description = "CSV file converted to JSON."
+    value       = step.transform.local_csv_file_to_json.value
   }
 
 }
