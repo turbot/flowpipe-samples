@@ -1,14 +1,14 @@
 pipeline "add_pipes_org_workspace_and_members" {
   title       = "Add Pipes Workspace Organization and Add Members"
-  description = "Add workspce to the organization and add organization members to the workspace."
+  description = "Create a workspace in an organization and bring in organization members to the workspace."
 
-  param "token" {
+  param "pipes_credentials" {
     type        = string
-    description = "API access token."
-    default     = var.token
+    description = "Name for Pipes credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
   }
 
-  param "org_handle" {
+  param "organization_handle" {
     type        = string
     description = "The handle of the organization where the workspace has to be created."
   }
@@ -20,7 +20,7 @@ pipeline "add_pipes_org_workspace_and_members" {
 
   param "instance_type" {
     type        = string
-    description = "The type of the instance to be created."
+    description = "The type of the instance to be created. Supported values are 'db1.shared' and 'db1.small'."
     default     = "db1.shared"
   }
 
@@ -37,25 +37,25 @@ pipeline "add_pipes_org_workspace_and_members" {
   }
 
   step "pipeline" "add_pipes_org_workspace" {
-    pipeline = pipes.pipeline.create_org_workspace
+    pipeline = pipes.pipeline.create_organization_workspace
     args = {
-      token            = param.token
-      org_handle       = param.org_handle
-      workspace_handle = param.workspace_handle
-      instance_type    = param.instance_type
+      cred                = param.pipes_credentials
+      organization_handle = param.organization_handle
+      handle              = param.workspace_handle
+      instance_type       = param.instance_type
     }
   }
 
   step "pipeline" "add_workspace_member" {
     depends_on = [step.pipeline.add_pipes_org_workspace]
     for_each   = { for handle in param.member_handles : handle => handle }
-    pipeline   = pipes.pipeline.add_org_workspace_member
+    pipeline   = pipes.pipeline.create_organization_workspace_member
     args = {
-      token            = param.token
-      org_handle       = param.org_handle
+      cred             = param.pipes_credentials
+      org_handle       = param.organization_handle
       workspace_handle = param.workspace_handle
       role             = param.role
-      member_handle    = each.value
+      handle           = each.value
     }
   }
 
