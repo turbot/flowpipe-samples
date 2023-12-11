@@ -2,16 +2,16 @@ pipeline "ip_profiler" {
   title       = "IP Profiler"
   description = "Get valuable information about an IP address by combining data from AbuseIPDB, ReallyFreeGeoIP and VirusTotal."
 
-  param "abuseipdb_api_key" {
+  param "abuseipdb_cred" {
     type        = string
-    default     = var.abuseipdb_api_key
-    description = "API key to authenticate requests with AbuseIPDB."
+    default     = "default"
+    description = "Name for AbuseIPDB credentials to use. If not provided, the default credentials will be used."
   }
 
-  param "virustotal_api_key" {
+  param "virustotal_cred" {
     type        = string
-    default     = var.virustotal_api_key
-    description = "API key to authenticate requests with VirusTotal."
+    default     = "default"
+    description = "Name for VirusTotal credentials to use. If not provided, the default credentials will be used."
   }
 
   param "ip_addresses" {
@@ -23,18 +23,6 @@ pipeline "ip_profiler" {
     type        = number
     default     = 30
     description = "Maximum age in days for the AbuseIPDB reports to retrieve. Defaults to 30 days."
-  }
-
-  param "page" {
-    type        = number
-    default     = 1
-    description = "The page number of results to retrieve. Defaults to page 1."
-  }
-
-  param "per_page" {
-    type        = number
-    default     = 25
-    description = "The number of reports per page. Defaults to 25 reports per page."
   }
 
   # ReallyFreeGeoIP - Get IP Geolocation
@@ -51,7 +39,7 @@ pipeline "ip_profiler" {
     for_each = { for ip in param.ip_addresses : ip => ip }
     pipeline = abuseipdb.pipeline.check_ip_address
     args = {
-      api_key         = param.abuseipdb_api_key
+      cred            = param.abuseipdb_cred
       ip_address      = each.value
       max_age_in_days = param.max_age_in_days
     }
@@ -62,7 +50,7 @@ pipeline "ip_profiler" {
     for_each = { for ip in param.ip_addresses : ip => ip }
     pipeline = abuseipdb.pipeline.list_ip_address_reports
     args = {
-      api_key         = param.abuseipdb_api_key
+      cred            = param.abuseipdb_cred
       ip_address      = each.value
       max_age_in_days = param.max_age_in_days
     }
@@ -75,7 +63,7 @@ pipeline "ip_profiler" {
     if       = can(regex("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", each.value)) == true
     pipeline = virustotal.pipeline.get_ip_address_report
     args = {
-      api_key    = param.virustotal_api_key
+      cred       = param.virustotal_cred
       ip_address = each.value
     }
   }
@@ -91,7 +79,7 @@ pipeline "ip_profiler" {
   }
 
   output "ip_profile" {
-    description = "IP Profile"
+    description = "IP Profile."
     value       = { for ip, details in step.transform.ip_profile : ip => details.value }
   }
 }
