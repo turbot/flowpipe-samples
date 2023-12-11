@@ -2,18 +2,6 @@ pipeline "lookup_file_hash" {
   title       = "Lookup File hash in Different Tools"
   description = "A composite Flowpipe mod that lookup a file hash in VirusTotal, Urlscan and other tools."
 
-  param "virustotal_api_key" {
-    type        = string
-    default     = var.virustotal_api_key
-    description = local.virustotal_api_key_param_description
-  }
-
-  param "urlscan_api_key" {
-    type        = string
-    default     = var.urlscan_api_key
-    description = local.urlscan_api_key_param_description
-  }
-
   param "hybrid_analysis_api_key" {
     type        = string
     default     = var.hybrid_analysis_api_key
@@ -29,17 +17,15 @@ pipeline "lookup_file_hash" {
   step "pipeline" "virustotal_file_hash_lookup" {
     pipeline = virustotal.pipeline.get_file_analysis
     args = {
-      api_key   = param.virustotal_api_key
       file_hash = param.file_hash
     }
   }
 
-  # Urlscan
+  # Urlscan.io
   step "pipeline" "urlscan_file_hash_lookup" {
-    pipeline = urlscan.pipeline.search_scan
+    pipeline = urlscanio.pipeline.search_scan
     args = {
-      api_key    = param.urlscan_api_key
-      query_term = "hash:${param.file_hash}"
+      query = "hash:${param.file_hash}"
     }
   }
 
@@ -56,18 +42,10 @@ pipeline "lookup_file_hash" {
     request_body = "hash=${param.file_hash}"
   }
 
-  step "transform" "lookup_file_hash" {
-    json = {
-      virustotal_file_scan : step.pipeline.virustotal.output.file_analysis.data,
-      urlscan_file_scan : step.pipeline.urlscan.output.scan_result,
-      hybrid_file_scan : step.http.hybrid.response_body
-    }
-  }
-
   output "lookup_file_hash" {
     value = {
       virustotal_file_hash_lookup : step.pipeline.virustotal_file_hash_lookup.output.file_analysis.data,
-      urlscan_file_hash_lookup : step.pipeline.urlscan_file_hash_lookup.output.scan_result,
+      urlscan_file_hash_lookup : step.pipeline.urlscan_file_hash_lookup.output.search_results,
       hybrid_analysis_file_hash_lookup : step.http.hybrid_analysis_file_hash_lookup.response_body
     }
   }

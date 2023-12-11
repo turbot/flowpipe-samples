@@ -1,8 +1,4 @@
-abuseipdb_api_key ="Your_AbuseIPDB_API_Key"
 apivoid_api_key="Your_APIVoid_API_Key"
-ip2location_api_key="Your_IP2Location_API_Key"
-urlscan_api_key="Your_Urlscan_API_Key"
-virustotal_api_key="Your_Virustotal_API_Key"
 hunter_api_key="Your_Hunter_API_Key"
 kickbox_api_key="Your_Kickbox_API_Key"
 hybrid_analysis_api_key="Your_Hybrid_Analysis_API_Key"
