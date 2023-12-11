@@ -1,5 +1,5 @@
 mod "send_top_show_hn_email" {
-  title       = "Send top 'Show HN' Email"
+  title       = "Send Top 'Show HN' Email"
   description = "Send an email using SendGrid containing top stories from 'Show HN'."
   categories  = ["productivity"]
 

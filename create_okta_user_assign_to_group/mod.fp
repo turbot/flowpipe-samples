@@ -1,5 +1,5 @@
 mod "create_okta_user_assign_to_group" {
-  title       = "Create User and Assign Group"
+  title       = "Create Okta User and Assign to Group"
   description = "Create a user in Okta and assign to a group."
 
   require {
