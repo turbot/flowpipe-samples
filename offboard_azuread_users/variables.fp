@@ -24,24 +24,7 @@ variable "resource_group" {
   description = "Azure Resource Group. Examples: my_resource_group."
 }
 
-// JIRA
-
-variable "token" {
-  type        = string
-  description = "API access token"
-}
-
-variable "user_email" {
-  type        = string
-  description = "Email-id of the user."
-}
-
-variable "api_base_url" {
-  type        = string
-  description = "API base URL."
-}
-
 variable "project_key" {
   type        = string
-  description = "The key identifying the project."
+  description = "Project key name in jira."
 }
