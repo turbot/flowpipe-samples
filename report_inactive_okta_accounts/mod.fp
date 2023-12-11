@@ -5,12 +5,11 @@ mod "report_inactive_okta_accounts" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-okta" {
-      version = "v0.0.1-rc.3"
+      version = "v0.0.1-rc.4"
     }
 
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "v0.0.1-rc.6"
+      version = "v0.0.1-rc.7"
     }
   }
-
 }

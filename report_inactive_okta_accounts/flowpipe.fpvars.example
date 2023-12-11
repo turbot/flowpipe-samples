@@ -1,0 +1,9 @@
+# Required
+inactive_hours = "48"
+issue_type     = "Task"
+project_key    = "project-foo"
+
+
+# Optional
+# jira_cred = "non_default_cred"
+# okta_cred = "non_default_cred"

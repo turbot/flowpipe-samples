@@ -1,6 +1,12 @@
-pipeline "send_email_to_teams_user" {
-  title       = "Send Email Message to Specific Teams User"
+pipeline "send_message_to_user_in_microsoft_teams" {
+  title       = "Send Message to User in Teams"
   description = "Send an email to specific Team user and communicate to Team with a an update messge."
+
+  param "teams_cred" {
+    type        = string
+    description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
+  }
 
   param "to_email" {
     type        = string
@@ -20,7 +26,6 @@ pipeline "send_email_to_teams_user" {
   param "team_id" {
     type        = string
     description = "The unique identifier of the team."
-    default     = var.team_id
   }
 
   param "channel_id" {
@@ -34,6 +39,7 @@ pipeline "send_email_to_teams_user" {
     pipeline = teams.pipeline.get_user_by_email
 
     args = {
+      cred       = param.teams_cred
       user_email = param.to_email
     }
 
@@ -51,6 +57,7 @@ pipeline "send_email_to_teams_user" {
     pipeline = teams.pipeline.list_team_members
 
     args = {
+      cred    = param.teams_cred
       team_id = param.team_id
     }
   }
@@ -64,6 +71,7 @@ pipeline "send_email_to_teams_user" {
     pipeline = teams.pipeline.send_mail
 
     args = {
+      cred     = param.teams_cred
       to_email = ["${step.pipeline.get_user_by_email.output.user.userPrincipalName}"]
       subject  = param.subject
       content  = param.content
@@ -78,6 +86,7 @@ pipeline "send_email_to_teams_user" {
     pipeline = teams.pipeline.send_channel_message
 
     args = {
+      cred       = param.teams_cred
       team_id    = param.team_id
       channel_id = param.channel_id
       message    = "Mail sent to ${step.pipeline.get_user_by_email.output.user.displayName}(${step.pipeline.get_user_by_email.output.user.userPrincipalName})."
