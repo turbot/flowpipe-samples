@@ -10,7 +10,7 @@ pipeline "report_inactive_okta_accounts" {
   description = "Routinely scan Okta environments for potential inactive accounts and deactivate accounts."
 
   tags = {
-    type = "test"
+    type = "featured"
   }
 
   param "jira_cred" {

@@ -2,6 +2,10 @@ pipeline "send_teams_message" {
   title       = "Send Teams Message"
   description = "Send a new chat message in the specified channel."
 
+  tags = {
+    type = "featured"
+  }
+
   param "team_cred" {
     type        = string
     description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."

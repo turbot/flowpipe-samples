@@ -5,7 +5,7 @@ mod "throw_error_example_using_slack" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "v0.0.1-rc.6"
+      version = "v0.0.1-rc.8"
     }
   }
 }

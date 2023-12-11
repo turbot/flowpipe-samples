@@ -3,7 +3,7 @@ pipeline "send_message_to_user_in_microsoft_teams" {
   description = "Send an email to specific Team user and communicate to Team with a an update messge."
 
   tags = {
-    type = "test"
+    type = "featured"
   }
 
   param "teams_cred" {
