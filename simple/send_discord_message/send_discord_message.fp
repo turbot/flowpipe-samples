@@ -2,12 +2,6 @@ pipeline "send_discord_message" {
   title       = "Send Discord Message"
   description = "Send a message to a Discord channel."
 
-  param "discord_token" {
-    description = "The Discord bot token."
-    type        = string
-    default     = var.discord_token
-  }
-
   param "channel_id" {
     description = "The ID of the channel to send the message to."
     type        = string
@@ -21,7 +15,6 @@ pipeline "send_discord_message" {
   step "pipeline" "create_message" {
     pipeline = discord.pipeline.create_message
     args = {
-      token      = param.discord_token
       channel_id = param.channel_id
       message    = param.message
     }
