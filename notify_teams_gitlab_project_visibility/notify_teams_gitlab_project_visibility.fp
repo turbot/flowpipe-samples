@@ -2,15 +2,15 @@ pipeline "notify_teams_gitlab_project_visibility" {
   title       = "Notify GitLab Project Visibility Changes"
   description = "Notify a Slack channel when a GitLab's project visibility is changed."
 
-  param "gitlab_access_token" {
+  param "gitlab_credentials" {
     type        = string
-    description = "GitLab personal, project, or group access token to authenticate to the API. Example: glpat-ABC123_456-789."
-    default     = var.gitlab_access_token
+    description = "Name for GitLab credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
   }
 
   param "group_id" {
     type        = string
-    description = "GitLab Group ID"
+    description = "GitLab Group ID."
   }
 
   param "action_public_to_private" {
@@ -19,10 +19,10 @@ pipeline "notify_teams_gitlab_project_visibility" {
     default     = false
   }
 
-  param "teams_access_token" {
+  param "teams_credentials" {
     type        = string
-    description = "The MS Team access token to use for the API request."
-    default     = var.teams_access_token
+    description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
   }
 
   param "team_id" {
@@ -40,9 +40,9 @@ pipeline "notify_teams_gitlab_project_visibility" {
     pipeline = gitlab.pipeline.list_group_projects
 
     args = {
-      access_token = param.gitlab_access_token
-      group_id     = param.group_id
-      visibility   = "public"
+      cred       = param.gitlab_credentials
+      group_id   = param.group_id
+      visibility = "public"
     }
   }
 
@@ -55,16 +55,16 @@ pipeline "notify_teams_gitlab_project_visibility" {
     pipeline = gitlab.pipeline.update_project
 
     args = {
-      access_token = param.gitlab_access_token
-      visibility   = "private"
-      project_id   = tostring(each.value.id)
+      cred       = param.gitlab_credentials
+      visibility = "private"
+      project_id = tostring(each.value.id)
     }
   }
 
   step "pipeline" "send_message" {
     pipeline = teams.pipeline.send_channel_message
     args = {
-      access_token         = param.teams_access_token
+      cred                 = param.teams_credentials
       team_id              = param.team_id
       channel_id           = param.teams_channel_id
       message_content_type = "html"
