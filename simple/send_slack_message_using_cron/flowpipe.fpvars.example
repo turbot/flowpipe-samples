@@ -1,0 +1,6 @@
+# Required
+channel = "CH1432FEW"
+text    = "Hello!"
+
+# Optional
+# slack_cred = "non_default_cred"
