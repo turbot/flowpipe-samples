@@ -2,12 +2,6 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
   title       = "Snapshot and Isolate GCP Compute Instance"
   description = "For a given GCP Compute instance, create a snapshot for all of its disks, detach the disks, and then create ingress and egress firewall rules blocking all traffic."
 
-  param "application_credentials_path" {
-    type        = string
-    description = "The GCP application credentials file path."
-    default     = var.gcp_application_credentials_path
-  }
-
   param "project_id" {
     type        = string
     description = "The GCP project ID."
@@ -23,16 +17,14 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
   param "instance_name" {
     type        = string
     description = "The GCP instance name."
-    default     = "instance-1"
   }
 
   step "pipeline" "get_compute_instance" {
     pipeline = gcp.pipeline.get_compute_instance
     args = {
-      application_credentials_path = param.application_credentials_path
-      instance_name                = param.instance_name
-      project_id                   = param.project_id
-      zone                         = param.zone
+      instance_name = param.instance_name
+      project_id    = param.project_id
+      zone          = param.zone
     }
   }
 
@@ -41,11 +33,10 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     for_each   = { for disk in step.pipeline.get_compute_instance.output.instance.disks : disk.source => disk }
     pipeline   = gcp.pipeline.create_compute_snapshot
     args = {
-      application_credentials_path = param.application_credentials_path
-      source_disk_name             = regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]
-      project_id                   = param.project_id
-      snapshot_name                = "isolate-disk-${regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]}"
-      source_disk_zone             = regex("projects/.+/zones/(.+)/disks/.+", each.key)[0]
+      source_disk_name = regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]
+      project_id       = param.project_id
+      snapshot_name    = "isolate-disk-${regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]}"
+      source_disk_zone = regex("projects/.+/zones/(.+)/disks/.+", each.key)[0]
     }
   }
 
@@ -53,10 +44,9 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     depends_on = [step.pipeline.create_compute_snapshot]
     pipeline   = gcp.pipeline.stop_compute_instance
     args = {
-      application_credentials_path = param.application_credentials_path
-      instance_name                = param.instance_name
-      project_id                   = param.project_id
-      zone                         = param.zone
+      instance_name = param.instance_name
+      project_id    = param.project_id
+      zone          = param.zone
     }
   }
 
@@ -65,11 +55,10 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     for_each   = { for disk in step.pipeline.get_compute_instance.output.instance.disks : disk.source => disk }
     pipeline   = gcp.pipeline.detach_compute_instance_from_disk
     args = {
-      application_credentials_path = param.application_credentials_path
-      instance_name                = param.instance_name
-      project_id                   = param.project_id
-      zone                         = param.zone
-      disk_name                    = regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]
+      instance_name = param.instance_name
+      project_id    = param.project_id
+      zone          = param.zone
+      disk_name     = regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]
     }
   }
 
@@ -77,14 +66,13 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     depends_on = [step.pipeline.detach_compute_instance_from_disk]
     pipeline   = gcp.pipeline.create_vpc_firewall_rule
     args = {
-      application_credentials_path = param.application_credentials_path
-      project_id                   = param.project_id
-      network_name                 = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.instance.networkInterfaces[0].network)[0]
-      firewall_rule_name           = "block-ingress"
-      priority                     = "1000"
-      direction                    = "INGRESS"
-      action                       = "DENY"
-      rules                        = ["all"]
+      project_id         = param.project_id
+      network_name       = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.instance.networkInterfaces[0].network)[0]
+      firewall_rule_name = "block-ingress"
+      priority           = "1000"
+      direction          = "INGRESS"
+      action             = "DENY"
+      rules              = ["all"]
     }
   }
 
@@ -92,14 +80,13 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     depends_on = [step.pipeline.create_ingress_vpc_firewall_rule]
     pipeline   = gcp.pipeline.create_vpc_firewall_rule
     args = {
-      application_credentials_path = param.application_credentials_path
-      project_id                   = param.project_id
-      network_name                 = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.instance.networkInterfaces[0].network)[0]
-      firewall_rule_name           = "block-egress"
-      priority                     = "1000"
-      direction                    = "EGRESS"
-      action                       = "DENY"
-      rules                        = ["all"]
+      project_id         = param.project_id
+      network_name       = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.instance.networkInterfaces[0].network)[0]
+      firewall_rule_name = "block-egress"
+      priority           = "1000"
+      direction          = "EGRESS"
+      action             = "DENY"
+      rules              = ["all"]
     }
   }
 
