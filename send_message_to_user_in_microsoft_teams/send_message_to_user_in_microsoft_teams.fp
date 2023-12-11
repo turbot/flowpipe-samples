@@ -2,6 +2,10 @@ pipeline "send_message_to_user_in_microsoft_teams" {
   title       = "Send Message to User in Teams"
   description = "Send an email to specific Team user and communicate to Team with a an update messge."
 
+  tags = {
+    type = "test"
+  }
+
   param "teams_cred" {
     type        = string
     description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."

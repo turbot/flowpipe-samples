@@ -9,6 +9,10 @@ pipeline "report_inactive_okta_accounts" {
   title       = "Report on Inactive Okta Accounts and Deactivate"
   description = "Routinely scan Okta environments for potential inactive accounts and deactivate accounts."
 
+  tags = {
+    type = "test"
+  }
+
   param "jira_cred" {
     type        = string
     description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
