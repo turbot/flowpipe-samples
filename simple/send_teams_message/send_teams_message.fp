@@ -2,10 +2,15 @@ pipeline "send_teams_message" {
   title       = "Send Teams Message"
   description = "Send a new chat message in the specified channel."
 
+  param "team_cred" {
+    type        = string
+    description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
+  }
+
   param "team_id" {
     type        = string
     description = "The unique identifier of the team."
-    default     = var.team_id
   }
 
   param "channel_id" {
@@ -28,6 +33,7 @@ pipeline "send_teams_message" {
   step "pipeline" "send_teams_message" {
     pipeline = teams.pipeline.send_channel_message
     args = {
+      cred                 = param.team_cred
       team_id              = param.team_id
       channel_id           = param.channel_id
       message              = param.message
@@ -36,7 +42,7 @@ pipeline "send_teams_message" {
   }
 
   output "message" {
-    value       = step.pipeline.send_teams_message
+    value       = step.pipeline.send_teams_message.output.message
     description = "Channel message details."
   }
 }
