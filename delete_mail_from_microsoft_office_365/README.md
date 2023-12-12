@@ -2,9 +2,7 @@
 
 Delete an email from a specified user's mailbox in Microsoft Office 365.
 
-## Getting Started
-
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -22,7 +20,7 @@ credential "teams" "default" {
 }
 ```
 
-### Usage
+## Usage
 
 Run the pipeline and specify the `user_id` and `message_id` pipeline arguments:
 

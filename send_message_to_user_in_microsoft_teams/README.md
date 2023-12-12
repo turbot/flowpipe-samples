@@ -2,9 +2,7 @@
 
 Send an email message to a user in Microsoft Teams and notify them in the specified channel.
 
-## Getting Started
-
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -22,7 +20,7 @@ credential "teams" "default" {
 }
 ```
 
-### Usage
+## Usage
 
 Run the pipeline and specify the `team_id`, `channel_id` and `message` pipeline arguments:
 

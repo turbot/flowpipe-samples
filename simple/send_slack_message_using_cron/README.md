@@ -4,9 +4,7 @@ Send a message to a Slack channel every minute using cron.
 
 If run with `flowpipe server`, this mod will send a message to slack every minute.
 
-## Getting Started
-
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -26,7 +24,7 @@ credential "slack" "default" {
 
 For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
-### Usage
+## Usage
 
 Run the pipeline to send a message immediately:
 
@@ -42,7 +40,7 @@ flowpipe server
 
 Once started, Flowpipe will run the pipeline automatically at the scheduled time.
 
-### Configuration
+## Configuration
 
 To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
 

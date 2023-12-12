@@ -2,9 +2,7 @@
 
 Throw an error if the requested Slack channel is unavailable.
 
-## Getting Started
-
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -22,7 +20,7 @@ credential "slack" "default" {
 }
 ```
 
-### Usage
+## Usage
 
 Run the pipeline and specify the `channel` pipeline arguments:
 

@@ -4,9 +4,7 @@ Routinely scan Okta environments for potential inactive accounts and deactivate 
 
 If run with `flowpipe server`, this mod will run the scan every day at 9 AM UTC.
 
-## Getting Started
-
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -43,7 +41,7 @@ credential "okta" "default" {
 
 For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
-### Usage
+## Usage
 
 Run the pipeline to run the scan immediately:
 
@@ -59,7 +57,7 @@ flowpipe server
 
 Once started, Flowpipe will run the pipeline automatically at the scheduled time.
 
-### Configuration
+## Configuration
 
 To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
 

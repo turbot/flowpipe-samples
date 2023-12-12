@@ -2,9 +2,7 @@
 
 Add a new user in Microsoft Office 365.
 
-## Getting Started
-
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -37,7 +35,7 @@ credential "teams" "default" {
 }
 ```
 
-### Usage
+## Usage
 
 Run the pipeline and specify the `display_name`, `account_enabled`, `mail_nickname`, `user_principal_name`, `password`, `license_sku_ids`, `jira_project_key`, `team_id` and `message` pipeline arguments:
 
