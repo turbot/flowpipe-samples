@@ -2,11 +2,9 @@
 
 Take remediation actions based on the incident event type.
 
-If run with `flowpipe server`, this mod will receive a PagerDuty v3 webhook when an incident is triggered, annotated, and acknowledged.
+If run with `flowpipe server`, this mod will receive a [PagerDuty v3 webhook event](https://developer.pagerduty.com/docs/db0fa8c8984fc-overview) when an incident is triggered, annotated, and acknowledged.
 
-## Getting Started
-
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -20,16 +18,16 @@ vi ~/.flowpipe/config/pagerduty.fpc
 
 ```hcl
 credential "pagerduty" "pagerduty_cred" {
-  api_key = "u+_szhL....."
+  api_key = "u+_szhL..."
 }
 ```
 
-### Usage
+## Usage
 
 Run the pipeline to take action for PagerDuty incident acknowledged:
 
 ```sh
-flowpipe pipeline run pagerduty_incident_acknowledged --arg incident_id=<incident_id>
+flowpipe pipeline run pagerduty_incident_acknowledged --arg incident_id=PT4KHLK
 ```
 
 To run whenever an incident is triggered, annotated, and acknowledged, start the Flowpipe server:
@@ -38,21 +36,29 @@ To run whenever an incident is triggered, annotated, and acknowledged, start the
 flowpipe server
 ```
 
-Once started, Flowpipe will run the pipeline automatically whenever a webhook is received.
+Once started, Flowpipe will run the pipeline automatically whenever a webhook event is received.
 
-### Configuration
+## Configuration
 
-To run the pipeline automatically whenever a webhook is received, you can set the [PagerDuty v3 webhook](https://developer.pagerduty.com/docs/db0fa8c8984fc-overview#webhook-subscriptions). 
+To run the pipeline automatically whenever a webhook event is received, you can create a PagerDuty webhook subscription.
 
-For the webhook URL:
+To configure the webhook subscription in PagerDuty:
 
-1. List the triggers in the top level (parent mod), 
-  ```ssh
-  flowpipe trigger list
+1. Get the trigger details:
+  ```sh
+  flowpipe trigger show http.pagerduty_webhook_incident_events
   ```
-2. Copy the `url` for the `remediate_pagerduty_alert.trigger.http.pagerduty_webhook_incident_events` trigger
-3. Use ngrok to expose the webhook URL to the internet
-  ```ssh
-  ngrok http 7103
+2. Copy the `Url`, e.g., `/hook/remediate_pagerduty_alert.trigger.http.pagerduty_webhook_incident_events/92ffeda03426754f2c79dfaa`
+3. Use a tool like [ngrok](https://ngrok.com/) with a custom domain to expose your localhost server to the internet:
+  ```sh
+  ngrok http 7103 --domain=yellow-neutral-lab.ngrok-free.app
   ```
-4. With the public endpoint from ngrok and the hook url, form the webhook URL for the trigger with the format `https://{ngrok-domain}.ngrok-free.app/api/v0/{hook-url}`
+4. Form the full webhook URL with the public endpoint from ngrok and the trigger URL using the format `https://{ngrok_domain}.ngrok-free.app/api/v0/{hook_url}`, e.g., `https://yellow-neutral-lab.ngrok-free.app/api/v0/hook/remediate_pagerduty_alert.trigger.http.pagerduty_webhook_incident_events/92ffeda03426754f2c79dfaa`
+5. Create the webhook subscription in PagerDuty with the following configurations:
+   - Webhook URL: `<URL from above>`
+   - Scope Type: Account
+   - Description: Flowpipe webhook trigger
+   - Event Subscription:
+     - incident.acknowledged
+     - incident.triggered
+     - incident.annotated
