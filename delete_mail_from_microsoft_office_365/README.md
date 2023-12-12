@@ -1,8 +1,31 @@
-# Delete Email From Microsoft Office 365
+# Delete Mail From Microsoft Office 365
 
 Delete an email from a specified user's mailbox in Microsoft Office 365.
 
-## Usage
+## Getting Started
 
-- Add your Teams Access Token to `flowpipe.pvars`
-- Run the pipeline and specify `user_id` and `message_id`, e.g., `flowpipe pipeline run delete_mail_from_microsoft_office_365 --arg 'user_id=steampipe@test.com' --arg 'message_id=AAMkAGQzYjc2ZDE3LTZkZjQtNGEyNi05MmNmLWJlODIyZGU1OGJlMABGAAAAAABeeVkd3akWQLfo5eM6sgFiBwDMbETpmyZ_RIhanBkFj1y3AAAAAAEMAAD'`
+### Credentials
+
+By default, the following environment variables will be used for authentication:
+
+- `TEAMS_ACCESS_TOKEN`
+
+You can also create `credential` resources in configuration files:
+
+```sh
+vi ~/.flowpipe/config/teams.fpc
+```
+
+```hcl
+credential "teams" "default" {
+  access_token = "<access_token>"
+}
+```
+
+### Usage
+
+Run the pipeline and specify the `user_id` and `message_id` pipeline arguments:
+
+```sh
+flowpipe pipeline run delete_mail_from_microsoft_office_365 --arg user_id='<user_id>' --arg message_id='<message_id>'
+```
