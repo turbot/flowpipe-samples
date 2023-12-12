@@ -41,3 +41,7 @@ Run the pipeline to make public GitLab project to private and notify in Microsof
 ```sh
 flowpipe pipeline run notify_teams_gitlab_project_visibility --arg team_id=111aaa00-abcd-efgh-1234-000aaa111bbb --arg teams_channel_id="19:P7fSYEJGuWSTHTfYAMAZEzIc1Uk8BTS-abcdnSV2H-A1@thread.tacv2" --arg group_id=8937 --arg action_public_to_private=true
 ```
+
+### Configuration
+
+No additional configuration is required.
