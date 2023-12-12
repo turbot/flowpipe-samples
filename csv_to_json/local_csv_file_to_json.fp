@@ -24,9 +24,14 @@ pipeline "local_csv_file_to_json" {
     value       = file("${param.local_csv_file_path}")
   }
 
+  output "csv_decoded" {
+    description = "Decoded data from the CSV file."
+    value       = csvdecode(file("${param.local_csv_file_path}"))
+  }
+
   output "csv_to_json" {
     description = "CSV file converted to JSON."
-    value       = jsondecode(step.transform.local_csv_file_to_json.value)
+    value       = step.transform.local_csv_file_to_json.value
   }
 
 }
