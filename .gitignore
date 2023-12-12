@@ -17,3 +17,6 @@
 # Flowpipe mod dependencies
 .flowpipe
 *.cache.json
+
+# Flowpipe configuration files
+*.fpc
