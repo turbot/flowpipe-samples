@@ -1,5 +1,6 @@
 # Jira project_key
 jira_project_key="your-jira-project-key"
+jira_issue_type="your-jira-issue-type"
 
 # AWS region
 aws_region = "your-aws-region"
