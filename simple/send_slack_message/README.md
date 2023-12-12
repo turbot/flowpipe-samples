@@ -2,12 +2,30 @@
 
 Send a message to a Slack channel.
 
-## Usage
+## Getting Started
 
-- Set your `SLACK_TOKEN` environment variable or configure your Slack credentials in `~/.flowpipe/config/slack.fpc`:
-  ```hcl
-  credential "slack" "default" {
-    token = "xoxp-12345-..."
-  }
-  ```
-- Run the pipeline and specify the `channel` and `text` args, e.g., `flowpipe pipeline run send_slack_message --arg 'channel=my-channel' --arg 'text=Hello world!'`
+### Credentials
+
+By default, the following environment variables will be used for authentication:
+
+- `SLACK_TOKEN`
+
+You can also create `credential` resources in configuration files:
+
+```sh
+vi ~/.flowpipe/config/slack.fpc
+```
+
+```hcl
+credential "slack" "default" {
+  token = "xoxp-12345-..."
+}
+```
+
+### Usage
+
+Run the pipeline and specify the `channel` and `text` pipeline arguments:
+
+```sh
+flowpipe pipeline run send_slack_message --arg 'channel=my-channel' --arg 'text=Hello world!'
+```
