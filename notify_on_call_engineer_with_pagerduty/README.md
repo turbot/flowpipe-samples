@@ -60,6 +60,3 @@ flowpipe pipeline run notify_on_call_engineer_with_pagerduty \
   --arg email_text="On-call engineer" \
   --arg from="foo@bar.com"
 ```
-```sh
-flowpipe pipeline run notify_on_call_engineer_with_pagerduty --arg slack_message="On-call engineer" --arg slack_channel="CH12345ABC" --arg email_subject="On-call engineer" --arg email_text="On-call engineer" --arg from="foo@bar.com"
-```
