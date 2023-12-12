@@ -1,5 +1,5 @@
 pipeline "lookup_file_hash" {
-  title       = "Lookup File hash in Different Tools"
+  title       = "Lookup File hash In Different Tools"
   description = "A composite Flowpipe mod that lookup a file hash in VirusTotal, Urlscan and other tools."
 
   param "virustotal_cred" {

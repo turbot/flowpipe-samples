@@ -1,5 +1,5 @@
 pipeline "lookup_domain" {
-  title       = "Lookup Domain in Different Tools"
+  title       = "Lookup Domain In Different Tools"
   description = "A composite Flowpipe mod that lookup a domain in VirusTotal, Urlscan and other tools."
 
   param "virustotal_cred" {

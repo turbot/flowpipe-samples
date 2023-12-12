@@ -1,5 +1,5 @@
 pipeline "lookup_email" {
-  title       = "Lookup Email in Different Tools"
+  title       = "Lookup Email In Different Tools"
   description = "A composite Flowpipe mod that lookup email in VirusTotal, Urlscan and other tools."
 
   param "hunter_api_key" {

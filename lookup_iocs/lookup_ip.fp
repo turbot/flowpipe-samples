@@ -1,5 +1,5 @@
 pipeline "lookup_ip" {
-  title       = "Lookup IP in Different Tools"
+  title       = "Lookup IP In Different Tools"
   description = "A composite Flowpipe mod that lookup an IP in VirusTotal, Urlscan and other tools."
 
   param "abuseipdb_cred" {

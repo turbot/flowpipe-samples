@@ -1,5 +1,5 @@
 pipeline "lookup_iocs" {
-  title       = "Lookup IOCs in Different Tools"
+  title       = "Lookup IOCs In Different Tools"
   description = "A composite Flowpipe mod that lookup IOCs in VirusTotal, Urlscan and other tools."
 
   tags = {
