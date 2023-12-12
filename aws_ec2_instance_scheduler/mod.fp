@@ -9,7 +9,7 @@ mod "aws_ec2_instance_scheduler" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "v0.0.1-rc.9"
+      version = "v0.0.1-rc.16"
       args = {
         region = var.aws_region
       }
