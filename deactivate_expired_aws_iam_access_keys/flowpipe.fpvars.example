@@ -1,6 +1,7 @@
+# Required
 aws_region = "us-east-1"
-aws_access_key_id = "YourAccessKeyID"
-aws_secret_access_key = "YourSecretAccessKey"
-
 slack_channel ="test-channel"
-slack_token   ="xoxp-12345-67890"
+
+# Optional
+aws_cred   = "non_default_aws_credential"
+slack_cred = "non_default_slack_credential"

@@ -3,22 +3,19 @@ variable "aws_region" {
   description = "The name of the Region."
 }
 
-variable "aws_access_key_id" {
+variable "aws_cred" {
   type        = string
-  description = "The ID for this access key."
+  description = "Name for AWS credentials to use. If not provided, the default credentials will be used."
+  default     = "default"
 }
 
-variable "aws_secret_access_key" {
+variable "slack_cred" {
   type        = string
-  description = "The secret key used to sign requests."
+  description = "Name for Slack credentials to use. If not provided, the default credentials will be used."
+  default     = "default"
 }
 
 variable "slack_channel" {
   type        = string
   description = "Encoded ID or name of the Slack channel to send the message. Encoded ID is recommended. Examples: C1234567890, general, random"
-}
-
-variable "slack_token" {
-  type        = string
-  description = "Slack app token used to authenticate to your Slack workspace."
 }
