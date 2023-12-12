@@ -16,5 +16,4 @@ pipeline "http_list_pagination" {
     description = "The list of berries consumed by Pokemon."
     value       = flatten([for page, berries in step.http.http_list_pagination : berries.response_body.results])
   }
-
 }

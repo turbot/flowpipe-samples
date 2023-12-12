@@ -1,7 +1,8 @@
 mod "lookup_iocs" {
-  title       = "Lookup IOCs in different tools"
-  description = "A composite Flowpipe mod that lookup IOCS in VirusTotal, Urlscan and other tools."
-  categories  = ["security"]
+  title         = "Lookup IOCs in different tools"
+  description   = "A composite Flowpipe mod that lookup IOCS in VirusTotal, Urlscan and other tools."
+  documentation = file("./README.md")
+  categories    = ["security"]
 
   opengraph {
     title       = "Lookup IOCs in different tools"

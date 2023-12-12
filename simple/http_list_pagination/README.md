@@ -2,7 +2,10 @@
 
 Paginate the response from HTTP list call.
 
-## Usage
+### Usage
 
-- This mod does not require any authentication/tokens.
-- Run the pipeline using, `flowpipe pipeline run http_list_pagination'
+Run the pipeline to get paginated response from HTTP list call::
+
+```sh
+flowpipe pipeline run http_list_pagination'
+```
