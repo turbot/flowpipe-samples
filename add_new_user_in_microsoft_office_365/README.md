@@ -2,7 +2,45 @@
 
 Add a new user in Microsoft Office 365.
 
-## Usage
+## Getting Started
 
-- Add your Teams Access Token, Team Id, JIRA Token, JIRA User Email, JIRA API Base URL and JIRA Project Key to `flowpipe.fpvars`
-- Run the pipeline and specify `license_sku_ids`,`message`,`mail_nickname`,`account_enabled`,`user_principal_name`,`display_name` and `password`, e.g., `flowpipe pipeline run add_new_user_in_microsoft_office_365 --arg 'license_sku_ids=["944a8e14-7a6f-48c6-8805-6e93612f6c2"]' --arg 'message="Welcome to the team"' --arg 'mail_nickname="testFlowpipe"' --arg 'account_enabled=true' --arg 'user_principal_name=someuser@contoso.com' --arg 'display_name="test flowpipe"' --arg 'password="test@123"'`
+### Credentials
+
+By default, the following environment variables will be used for authentication:
+
+- `JIRA_API_TOKEN`
+- `JIRA_URL`
+- `JIRA_USER`
+- `TEAMS_ACCESS_TOKEN`
+
+You can also create `credential` resources in configuration files:
+
+```sh
+vi ~/.flowpipe/config/jira.fpc
+```
+
+```hcl
+credential "jira" "default" {
+  base_url    = "https://test.atlassian.net/"
+  api_token   = "ATATT3........."
+  username    = "abc@email.com"
+}
+```
+
+```sh
+vi ~/.flowpipe/config/teams.fpc
+```
+
+```hcl
+credential "teams" "default" {
+  access_token = "<access_token>"
+}
+```
+
+### Usage
+
+Run the pipeline and specify the `display_name`, `account_enabled`, `mail_nickname`, `user_principal_name`, `password`, `license_sku_ids`, `jira_project_key`, `team_id` and `message` pipeline arguments:
+
+```sh
+flowpipe pipeline run add_new_user_in_microsoft_office_365 --arg display_name='John Doe' --arg account_enabled=true --arg mail_nickname='john.doe' --arg user_principal_name='john.doe@foo.com' --arg password='P@ssw0rd' --arg license_sku_ids='["<license_sku_id>"]' --arg jira_project_key='project-foo' --arg team_id='<team_id>' --arg message='New user created'
+```
