@@ -2,6 +2,10 @@ pipeline "ip_profiler" {
   title       = "IP Profiler"
   description = "Get valuable information about an IP address by combining data from AbuseIPDB, ReallyFreeGeoIP and VirusTotal."
 
+  tags = {
+    type = "featured"
+  }
+
   param "abuseipdb_cred" {
     type        = string
     default     = "default"
