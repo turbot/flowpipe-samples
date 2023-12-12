@@ -1,6 +1,6 @@
 pipeline "notify_teams_gitlab_project_visibility" {
   title       = "Notify GitLab Project Visibility Changes"
-  description = "Notify in a Microsoft Teams channel whenever there is a change in the visibility status of a GitLab project."
+  description = "Notify a Microsoft Teams channel when a GitLab's project visibility is changed."
 
   tags = {
     type = "featured"
