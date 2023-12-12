@@ -26,6 +26,12 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 
 ## Usage
 
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
+
 Run the pipeline to send a message immediately:
 
 ```sh

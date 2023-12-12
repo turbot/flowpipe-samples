@@ -37,6 +37,12 @@ credential "teams" "default" {
 
 ## Usage
 
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
+
 Run the pipeline and specify the `display_name`, `account_enabled`, `mail_nickname`, `user_principal_name`, `password`, `license_sku_ids`, `jira_project_key`, `team_id` and `message` pipeline arguments:
 
 ```sh

@@ -24,6 +24,12 @@ credential "pagerduty" "pagerduty_cred" {
 
 ## Usage
 
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
+
 Run the pipeline to take action for PagerDuty incident acknowledged:
 
 ```sh
