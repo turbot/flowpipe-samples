@@ -44,18 +44,6 @@ pipeline "summarize_github_issue_with_openai" {
     default     = "default"
   }
 
-  # param "repository_owner" {
-  #   type        = string
-  #   description = "The organization or user name."
-  #   default     = local.repository_owner
-  # }
-
-  # param "repository_name" {
-  #   type        = string
-  #   description = "The name of the repository."
-  #   default     = local.repository_name
-  # }
-
   param "issue_number" {
     type        = number
     description = "The number of the issue."
@@ -67,8 +55,6 @@ pipeline "summarize_github_issue_with_openai" {
     args = {
       cred         = param.github_cred
       issue_number = param.issue_number
-      # repository_name  = param.repository_name
-      # repository_owner = param.repository_owner
     }
   }
 

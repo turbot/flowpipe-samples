@@ -4,8 +4,6 @@
 - Create a new workspace in an organization and bring in the organization member.
 - Add organization member to an existing organization workspace.
 
-## Getting Started
-
 ### Credentials
 
 By default, the following environment variables will be used for authentication:

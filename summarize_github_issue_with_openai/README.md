@@ -2,8 +2,6 @@
 
 Summarize a GitHub issue with OpenAI.
 
-## Getting Started
-
 ### Credentials
 
 By default, the following environment variables will be used for authentication:
@@ -45,8 +43,6 @@ vi flowpipe.fpvars
 ```hcl
 repository_full_name = "turbot/steampipe"
 ```
-
-When running a pipeline, you can override this default repository with pipeline argument, e.g., `--var 'repository_full_name=turbot/flowpipe'`.
 
 ## Usage
 

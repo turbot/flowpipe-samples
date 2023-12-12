@@ -2,8 +2,6 @@
 
 Get valuable information about IP addresses by bringing data together from AbuseIPDB, ReallyFreeGeoIP, and VirusTotal.
 
-## Getting Started
-
 ### Credentials
 
 By default, the following environment variables will be used for authentication:
