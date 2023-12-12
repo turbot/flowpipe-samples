@@ -4,15 +4,13 @@ Using [Steampipe](https://steampipe.io/) and the [Hacker News plugin](https://hu
 
 If run with `flowpipe server`, this mod will send an email every day at 12 PM UTC.
 
-## Getting Started
-
-### Requirements
+## Requirements
 
 Install [Steampipe](https://steampipe.io/downloads) and the [Hacker News plugin](https://hub.steampipe.io/plugins/turbot/hackernews#get-started).
 
 Then start Steampipe with `steampipe service start`.
 
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -32,7 +30,13 @@ credential "sendgrid" "default" {
 
 For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
-### Usage
+## Usage
+
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
 
 Run the pipeline to send an email immediately:
 
@@ -48,7 +52,7 @@ flowpipe server
 
 Once started, Flowpipe will run the pipeline automatically at the scheduled time.
 
-### Configuration
+## Configuration
 
 To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
 

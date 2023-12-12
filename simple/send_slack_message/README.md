@@ -2,9 +2,7 @@
 
 Send a message to a Slack channel.
 
-## Getting Started
-
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -22,7 +20,13 @@ credential "slack" "default" {
 }
 ```
 
-### Usage
+## Usage
+
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
 
 Run the pipeline and specify the `channel` and `text` pipeline arguments:
 
