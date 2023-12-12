@@ -2,6 +2,10 @@ pipeline "send_slack_message" {
   title       = "Send Slack Message"
   description = "Send a message to a Slack channel."
 
+  tags = {
+    type = "featured"
+  }
+
   param "slack_cred" {
     type        = string
     description = "Name for Slack credentials to use. If not provided, the default credentials will be used."
