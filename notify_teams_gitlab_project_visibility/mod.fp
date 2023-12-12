@@ -4,6 +4,11 @@ mod "notify_teams_gitlab_project_visibility" {
   documentation = file("./README.md")
   categories    = ["software development"]
 
+  opengraph {
+      title       = "Notify Teams on GitLab Project Visibility"
+      description = "Notify a Teams channel on GitLab public projects, optionally update the visibility from public to private."
+    }
+
   require {
     mod "github.com/turbot/flowpipe-mod-gitlab" {
       version = "v0.0.1-rc.7"
