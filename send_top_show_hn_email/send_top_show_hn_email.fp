@@ -9,6 +9,10 @@ pipeline "send_top_show_hn_email" {
   title       = "Send Email with Top 'Show HN'"
   description = "Send an email using SendGrid containing top stories from 'Show HN'."
 
+  tags = {
+    type = "featured"
+  }
+
   param "sendgrid_cred" {
     type        = string
     description = "Name for SendGrid credentials to use. If not provided, the default credentials will be used."
