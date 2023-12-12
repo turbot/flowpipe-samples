@@ -2,7 +2,7 @@
 
 Summarize a GitHub issue with OpenAI.
 
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -31,7 +31,17 @@ credential "openai" "default" {
 }
 ```
 
-### Configuration
+For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+
+## Usage
+
+Run the pipeline and specify the `issue_number` pipeline argument:
+
+```sh
+flowpipe pipeline run summarize_github_issue_with_openai --arg 'issue_number=3997'
+```
+
+## Configuration
 
 You can configure your default repository by setting the `repository_full_name` variable:
 
@@ -42,12 +52,4 @@ vi flowpipe.fpvars
 
 ```hcl
 repository_full_name = "turbot/steampipe"
-```
-
-## Usage
-
-Run the pipeline and specify the `issue_number` pipeline argument:
-
-```sh
-flowpipe pipeline run summarize_github_issue_with_openai --arg 'issue_number=3997'
 ```

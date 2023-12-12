@@ -4,7 +4,7 @@
 - Create a new workspace in an organization and bring in the organization member.
 - Add organization member to an existing organization workspace.
 
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -21,6 +21,8 @@ credential "pipes" "default" {
   token = "tpt_..."
 }
 ```
+
+For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
 ## Usage
 

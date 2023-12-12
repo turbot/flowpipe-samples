@@ -2,7 +2,7 @@
 
 Get valuable information about IP addresses by bringing data together from AbuseIPDB, ReallyFreeGeoIP, and VirusTotal.
 
-### Credentials
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -33,7 +33,9 @@ credential "virustotal" "default" {
 
 No credentials are required for ReallyFreeGeoIP.
 
-### Usage
+For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+
+## Usage
 
 Run the pipeline and specify the `channel` and `text` pipeline arguments:
 

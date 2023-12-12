@@ -1,2 +1,7 @@
-aws_region = "us-east-1"
-github_repository_full_name="octo/helloworld"
+# Required
+aws_region                  = "us-east-1"
+github_repository_full_name = "turbot/steampipe"
+
+# Optional
+# github_cred = "non_default_cred"
+# aws_cred    = "non_default_cred"

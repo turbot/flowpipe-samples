@@ -1,40 +1,35 @@
-trigger "schedule" "list_iam_user_groups_associations" {
-  description = "Runs daily at 9 AM UTC, this trigger scans for IAM users in multiple groups and creates/updates corresponding GitHub issues."
-  schedule    = "0 9 * * *"
+trigger "schedule" "aws_iam_user_group_membership" {
+  title       = "Schedule Check AWS IAM User Group Membership"
+  description = "Automate GitHub issue management for AWS IAM users with multiple group memberships at 9 AM UTC on weekdays."
+  schedule    = "0 9 * * MON-FRI"
   pipeline    = pipeline.aws_iam_user_group_membership
 }
 
 pipeline "aws_iam_user_group_membership" {
   title       = "Check AWS IAM User Group Membership"
-  description = "Tracks IAM users in multiple groups and manages related GitHub issues. It creates a new issue for each user found in more than one group and updates existing issues if needed."
+  description = "Monitors IAM users across various groups and oversees associated GitHub issues. It generates new issues for users belonging to multiple groups and updates existing issues as necessary."
 
-  param "github_credentials" {
+  tags = {
+    type = "featured"
+  }
+
+  param "github_cred" {
     type        = string
     description = "Name for GitHub credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+    default     = var.github_cred
   }
 
-  param "aws_credentials" {
+  param "aws_cred" {
     type        = string
     description = "Name for AWS credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
-  }
-
-  param "repository_owner" {
-    type    = string
-    default = local.repository_owner
-  }
-
-  param "repository_name" {
-    type    = string
-    default = local.repository_name
+    default     = var.aws_cred
   }
 
   # Get the list of AWS IAM Users
   step "pipeline" "list_iam_users" {
     pipeline = aws.pipeline.list_iam_users
     args = {
-      cred = param.aws_credentials
+      cred = param.aws_cred
     }
   }
 
@@ -43,7 +38,7 @@ pipeline "aws_iam_user_group_membership" {
     for_each = { for user in step.pipeline.list_iam_users.output.users : user.UserName => user.UserName }
     pipeline = aws.pipeline.list_iam_groups_for_user
     args = {
-      cred      = param.aws_credentials
+      cred      = param.aws_cred
       user_name = each.value
     }
   }
@@ -54,10 +49,8 @@ pipeline "aws_iam_user_group_membership" {
     for_each = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output }
     pipeline = github.pipeline.search_issues
     args = {
-      cred             = param.github_credentials
-      repository_owner = local.repository_owner
-      repository_name  = local.repository_name
-      search_value     = "[AWS IAM User in Groups]: User '${each.key}' state:open"
+      cred         = param.github_cred
+      search_value = "[AWS IAM User in Groups]: User '${each.key}' state:open"
     }
   }
 
@@ -67,11 +60,9 @@ pipeline "aws_iam_user_group_membership" {
     if       = length(each.value) > 1 && length(step.pipeline.github_search_issue[each.key].output.issues) > 0
     pipeline = github.pipeline.create_issue_comment
     args = {
-      cred             = param.github_credentials
-      repository_owner = local.repository_owner
-      repository_name  = local.repository_name
-      issue_number     = step.pipeline.github_search_issue[each.key].output.issues[0].number
-      issue_comment    = "Date: ${timestamp()}\nThe IAM groups assigned to user '${each.key}' are: ${join(", ", each.value[*].GroupName)}."
+      cred          = param.github_cred
+      issue_number  = step.pipeline.github_search_issue[each.key].output.issues[0].number
+      issue_comment = "Date: ${timestamp()}\nThe IAM groups assigned to user '${each.key}' are: ${join(", ", each.value[*].GroupName)}."
     }
   }
 
@@ -81,11 +72,9 @@ pipeline "aws_iam_user_group_membership" {
     if       = length(each.value) <= 1 && length(step.pipeline.github_search_issue[each.key].output.issues) > 0
     pipeline = github.pipeline.close_issue
     args = {
-      cred             = param.github_credentials
-      repository_owner = local.repository_owner
-      repository_name  = local.repository_name
-      issue_number     = step.pipeline.github_search_issue[each.key].output.issues[0].number
-      state_reason     = "COMPLETED"
+      cred         = param.github_cred
+      issue_number = step.pipeline.github_search_issue[each.key].output.issues[0].number
+      state_reason = "COMPLETED"
     }
   }
 
@@ -95,11 +84,9 @@ pipeline "aws_iam_user_group_membership" {
     if       = length(each.value) > 1 && length(step.pipeline.github_search_issue[each.key].output.issues) == 0
     pipeline = github.pipeline.create_issue
     args = {
-      cred             = param.github_credentials
-      repository_owner = local.repository_owner
-      repository_name  = local.repository_name
-      issue_title      = "[AWS IAM User in Groups]: User '${each.key}' is assigned with ${length(each.value)} IAM groups."
-      issue_body       = "The IAM groups assigned to user '${each.key}' are: ${join(", ", each.value[*].GroupName)}."
+      cred        = param.github_cred
+      issue_title = "[AWS IAM User in Groups]: User '${each.key}' is assigned with ${length(each.value)} IAM groups."
+      issue_body  = "The IAM groups assigned to user '${each.key}' are: ${join(", ", each.value[*].GroupName)}."
     }
   }
 
