@@ -1,6 +1,6 @@
 trigger "http" "pagerduty_webhook_incident_events" {
   title       = "PagerDuty Webhook Incident Events"
-  description = "Webhook for PagerDuty incident events."
+  description = "Take remediation actions based on the incident event type."
 
   pipeline = pipeline.remediate_pagerduty_alert
   args = {
@@ -10,7 +10,17 @@ trigger "http" "pagerduty_webhook_incident_events" {
 
 pipeline "remediate_pagerduty_alert" {
   title       = "Remediate PagerDuty Alert"
-  description = "Remediate PagerDuty alert."
+  description = "Takes Remediation Actions based on the event."
+
+  tags = {
+    type = "featured"
+  }
+
+  param "pagerduty_cred" {
+    type        = string
+    description = "Name for PagerDuty credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
+  }
 
   param "event" {
     type        = any
@@ -21,7 +31,8 @@ pipeline "remediate_pagerduty_alert" {
     if       = param.event.event_type == "incident.acknowledged"
     pipeline = pipeline.pagerduty_incident_acknowledged
     args = {
-      incident_id = param.event.data.id
+      pagerduty_cred = param.pagerduty_cred
+      incident_id    = param.event.data.id
     }
   }
 
@@ -29,7 +40,8 @@ pipeline "remediate_pagerduty_alert" {
     if       = param.event.event_type == "incident.triggered"
     pipeline = pipeline.pagerduty_incident_triggered
     args = {
-      incident_id = param.event.data.id
+      pagerduty_cred = param.pagerduty_cred
+      incident_id    = param.event.data.id
     }
   }
 
@@ -37,12 +49,14 @@ pipeline "remediate_pagerduty_alert" {
     if       = param.event.event_type == "incident.annotated"
     pipeline = pipeline.pagerduty_incident_annotated
     args = {
-      incident_id = param.event.data.incident.id
+      pagerduty_cred = param.pagerduty_cred
+      incident_id    = param.event.data.incident.id
     }
   }
 
 
   output "remediate_pagerduty_alert" {
+    description = "The remediation action taken."
     value = {
       pagerduty_incident_acknowledged : step.pipeline.pagerduty_incident_acknowledged,
       pagerduty_incident_triggered : step.pipeline.pagerduty_incident_triggered,
