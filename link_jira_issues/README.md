@@ -4,6 +4,12 @@ Search for related Jira issues using [Jira Query Language (JQL) query](https://s
 
 ## Usage
 
-- Add your Jira API token, user email, API base URL and project key to `flowpipe.pvars`
-- Start your Flowpipe server run `flowpipe server`
-- Run the pipeline and specify `assignee_id`, `jql_query`, and `issue_type` e.g., `flowpipe pipeline run link_jira_issues --arg jql_query="project = HSP" --arg assignee_id="543256788888888" --arg issue_type="Bug" --host http://localhost:7103`
+- Set your `JIRA_API_TOKEN`, `JIRA_URL`, `JIRA_USER` environment variables or configure your Jira credentials in `~/.flowpipe/config/jira.fpc`:
+  ```hcl
+  credential "jira" "jira_cred" {
+    base_url    = "https://test.atlassian.net/"
+    api_token   = "ATATT3........."
+    username    = "abc@email.com"
+  }
+  ```
+- Run the pipeline and specify `assignee_id`, `jql_query`, and `issue_type` e.g., `flowpipe pipeline run link_jira_issues --arg jql_query="summary~Test" --arg 'assignee_id=543256788888888' --arg 'issue_type=Bug'`
