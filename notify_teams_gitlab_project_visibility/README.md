@@ -3,6 +3,7 @@
 Notify a Teams channel with GitLab Public Projects of a group. Optionally, update the public projects in the group to private.
 
 ## Getting Started
+
 ### Credentials
 
 By default, the following environment variables will be used for authentication:
