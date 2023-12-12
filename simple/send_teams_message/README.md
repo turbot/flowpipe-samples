@@ -2,7 +2,30 @@
 
 Send a new chat message in the specified channel.
 
-## Usage
+## Getting Started
 
-- Add your Teams Access token and ID to `flowpipe.pvars`
-- Run the pipeline and specify the `channel_id` and `message` args, e.g., `flowpipe pipeline run send_teams_message --arg 'channel_id=944a8e14-7a6f-48c6-8805-6e93612f' --arg 'message=Hello world!'
+### Credentials
+
+By default, the following environment variables will be used for authentication:
+
+- `TEAMS_ACCESS_TOKEN`
+
+You can also create `credential` resources in configuration files:
+
+```sh
+vi ~/.flowpipe/config/teams.fpc
+```
+
+```hcl
+credential "teams" "default" {
+  access_token = "<access_token>"
+}
+```
+
+### Usage
+
+Run the pipeline and specify the `team_id`, `channel_id` and `message` pipeline arguments:
+
+```sh
+flowpipe pipeline run send_teams_message --arg team_id=fake-team-id --arg channel_id='19:fake@thread.tacv2' --arg message="Hello from Flowpipe!"
+```
