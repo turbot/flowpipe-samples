@@ -18,7 +18,7 @@ pipeline "remediate_aws_guardduty_alerts" {
 
   param "jira_cred" {
     type        = string
-    description = "Jira credentials."
+    description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
     default     = var.jira_cred
   }
 

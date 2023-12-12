@@ -2,13 +2,13 @@ pipeline "block_s3_public_access" {
 
   param "jira_cred" {
     type        = string
-    description = "Jira credentials."
+    description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
     default     = var.jira_cred
   }
 
   param "aws_cred" {
     type        = string
-    description = "AWS credentials."
+    description = "Name for AWS credentials to use. If not provided, the default credentials will be used."
     default     = var.aws_cred
   }
 

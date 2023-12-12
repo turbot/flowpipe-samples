@@ -23,10 +23,10 @@ pipeline "router_pipeline" {
     description = "GitHub event request body."
   }
 
-  param "slack_token" {
+  param "slack_cred" {
     type        = string
-    description = "Authentication token bearing required scopes."
-    default     = var.slack_token
+    description = "Name for Slack credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
   }
 
   param "slack_channel" {
@@ -40,7 +40,7 @@ pipeline "router_pipeline" {
 
     pipeline = slack.pipeline.post_message
     args = {
-      token   = param.slack_token
+      cred    = param.slack_cred
       channel = param.slack_channel
       message = "New release created by ${param.request_body.release.author.login}: ${param.request_body.release.html_url}"
     }
