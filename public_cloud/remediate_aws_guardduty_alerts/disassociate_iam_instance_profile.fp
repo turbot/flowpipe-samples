@@ -20,7 +20,6 @@ pipeline "disassociate_iam_instance_profile_actions" {
   param "aws_region" {
     type        = string
     description = "AWS region."
-    default     = var.aws_region
   }
 
   param "aws_instance_id" {

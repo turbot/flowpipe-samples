@@ -1,10 +1,5 @@
 # AWS variables
 
-variable "aws_region" {
-  type        = string
-  description = "The name of the Region."
-}
-
 variable "aws_cred" {
   type        = string
   description = "AWS credentials."
