@@ -1,6 +1,6 @@
 # Required
-slack_channel = "CH1234FEW"
-slack_text    = "Hello!"
+channel = "CH1234FEW"
+text    = "Hello!"
 
 # Optional
 # slack_cred = "non_default_cred"

@@ -51,7 +51,7 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 Run the pipeline to send a message immediately:
 
 ```sh
-flowpipe pipeline run send_slack_message_using_cron --arg slack_channel=CH1234FEW --arg slack_text="Hello!"
+flowpipe pipeline run send_slack_message_using_cron --arg channel=CH1234FEW --arg text="Hello"
 ```
 
 To send a message at the scheduled time, start the Flowpipe server:
@@ -73,8 +73,8 @@ vi flowpipe.fpvars
 
 ```hcl
 # Required
-slack_channel = "CH1234FEW"
-slack_text    = "Hello!"
+channel = "CH1234FEW"
+text    = "Hello!"
 
 # Optional
 # slack_cred = "non_default_cred"

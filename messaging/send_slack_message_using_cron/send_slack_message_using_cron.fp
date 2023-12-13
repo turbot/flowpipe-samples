@@ -18,24 +18,24 @@ pipeline "send_slack_message_using_cron" {
     default     = var.slack_cred
   }
 
-  param "slack_channel" {
+  param "channel" {
     type        = string
     description = "Channel, private group, or IM channel to send message to. Can be an encoded ID, or a name."
-    default     = var.slack_channel
+    default     = var.channel
   }
 
-  param "slack_text" {
+  param "text" {
     type        = string
     description = "The formatted text to describe the content of the message."
-    default     = var.slack_text
+    default     = var.text
   }
 
   step "pipeline" "post_message" {
     pipeline = slack.pipeline.post_message
     args = {
       cred    = param.slack_cred
-      channel = param.slack_channel
-      text    = param.slack_text
+      channel = param.channel
+      text    = param.text
     }
   }
 }

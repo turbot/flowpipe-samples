@@ -8,32 +8,32 @@ pipeline "create_okta_user_assign_to_group" {
     default     = "default"
   }
 
-  param "okta_first_name" {
+  param "first_name" {
     description = "Given name of the user."
     type        = string
   }
 
-  param "okta_last_name" {
+  param "last_name" {
     description = "The family name of the user."
     type        = string
   }
 
-  param "okta_email" {
+  param "email" {
     description = "The primary email address of the user."
     type        = string
   }
 
-  param "okta_login" {
+  param "login" {
     description = "The unique identifier for the user."
     type        = string
   }
 
-  param "okta_password" {
+  param "password" {
     description = "Specifies the password for a user."
     type        = string
   }
 
-  param "okta_group_id" {
+  param "group_id" {
     description = "The ID of the group."
     type        = string
   }
@@ -42,11 +42,11 @@ pipeline "create_okta_user_assign_to_group" {
     pipeline = okta.pipeline.create_user
     args = {
       cred       = param.okta_cred
-      first_name = param.okta_first_name
-      last_name  = param.okta_last_name
-      email      = param.okta_email
-      login      = param.okta_login
-      password   = param.okta_password
+      first_name = param.first_name
+      last_name  = param.last_name
+      email      = param.email
+      login      = param.login
+      password   = param.password
     }
   }
 
@@ -54,7 +54,7 @@ pipeline "create_okta_user_assign_to_group" {
     pipeline = okta.pipeline.assign_user
     args = {
       cred     = param.okta_cred
-      group_id = param.okta_group_id
+      group_id = param.group_id
       user_id  = step.pipeline.create_user.output.user.id
     }
   }
@@ -65,7 +65,7 @@ pipeline "create_okta_user_assign_to_group" {
     pipeline = okta.pipeline.list_member_users
     args = {
       cred     = param.okta_cred
-      group_id = param.okta_group_id
+      group_id = param.group_id
     }
   }
 
