@@ -19,7 +19,7 @@ Clone:
 
 ```sh
 git clone https://github.com/turbot/flowpipe-samples.git
-cd 
+cd public_cloud/remediate_aws_guardduty_alerts
 ```
 
 [Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
@@ -42,7 +42,7 @@ By default, the following environment variables will be used for authentication:
 You can also create `credential` resources in configuration files:
 
 ```sh
-vi ~/.flowpipe/config/slack.fpc
+vi ~/.flowpipe/config/jira.fpc
 ```
 
 ```hcl
@@ -54,7 +54,7 @@ credential "jira" "jira_cred" {
 ```
 
 ```sh
-vi ~/.flowpipe/config/slack.fpc
+vi ~/.flowpipe/config/aws.fpc
 ```
 
 ```hcl

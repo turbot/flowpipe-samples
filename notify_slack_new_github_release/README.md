@@ -2,10 +2,6 @@
 
 Notify a Slack channel when a new GitHub release is published.
 
-## Requirements
-
-Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
-
 ## Installation
 
 Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
@@ -19,7 +15,7 @@ Clone:
 
 ```sh
 git clone https://github.com/turbot/flowpipe-samples.git
-cd software/notify_slack_new_github_release
+cd software_development/notify_slack_new_github_release
 ```
 
 [Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
@@ -66,7 +62,7 @@ To configure the webhook subscription in GitHub:
 
 1. Get the trigger details:
 ```sh
-flowpipe trigger show http.pagerduty_webhook_incident_events
+flowpipe trigger show http.github_webhook_release_events
 ```
 2. Copy the `Url`, e.g., `/hook/github_webhook_release_events.trigger.http.github_webhook_release_events/92ffeda03426754f2c79dfaa`
 3. Use a tool like [ngrok](https://ngrok.com/) with a custom domain to expose your localhost server to the internet:
