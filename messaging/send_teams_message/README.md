@@ -69,4 +69,4 @@ This repository is published under the [Apache 2.0 license](https://www.apache.o
 Want to help but not sure where to start? Pick up one of the `help wanted` issues:
 
 - [Flowpipe](https://github.com/turbot/flowpipe/labels/help%20wanted)
-- [Azure Mod](https://github.com/turbot/flowpipe-mod-azure/labels/help%20wanted)
+- [Samples Mod](https://github.com/turbot/flowpipe-samples/labels/help%20wanted)
