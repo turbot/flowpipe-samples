@@ -12,16 +12,16 @@ pipeline "throw_error_example_using_slack" {
     default     = "default"
   }
 
-  param "channel" {
+  param "slack_channel" {
     type        = string
     description = "Conversation ID to learn more about."
   }
 
-  step "pipeline" "get_channel" {
+  step "pipeline" "get_slack_channel" {
     pipeline = slack.pipeline.get_channel
     args = {
       cred    = param.slack_cred
-      channel = param.channel
+      channel = param.slack_channel
     }
 
     # When the requested channel is unavilable, exit the pipeline.
@@ -31,8 +31,8 @@ pipeline "throw_error_example_using_slack" {
     }
   }
 
-  output "channel" {
+  output "slack_channel" {
     description = "Channel details."
-    value       = step.pipeline.get_channel
+    value       = step.pipeline.get_slack_channel
   }
 }
