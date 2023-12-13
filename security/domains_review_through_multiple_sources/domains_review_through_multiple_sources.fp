@@ -14,7 +14,7 @@ pipeline "domains_review_through_multiple_sources" {
     default     = "default"
   }
 
-  param "urlscanio_cred" {
+  param "urlscan_cred" {
     type        = string
     description = "Name for  URLScan.io credentials to use. If not provided, the default credentials will be used."
     default     = "default"
@@ -51,9 +51,9 @@ pipeline "domains_review_through_multiple_sources" {
   }
 
   step "pipeline" "urlscan_domain_scan" {
-    pipeline = urlscanio.pipeline.search_scan
+    pipeline = urlscan.pipeline.search_scan
     args = {
-      cred   = param.urlscanio_cred
+      cred  = param.urlscan_cred
       query = "domain:${param.domain}"
     }
   }

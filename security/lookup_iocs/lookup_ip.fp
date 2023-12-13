@@ -14,7 +14,7 @@ pipeline "lookup_ip" {
     default     = "default"
   }
 
-  param "urlscanio_cred" {
+  param "urlscan_cred" {
     type        = string
     description = "Name for  URLScan.io credentials to use. If not provided, the default credentials will be used."
     default     = "default"
@@ -59,9 +59,9 @@ pipeline "lookup_ip" {
   }
 
   step "pipeline" "urlscan_ip_lookup" {
-    pipeline = urlscanio.pipeline.search_scan
+    pipeline = urlscan.pipeline.search_scan
     args = {
-      cred  = param.urlscanio_cred
+      cred  = param.urlscan_cred
       query = "domain:${param.ip_address}"
     }
   }

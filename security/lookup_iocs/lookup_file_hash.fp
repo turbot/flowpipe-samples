@@ -8,7 +8,7 @@ pipeline "lookup_file_hash" {
     default     = "default"
   }
 
-  param "urlscanio_cred" {
+  param "urlscan_cred" {
     type        = string
     description = "Name for  URLScan.io credentials to use. If not provided, the default credentials will be used."
     default     = "default"
@@ -34,9 +34,9 @@ pipeline "lookup_file_hash" {
   }
 
   step "pipeline" "urlscan_file_hash_lookup" {
-    pipeline = urlscanio.pipeline.search_scan
+    pipeline = urlscan.pipeline.search_scan
     args = {
-      cred  = param.urlscanio_cred
+      cred  = param.urlscan_cred
       query = "hash:${param.file_hash}"
     }
   }
