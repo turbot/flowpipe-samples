@@ -2,10 +2,10 @@ pipeline "scan_file_hash_on_virustotal" {
   title = "Scan File Hash on VirusTotal"
   description = "Scans a file hash on VirusTotal."
 
-  param "virustotal_api_key" {
+  param "virustotal_cred" {
     type        = string
-    description = "The VirusTotal API key to use."
-    default     = var.virustotal_api_key
+    description = "Name for VirusTotal credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
   }
 
   param "file_hash" {
@@ -16,7 +16,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_analysis" {
     pipeline = virustotal.pipeline.get_file_analysis
     args = {
-      api_key   = param.virustotal_api_key
+      cred      = param.virustotal_cred
       file_hash = param.file_hash
     }
   }
@@ -24,7 +24,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_behaviour_summary" {
     pipeline = virustotal.pipeline.get_file_behaviour_summary
     args = {
-      api_key   = param.virustotal_api_key
+      cred      = param.virustotal_cred
       file_hash = param.file_hash
     }
   }
@@ -32,7 +32,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_behaviours" {
     pipeline = virustotal.pipeline.get_file_behaviours
     args = {
-      api_key   = param.virustotal_api_key
+      cred      = param.virustotal_cred
       file_hash = param.file_hash
     }
   }
@@ -40,7 +40,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_behaviour_mitre_trees" {
     pipeline = virustotal.pipeline.get_file_behaviour_mitre_trees
     args = {
-      api_key   = param.virustotal_api_key
+      cred      = param.virustotal_cred
       file_hash = param.file_hash
     }
   }
@@ -48,7 +48,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_comments" {
     pipeline = virustotal.pipeline.get_file_comments
     args = {
-      api_key   = param.virustotal_api_key
+      cred      = param.virustotal_cred
       file_hash = param.file_hash
     }
   }
@@ -56,7 +56,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_collections" {
     pipeline = virustotal.pipeline.get_file_collections
     args = {
-      api_key   = param.virustotal_api_key
+      cred      = param.virustotal_cred
       file_hash = param.file_hash
     }
   }
@@ -64,7 +64,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_execution_parents" {
     pipeline = virustotal.pipeline.get_file_execution_parents
     args = {
-      api_key   = param.virustotal_api_key
+      cred      = param.virustotal_cred
       file_hash = param.file_hash
     }
   }
@@ -72,7 +72,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_pe_resource_children" {
     pipeline = virustotal.pipeline.get_file_pe_resource_children
     args = {
-      api_key   = param.virustotal_api_key
+      cred      = param.virustotal_cred
       file_hash = param.file_hash
     }
   }
@@ -80,7 +80,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_pe_resource_parents" {
     pipeline = virustotal.pipeline.get_file_pe_resource_parents
     args = {
-      api_key   = param.virustotal_api_key
+      cred      = param.virustotal_cred
       file_hash = param.file_hash
     }
   }
@@ -106,19 +106,19 @@ pipeline "scan_file_hash_on_virustotal" {
   }
 
   output "file_collections" {
-    value = step.pipeline.get_file_comments.output.file_collections
+    value = step.pipeline.get_file_collections.output.collections
   }
 
   output "file_execution_parents" {
-    value = step.pipeline.get_file_comments.output.file_execution_parents
+    value = step.pipeline.get_file_execution_parents.output.execution_parents
   }
 
   output "file_pe_resource_children" {
-    value = step.pipeline.get_file_comments.output.file_pe_resource_children
+    value = step.pipeline.get_file_pe_resource_children.output.pe_resource_children
   }
 
   output "file_pe_resource_parents" {
-    value = step.pipeline.get_file_comments.output.file_pe_resource_parents
+    value = step.pipeline.get_file_pe_resource_parents.output.pe_resource_parents
   }
 
 }
