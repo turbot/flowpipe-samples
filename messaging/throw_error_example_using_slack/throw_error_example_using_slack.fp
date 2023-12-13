@@ -2,6 +2,16 @@ pipeline "throw_error_example_using_slack" {
   title       = "Throw Error Example Using Slack"
   description = "Throw an error if the requested Slack channel is unavailable."
 
+  tags = {
+    type = "featured"
+  }
+
+  param "slack_cred" {
+    type        = string
+    description = "Name for Slack credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
+  }
+
   param "channel" {
     type        = string
     description = "Conversation ID to learn more about."
@@ -10,6 +20,7 @@ pipeline "throw_error_example_using_slack" {
   step "pipeline" "get_channel" {
     pipeline = slack.pipeline.get_channel
     args = {
+      cred    = param.slack_cred
       channel = param.channel
     }
 

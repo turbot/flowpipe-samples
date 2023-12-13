@@ -2,7 +2,54 @@
 
 Send a new chat message in the specified channel.
 
+## Requirements
+
+Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
+
+## Installation
+
+Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
+
+```sh
+brew tap turbot/tap
+brew install flowpipe
+```
+
+Clone:
+
+```sh
+git clone https://github.com/turbot/flowpipe-samples.git
+cd messaging/send_teams_message
+```
+
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
+
+## Credentials
+
+By default, the following environment variables will be used for authentication:
+
+- `TEAMS_ACCESS_TOKEN`
+
+You can also create `credential` resources in configuration files:
+
+```sh
+vi ~/.flowpipe/config/teams.fpc
+```
+
+```hcl
+credential "teams" "default" {
+  access_token = "<access_token>"
+}
+```
+
 ## Usage
 
-- Add your Teams Access token and ID to `flowpipe.pvars`
-- Run the pipeline and specify the `channel_id` and `message` args, e.g., `flowpipe pipeline run send_teams_message --arg 'channel_id=944a8e14-7a6f-48c6-8805-6e93612f' --arg 'message=Hello world!'
+Run the pipeline and specify the `team_id`, `channel_id` and `message` pipeline arguments:
+
+```sh
+flowpipe pipeline run send_teams_message --arg team_id=fake-team-id --arg channel_id='19:fake@thread.tacv2' --arg message="Hello from Flowpipe!"
+```

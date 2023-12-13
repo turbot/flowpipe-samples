@@ -1,6 +1,16 @@
 pipeline "delete_mail_from_microsoft_office_365" {
-  title       = "Delete Email From Microsoft Office 365"
+  title       = "Delete Mail From Microsoft Office 365"
   description = "Delete an email from a specified user's mailbox in Microsoft Office 365."
+
+  tags = {
+    type = "featured"
+  }
+
+  param "teams_cred" {
+    type        = string
+    description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
+  }
 
   param "user_id" {
     type        = string
@@ -16,6 +26,7 @@ pipeline "delete_mail_from_microsoft_office_365" {
   step "pipeline" "get_email" {
     pipeline = teams.pipeline.get_message
     args = {
+      cred       = param.teams_cred
       user_id    = param.user_id
       message_id = param.message_id
     }
@@ -26,6 +37,7 @@ pipeline "delete_mail_from_microsoft_office_365" {
     depends_on = [step.pipeline.get_email]
     pipeline   = teams.pipeline.delete_message
     args = {
+      cred       = param.teams_cred
       user_id    = param.user_id
       message_id = param.message_id
     }
