@@ -1,10 +1,23 @@
 trigger "schedule" "deallocate_and_delete_unapproved_azure_vms" {
   description = "A daily cron job at 9 AM UTC that checks for Azure Unapproved VMs, deallocates and deletes them."
-  schedule    = "0 9 * * *"
-  pipeline    = pipeline.deallocate_and_delete_unapproved_azure_vms
+
+  schedule = "0 9 * * *"
+  pipeline = pipeline.deallocate_and_delete_unapproved_azure_vms
 }
 
 pipeline "deallocate_and_delete_unapproved_azure_vms" {
+
+  param "azure_cred" {
+    type        = string
+    description = "Name for Azure credentials to use. If not provided, the default credentials will be used."
+    default     = var.azure_cred
+  }
+
+  param "zendesk_cred" {
+    type        = string
+    description = "Name for Zendesk credentials to use. If not provided, the default credentials will be used."
+    default     = var.zendesk_cred
+  }
 
   param "subscription_id" {
     type        = string
@@ -18,55 +31,17 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     default     = var.resource_group
   }
 
-  param "tenant_id" {
-    type = string
-    # description = local.tenant_id_param_description
-    default = var.tenant_id
-  }
-
-  param "client_secret" {
-    type        = string
-    description = local.client_secret_param_description
-    default     = var.client_secret
-  }
-
-  param "client_id" {
-    type        = string
-    description = local.client_id_param_description
-    default     = var.client_id
-  }
-
   param "tags_query" {
     type        = string
     description = "A JMESPath query to use in filtering the response data."
-    default     = "[?tags.environment=='development' || tags.environment=='dev'].name"
-  }
-
-  param "api_token" {
-    type        = string
-    description = local.api_token_param_description
-    default     = var.api_token
-  }
-
-  param "user_email" {
-    type        = string
-    description = local.user_email_param_description
-    default     = var.user_email
-  }
-
-  param "subdomain" {
-    type        = string
-    description = local.subdomain_param_description
-    default     = var.subdomain
+    default     = var.tags_query
   }
 
   # List Azure VMs with the given tags as per the query param.
   step "pipeline" "list_azure_vms" {
     pipeline = azure.pipeline.list_compute_virtual_machines
     args = {
-      tenant_id       = param.tenant_id
-      client_secret   = param.client_secret
-      client_id       = param.client_id
+      cred            = param.azure_cred
       subscription_id = param.subscription_id
       resource_group  = param.resource_group
       query           = param.tags_query
@@ -84,9 +59,7 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     for_each = { for name in step.pipeline.list_azure_vms.output.stdout : name => name }
     pipeline = azure.pipeline.get_compute_virtual_machine_instance_view
     args = {
-      tenant_id       = param.tenant_id
-      client_secret   = param.client_secret
-      client_id       = param.client_id
+      cred            = param.azure_cred
       subscription_id = param.subscription_id
       resource_group  = param.resource_group
       vm_name         = each.value
@@ -101,9 +74,7 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     }
     pipeline = azure.pipeline.deallocate_compute_virtual_machine
     args = {
-      tenant_id       = param.tenant_id
-      client_secret   = param.client_secret
-      client_id       = param.client_id
+      cred            = param.azure_cred
       subscription_id = param.subscription_id
       resource_group  = param.resource_group
       vm_name         = each.key
@@ -117,9 +88,7 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     }
     pipeline = azure.pipeline.delete_compute_virtual_machine
     args = {
-      tenant_id       = param.tenant_id
-      client_secret   = param.client_secret
-      client_id       = param.client_id
+      cred            = param.azure_cred
       subscription_id = param.subscription_id
       resource_group  = param.resource_group
       vm_name         = each.key
@@ -134,10 +103,8 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     depends_on = [step.pipeline.delete_instances]
     pipeline   = zendesk.pipeline.create_ticket
     args = {
-      api_token  = param.api_token
-      user_email = param.user_email
-      subdomain  = param.subdomain
-      subject    = "Unapproved Azure VM Deleted"
+      cred    = param.zendesk_cred
+      subject = "Unapproved Azure VM Deleted"
       comment = ({
         body   = "Unapproved Azure VM Deleted\nSubscriptionId: ${param.subscription_id}\nResourceGroup: ${param.resource_group}\nName: ${each.key}\n",
         public = true
