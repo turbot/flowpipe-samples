@@ -5,7 +5,7 @@ mod "csv_to_json" {
   categories    = ["productivity"]
 
   opengraph {
-      title       = "Notify Teams on GitLab Project Visibility"
-      description = "Notify a Teams channel on GitLab public projects, optionally update the visibility from public to private."
+    title       = "Notify Teams on GitLab Project Visibility"
+    description = "Notify a Teams channel on GitLab public projects, optionally update the visibility from public to private."
   }
 }
