@@ -10,7 +10,7 @@ pipeline "lookup_ip" {
 
   param "ip2locationio_cred" {
     type        = string
-    description = "Name for IP2Locationio credentials to use. If not provided, the default credentials will be used."
+    description = "Name for ip2location.io credentials to use. If not provided, the default credentials will be used."
     default     = "default"
   }
 
