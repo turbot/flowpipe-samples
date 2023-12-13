@@ -73,8 +73,13 @@ flowpipe trigger show http.pagerduty_webhook_incident_events
 ```sh
 ngrok http 7103 --domain=yellow-neutral-lab.ngrok-free.app
 ```
-4. Form the full webhook URL with the public endpoint from ngrok and the trigger URL using the format `https://{ngrok_domain}.ngrok-free.app/api/v0/{hook_url}`, e.g., `https://yellow-neutral-lab.ngrok-free.app/api/v0/hook/github_webhook_release_events.trigger.http.github_webhook_release_events/92ffeda03426754f2c79dfaa`
-
+4. Form the full webhook URL with the public endpoint from ngrok and the trigger URL using the format `https://{ngrok_domain}.ngrok-free.app/api/latest/{hook_url}`, e.g., `https://yellow-neutral-lab.ngrok-free.app/api/latest/hook/github_webhook_release_events.trigger.http.github_webhook_release_events/92ffeda03426754f2c79dfaa`
+5. [Create a webhook](https://docs.github.com/en/webhooks/using-webhooks/creating-webhooks#creating-a-repository-webhook) in the GitHub repository:
+  - Payload URL: `<URL from above>`
+  - Content type: `application/json`
+  - Secret: Can optionally add a secret
+  - Events: `Releases`
+  - Active: Checked
 
 To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
 
