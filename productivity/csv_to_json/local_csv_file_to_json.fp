@@ -1,5 +1,5 @@
 pipeline "local_csv_file_to_json" {
-  title       = "Convert Local CSV File To JSON"
+  title       = "Convert Local CSV File to JSON"
   description = "Read a CSV file and transform it into JSON format."
 
   tags = {
