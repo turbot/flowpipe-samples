@@ -46,8 +46,8 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 
 ## Usage
 
-Run the pipeline and specify the `channel_id` and `message` pipeline arguments:
+Run the pipeline and specify the `discord_channel_id` and `discord_message` pipeline arguments:
 
 ```sh
-flowpipe pipeline run send_discord_message --arg 'channel_id=my-channel' --arg 'message=Hello world!'
+flowpipe pipeline run send_discord_message --arg 'discord_channel_id=my-channel' --arg 'discord_message=Hello world!'
 ```

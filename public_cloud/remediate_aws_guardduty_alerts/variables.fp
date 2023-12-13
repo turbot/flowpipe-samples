@@ -23,7 +23,7 @@ variable "jira_project_key" {
   description = "The key identifying the project."
 }
 
-variable "issue_type" {
+variable "jira_issue_type" {
   type        = string
   description = "Jira issue type."
 }

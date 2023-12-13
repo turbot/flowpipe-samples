@@ -12,7 +12,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
     default     = var.aws_cred
   }
 
-  param "issue_id" {
+  param "jira_issue_id" {
     type        = string
     description = "Jira issue id."
   }
@@ -23,7 +23,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
     default     = var.aws_region
   }
 
-  param "instance_id" {
+  param "aws_instance_id" {
     type        = string
     description = "AWS instance id."
   }
@@ -33,7 +33,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
     args = {
       cred        = param.aws_cred
       region      = param.aws_region
-      instance_id = param.instance_id
+      instance_id = param.aws_instance_id
     }
   }
 
@@ -53,8 +53,8 @@ pipeline "disassociate_iam_instance_profile_actions" {
     pipeline   = jira.pipeline.add_comment
     args = {
       cred         = param.jira_cred
-      issue_id     = param.issue_id
-      comment_text = "Disassociated IAM Instance Profile from ${param.instance_id}."
+      issue_id     = param.jira_issue_id
+      comment_text = "Disassociated IAM Instance Profile from ${param.aws_instance_id}."
     }
   }
 
@@ -63,7 +63,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
     pipeline   = jira.pipeline.get_issue_transitions
     args = {
       cred      = param.jira_cred
-      issue_key = param.issue_id
+      issue_key = param.jira_issue_id
     }
   }
 
@@ -72,7 +72,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
     pipeline   = jira.pipeline.transition_issue
     args = {
       cred          = param.jira_cred
-      issue_id      = param.issue_id
+      issue_id      = param.jira_issue_id
       transition_id = tonumber([for transition in step.pipeline.get_issue_transitions.output.transitions : transition.id if transition.name == "Done"][0])
     }
   }

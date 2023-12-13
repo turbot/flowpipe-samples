@@ -29,13 +29,13 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     description = "The GCP project ID."
   }
 
-  param "zone" {
+  param "gcp_zone" {
     type        = string
     description = "The GCP zone."
     default     = var.gcp_zone
   }
 
-  param "instance_name" {
+  param "gcp_instance_name" {
     type        = string
     description = "The GCP instance name."
   }
@@ -44,9 +44,9 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     pipeline = gcp.pipeline.get_compute_instance
     args = {
       cred          = param.gcp_cred
-      instance_name = param.instance_name
+      instance_name = param.gcp_instance_name
       project_id    = param.gcp_project_id
-      zone          = param.zone
+      zone          = param.gcp_zone
     }
   }
 
@@ -68,9 +68,9 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     pipeline   = gcp.pipeline.stop_compute_instance
     args = {
       cred          = param.gcp_cred
-      instance_name = param.instance_name
+      instance_name = param.gcp_instance_name
       project_id    = param.gcp_project_id
-      zone          = param.zone
+      zone          = param.gcp_zone
     }
   }
 
@@ -80,9 +80,9 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     pipeline   = gcp.pipeline.detach_compute_disk_from_instance
     args = {
       cred          = param.gcp_cred
-      instance_name = param.instance_name
+      instance_name = param.gcp_instance_name
       project_id    = param.gcp_project_id
-      zone          = param.zone
+      zone          = param.gcp_zone
       disk_name     = regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]
     }
   }
@@ -122,7 +122,7 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     pipeline   = jira.pipeline.create_issue
     args = {
       cred        = param.jira_cred
-      summary     = "Isolated GCP instance ${param.instance_name}"
+      summary     = "Isolated GCP instance ${param.gcp_instance_name}"
       description = " - Created snapshots: ${join(", ", [for disk in step.pipeline.get_compute_instance.output.instance.disks : "isolate-disk-${regex("projects/.+/zones/.+/disks/(.+)", disk.source)[0]}"])}\n - Detached disks: ${join(", ", [for disk in step.pipeline.get_compute_instance.output.instance.disks : regex("projects/.+/zones/.+/disks/(.+)", disk.source)[0]])}\n - Created VPC firewall rules to block ingress and egress traffic"
       project_key = param.jira_project_key
       issue_type  = param.jira_issue_type
@@ -130,6 +130,6 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
   }
 
   output "output" {
-    value = !is_error(step.pipeline.create_egress_vpc_firewall_rule) ? "Created snapshots for disks, detached disks, and blocked ingress/egress traffic for instance ${param.instance_name}" : "Failed to snapshot and isolate instance"
+    value = !is_error(step.pipeline.create_egress_vpc_firewall_rule) ? "Created snapshots for disks, detached disks, and blocked ingress/egress traffic for instance ${param.gcp_instance_name}" : "Failed to snapshot and isolate instance"
   }
 }

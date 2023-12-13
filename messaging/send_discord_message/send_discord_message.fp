@@ -8,12 +8,12 @@ pipeline "send_discord_message" {
     default     = "default"
   }
 
-  param "channel_id" {
+  param "discord_channel_id" {
     description = "The ID of the channel to send the message to."
     type        = string
   }
 
-  param "message" {
+  param "discord_message" {
     description = "The message to send."
     type        = string
   }
@@ -22,8 +22,8 @@ pipeline "send_discord_message" {
     pipeline = discord.pipeline.create_message
     args = {
       cred       = param.discord_cred
-      channel_id = param.channel_id
-      message    = param.message
+      channel_id = param.discord_channel_id
+      message    = param.discord_message
     }
   }
 

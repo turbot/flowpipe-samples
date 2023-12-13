@@ -51,8 +51,8 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 
 ## Usage
 
-Run the pipeline and specify the `jira_project_key`, `jql_query`, and `issue_type` pipeline arguments:
+Run the pipeline and specify the `jira_project_key`, `jira_jql_query`, and `issue_type` pipeline arguments:
 
 ```sh
-flowpipe pipeline run link_jira_issues --arg jql_query="summary~Test" --arg 'jira_project_key=QWR' --arg 'issue_type=Bug'
+flowpipe pipeline run link_jira_issues --arg jira_jql_query="summary~Test" --arg 'jira_project_key=QWR' --arg 'jira_issue_type=Bug'
 ```
