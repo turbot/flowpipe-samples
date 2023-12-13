@@ -1,8 +1,8 @@
 trigger "schedule" "report_inactive_okta_accounts" {
+  title       = "Report on Inactive Okta Accounts and Deactivate"
   description = "Runs daily at 9 AM UTC, this trigger scans inactive Okta accounts and deactivates them."
-
-  schedule = "0 9 * * *"
-  pipeline = pipeline.report_inactive_okta_accounts
+  schedule    = "0 9 * * *"
+  pipeline    = pipeline.report_inactive_okta_accounts
 }
 
 pipeline "report_inactive_okta_accounts" {

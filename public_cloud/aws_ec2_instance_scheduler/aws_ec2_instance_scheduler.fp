@@ -104,6 +104,7 @@ pipeline "aws_ec2_instance_scheduler" {
 
 # Business hours (8:00am - 6:00pm on weekdays)
 trigger "schedule" "business_hours_start" {
+  title    = "Business Hours Start"
   schedule = "0 8 * * 1-5"
   pipeline = pipeline.aws_ec2_instance_scheduler
   args = {
@@ -113,6 +114,7 @@ trigger "schedule" "business_hours_start" {
 }
 
 trigger "schedule" "business_hours_stop" {
+  title    = "Business Hours Stop"
   schedule = "0 18 * * 1-5"
   pipeline = pipeline.aws_ec2_instance_scheduler
   args = {
@@ -123,6 +125,7 @@ trigger "schedule" "business_hours_stop" {
 
 # Extended business hours (7:00am - 11:00pm on weekdays)
 trigger "schedule" "extended_business_hours_start" {
+  title    = "Extended Business Hours Start"
   schedule = "0 7 * * 1-5"
   pipeline = pipeline.aws_ec2_instance_scheduler
   args = {
@@ -132,6 +135,7 @@ trigger "schedule" "extended_business_hours_start" {
 }
 
 trigger "schedule" "extended_business_hours_stop" {
+  title    = "Extended Business Hours Stop"
   schedule = "0 23 * * 1-5"
   pipeline = pipeline.aws_ec2_instance_scheduler
   args = {
@@ -142,6 +146,7 @@ trigger "schedule" "extended_business_hours_stop" {
 
 # Stop for night (stop at 10:00pm every day)
 trigger "schedule" "stop_for_night" {
+  title    = "Stop for the Night"
   schedule = "0 22 * * *"
   pipeline = pipeline.aws_ec2_instance_scheduler
   args = {
@@ -152,6 +157,7 @@ trigger "schedule" "stop_for_night" {
 
 #  Stop for Weekend at 10:00 PM
 trigger "schedule" "stop_for_weekend" {
+  title    = "Stop for the Weekend"
   schedule = "0 22 * * 5"
   pipeline = pipeline.aws_ec2_instance_scheduler
   args = {

@@ -1,4 +1,5 @@
 trigger "schedule" "scheduled_enable_entra_id_user" {
+  title       = "Schedule Jira Issues Scan"
   description = "Scan Jira Issues to enable Entra ID User."
 
   # Run every 5 min

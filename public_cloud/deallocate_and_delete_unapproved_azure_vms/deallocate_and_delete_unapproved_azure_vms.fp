@@ -1,4 +1,5 @@
 trigger "schedule" "deallocate_and_delete_unapproved_azure_vms" {
+  title       = "Deallocate and Delete Unapproved Azure VMs"
   description = "A daily cron job at 9 AM UTC that checks for Azure Unapproved VMs, deallocates and deletes them."
 
   schedule = "0 9 * * *"

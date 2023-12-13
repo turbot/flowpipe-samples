@@ -1,4 +1,5 @@
 trigger "schedule" "send_slack_message_using_cron" {
+  title       = "Send Slack Message Using Cron"
   description = "Send a message to a Slack channel every minute using cron."
   schedule    = "* * * * *"
   pipeline    = pipeline.send_slack_message_using_cron
