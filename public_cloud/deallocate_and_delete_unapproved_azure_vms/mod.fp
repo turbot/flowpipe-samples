@@ -6,14 +6,10 @@ mod "deallocate_and_delete_unapproved_azure_vms" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-azure" {
-      version = "v0.0.1-rc.11"
-      args = {
-        subscription_id = var.subscription_id
-        resource_group  = var.resource_group
-      }
+      version = "v0.4.0"
     }
     mod "github.com/turbot/flowpipe-mod-zendesk" {
-      version = "v0.0.1-rc.6"
+      version = "v0.2.0"
     }
   }
 }

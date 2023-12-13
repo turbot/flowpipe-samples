@@ -40,7 +40,7 @@ pipeline "enable_entra_id_user" {
     depends_on = [step.pipeline.list_issues]
     for_each   = step.pipeline.list_issues.output.issues.issues != null ? { for each_issue in step.pipeline.list_issues.output.issues.issues : each_issue.id => each_issue if strcontains(each_issue.fields.summary, "Enable") && strcontains(each_issue.fields.status.name, "Done") } : tomap({})
 
-    pipeline = entra.pipeline.update_user_status
+    pipeline = entra.pipeline.update_user
     args = {
       cred            = param.azure_cred
       user_id         = split(" ", each.value.fields.summary)[1]
