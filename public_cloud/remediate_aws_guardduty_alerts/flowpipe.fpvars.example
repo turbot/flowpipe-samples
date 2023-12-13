@@ -1,5 +1,2 @@
 # Jira project_key
 jira_project_key="your-jira-project-key"
-
-# AWS region
-aws_region = "your-aws-region"

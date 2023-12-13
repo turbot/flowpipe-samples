@@ -8,7 +8,6 @@ pipeline "disassociate_iam_instance_profile_actions" {
   param "aws_region" {
     type        = string
     description = "AWS region."
-    default     = var.aws_region
   }
 
   param "instance_id" {
@@ -19,8 +18,8 @@ pipeline "disassociate_iam_instance_profile_actions" {
   step "pipeline" "describe_iam_instance_profile_associations" {
     pipeline = aws.pipeline.describe_iam_instance_profile_associations
     args = {
-      region            = param.aws_region
-      instance_id       = param.instance_id
+      region      = param.aws_region
+      instance_id = param.instance_id
     }
   }
 
@@ -29,8 +28,8 @@ pipeline "disassociate_iam_instance_profile_actions" {
     for_each   = step.pipeline.describe_iam_instance_profile_associations.output.iam_instance_profile_associations != null ? { for each_association in step.pipeline.describe_iam_instance_profile_associations.output.iam_instance_profile_associations : each_association.InstanceId => each_association.AssociationId } : tomap({})
     pipeline   = aws.pipeline.disassociate_iam_instance_profile
     args = {
-      region            = param.aws_region
-      association_id    = each.value
+      region         = param.aws_region
+      association_id = each.value
     }
   }
 
@@ -47,7 +46,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
     depends_on = [step.pipeline.add_comment]
     pipeline   = jira.pipeline.get_issue_transitions
     args = {
-      issue_key    = param.issue_id
+      issue_key = param.issue_id
     }
   }
 
