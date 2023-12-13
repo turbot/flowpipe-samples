@@ -1,0 +1,3 @@
+# Required
+splunk_auth_token = "eyJraWQiOiJzcGx1bmsuc2Vjc..."
+splunk_server = "localhost"
