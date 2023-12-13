@@ -5,16 +5,10 @@ mod "aws_iam_user_group_membership" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "v0.0.1-rc.7"
-      args = {
-        region = var.aws_region
-      }
+      version = "v0.2.0"
     }
     mod "github.com/turbot/flowpipe-mod-github" {
-      version = "v0.0.1-rc.5"
-      args = {
-        repository_full_name = var.github_repository_full_name
-      }
+      version = "v0.1.0"
     }
   }
 }

@@ -67,3 +67,18 @@ flowpipe pipeline run create_organization_workspace_and_add_member --arg 'organi
 ```sh
 flowpipe pipeline run add_organization_member_to_workspace --arg 'organization_handle=acme-demo' --arg 'workspace_handle=demoworkspace' --arg 'member_handle=acmeuser01-icbc'
 ```
+
+## Open Source & Contributing
+
+This repository is published under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0). Please see our [code of conduct](https://github.com/turbot/.github/blob/main/CODE_OF_CONDUCT.md). We look forward to collaborating with you!
+
+[Flowpipe](https://flowpipe.io) is a product produced from this open source software, exclusively by [Turbot HQ, Inc](https://turbot.com). It is distributed under our commercial terms. Others are allowed to make their own distribution of the software, but cannot use any of the Turbot trademarks, cloud services, etc. You can learn more in our [Open Source FAQ](https://turbot.com/open-source).
+
+## Get Involved
+
+**[Join #flowpipe on Slack →](https://flowpipe.io/community/join)**
+
+Want to help but not sure where to start? Pick up one of the `help wanted` issues:
+
+- [Flowpipe](https://github.com/turbot/flowpipe/labels/help%20wanted)
+- [Flowpipe Samples Mod](https://github.com/turbot/flowpipe-samples/labels/help%20wanted)
