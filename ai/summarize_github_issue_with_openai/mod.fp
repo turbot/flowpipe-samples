@@ -4,14 +4,14 @@ mod "summarize_github_issue_with_openai" {
   categories  = ["software development", "ai"]
 
   require {
-    mod "github.com/turbot/flowpipe-mod-openai" {
-      version = "v0.0.1-rc.3"
-    }
     mod "github.com/turbot/flowpipe-mod-github" {
-      version = "v0.0.1-rc.5"
-      args = {
-        repository_full_name = var.repository_full_name
-      }
+      version = "v0.1.0"
+    }
+    mod "github.com/turbot/flowpipe-mod-openai" {
+      version = "v0.1.0"
+    }
+    mod "github.com/turbot/flowpipe-mod-slack" {
+      version = "v0.1.0"
     }
   }
 }
