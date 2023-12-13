@@ -1,0 +1,7 @@
+# Required
+to   = "recipient@example.com"
+from = "sender@example.com"
+
+# Optional
+# sendgrid_cred  = "non_default_cred"
+# hn_story_count = 50
