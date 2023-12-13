@@ -1,20 +1,29 @@
 pipeline "deactivate_expired_aws_iam_access_keys" {
-  title = "Deactivate expired AWS IAM access keys"
+  title       = "Deactivate expired AWS IAM access keys"
   description = "Deactivates expired AWS IAM access keys and notifies via Slack channel."
 
-  param "slack_token" {
+  tags = {
+    type = "featured"
+  }
+
+  param "aws_cred" {
     type        = string
-    description = "Slack app token used to connect to the API."
-    default     = var.slack_token
+    description = "Name for AWS credentials to use. If not provided, the default credentials will be used."
+    default     = var.aws_cred
+  }
+
+  param "slack_cred" {
+    type        = string
+    description = "Name for Slack credentials to use. If not provided, the default credentials will be used."
+    default     = var.slack_cred
   }
 
   param "slack_channel" {
     type        = string
-    description = "Channel containing the message to be updated."
-    default     = var.slack_channel
+    description = "Channel, private group, or IM channel to send message to."
   }
 
-  param "expire_after_days" {
+  param "aws_expire_after_days" {
     type        = number
     description = "Number of days after which the access key should be deactivated."
     default     = 90
@@ -25,64 +34,37 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
   }
 
   step "pipeline" "list_iam_access_keys" {
-    for_each = step.pipeline.list_iam_users.output.stdout.Users
+    for_each = { for user in step.pipeline.list_iam_users.output.users : user.UserName => user.UserName }
     pipeline = aws.pipeline.list_iam_access_keys
     args = {
-      user_name = each.value.UserName
+      cred      = param.aws_cred
+      user_name = each.value
     }
   }
 
-  step "pipeline" "update_iam_access_key_status" {
-    for_each = concat([for keys in step.pipeline.list_iam_access_keys: keys.output.stdout.AccessKeyMetadata])
+  step "pipeline" "update_iam_access_key" {
+    for_each = flatten([for accessKey in step.pipeline.list_iam_access_keys : accessKey.output.access_keys])
     # Run only if the access key is active and older than specified number of days.
-    if = each.value.Status == "Active" && timecmp(each.value.CreateDate, timeadd(timestamp(), "-${param.expire_after_days*24}h")) < 0
-    pipeline = aws.pipeline.update_iam_access_key_status
+    if       = each.value.Status == "Active" && timecmp(each.value.CreateDate, timeadd(timestamp(), "-${param.aws_expire_after_days * 24}h")) < 0
+    pipeline = aws.pipeline.update_iam_access_key
     args = {
-      user_name = each.value.UserName
+      cred          = param.aws_cred
+      user_name     = each.value.UserName
       access_key_id = each.value.AccessKeyId
-      status = "Inactive"
+      status        = "Inactive"
     }
   }
 
   step "pipeline" "post_message" {
-    for_each = concat([for keys in step.pipeline.list_iam_access_keys: keys.output.stdout.AccessKeyMetadata])
+    for_each = flatten([for accessKey in step.pipeline.list_iam_access_keys : accessKey.output.access_keys])
     # Run only if the access key is active and older than specified number of days.
-    if = each.value.Status == "Active" && timecmp(each.value.CreateDate, timeadd(timestamp(), "-${param.expire_after_days*24}h")) < 0
+    if = each.value.Status == "Active" && timecmp(each.value.CreateDate, timeadd(timestamp(), "-${param.aws_expire_after_days * 24}h")) < 0
 
-    pipeline = slack.pipeline.chat_post_message
+    pipeline = slack.pipeline.post_message
     args = {
-      token   = param.slack_token
+      cred    = param.slack_cred
       channel = param.slack_channel
-      message = "The access key ${each.value.AccessKeyId} for user ${each.value.UserName} has been deactivated."
+      text    = "The access key ${each.value.AccessKeyId} for user ${each.value.UserName} has been deactivated."
     }
   }
-
-  output "message" {
-    value = step.pipeline.post_message.output.message
-  }
-
-  # Reenable for debugging
-  # output "iam_users" {
-  #   description = "List of IAM users."
-  #   value       = step.pipeline.list_iam_users.output.stdout
-  # }
-
-  # Reenable for debugging
-  # output "update_iam_access_key_status" {
-  #   description = "List of access keys."
-  #   value       = step.pipeline.update_iam_access_key_status
-  # }
-
-  # Reenable for debugging
-  # output "access_keys" {
-  #   description = "List of access keys."
-  #   value       = step.pipeline.list_iam_access_keys
-  # }
-
-  # Reenable for debugging
-  # output "iam_users" {
-  #   description = "List of IAM users."
-  #   value       = step.pipeline.list_iam_users.output.stdout
-  # }
-
 }

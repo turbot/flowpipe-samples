@@ -1,12 +1,8 @@
-# AWS IAM User Group Membership
+# Invite Pipes Organization Member
 
-Check for AWS IAM users with multiple group membership and automate GitHub issue management at 9 AM UTC on weekdays.
-
-If run with `flowpipe server`, this mod will create/update/close GitHub issues every weekday at 9 AM UTC.
-
-## Requirements
-
-Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
+- Invite a member to an organization by email.
+- Create a new workspace in an organization and bring in the organization member.
+- Add organization member to an existing organization workspace.
 
 ## Installation
 
@@ -21,7 +17,7 @@ Clone:
 
 ```sh
 git clone https://github.com/turbot/flowpipe-samples.git
-cd public_cloud/aws_iam_user_group_membership
+cd access_management/invite_pipes_organization_member
 ```
 
 [Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
@@ -34,36 +30,17 @@ flowpipe mod install
 
 By default, the following environment variables will be used for authentication:
 
-- `AWS_PROFILE`
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-- `AWS_PROFILE`
-- `GITHUB_TOKEN`
+- `PIPES_TOKEN`
 
 You can also create `credential` resources in configuration files:
 
 ```sh
-vi creds.fpc
+vi ~/.flowpipe/config/pipes.fpc
 ```
 
 ```hcl
-credential "aws" "aws_profile" {
-  profile = "my-profile"
-}
-
-credential "aws" "aws_access_key_pair" {
-  access_key = "AKIA..."
-  secret_key = "dP+C+J..."
-}
-
-credential "aws" "aws_session_token" {
-  access_key = "AKIA..."
-  secret_key = "dP+C+J..."
-  session_token = "AQoDX..."
-}
-
-credential "github" "default" {
-  token = "ghp_..."
+credential "pipes" "default" {
+  token = "tpt_..."
 }
 ```
 
@@ -71,33 +48,24 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 
 ## Usage
 
-Run the pipeline to check IAM user group membership and manage corresponding GitHub issues immediately:
+Run the pipeline and specify the necessary pipeline arguments:
+
+- Send email invitation to users to join as member in the organization:
 
 ```sh
-flowpipe pipeline run aws_iam_user_group_membership --arg github_repository_owner=my_gh_org --arg github_repository_name=my_gh_repo
+flowpipe pipeline run invite_organization_member_by_email --arg 'organization_handle=acme-demo' --arg 'email=acmeuser01@example.org'
 ```
 
-To perform the IAM user group membership check at the scheduled time, start the Flowpipe server:
+- Create a new workspace in an organization and bring in the organization member.
 
 ```sh
-flowpipe server
+flowpipe pipeline run create_organization_workspace_and_add_member --arg 'organization_handle=acme-demo' --arg 'workspace_handle=demoworkspace' --arg 'member_handle=acmeuser01-icbc'
 ```
 
-Once started, Flowpipe will run the pipeline automatically at the scheduled time.
-
-## Configuration
-
-To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
+- Add organization member to an existing organization workspace.
 
 ```sh
-cp flowpipe.fpvars.example flowpipe.fpvars
-vi flowpipe.fpvars
-```
-
-```hcl
-# Optional
-# github_cred = "non_default_cred"
-# aws_cred    = "non_default_cred"
+flowpipe pipeline run add_organization_member_to_workspace --arg 'organization_handle=acme-demo' --arg 'workspace_handle=demoworkspace' --arg 'member_handle=acmeuser01-icbc'
 ```
 
 ## Open Source & Contributing

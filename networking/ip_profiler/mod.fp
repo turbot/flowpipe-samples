@@ -5,13 +5,13 @@ mod "ip_profiler" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-abuseipdb" {
-      version = "v0.0.1-rc.5"
+      version = "v0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-reallyfreegeoip" {
-      version = "v0.0.1-rc.5"
+      version = "v0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-virustotal" {
-      version = "v0.0.1-rc.7"
+      version = "v0.2.0"
     }
   }
 }

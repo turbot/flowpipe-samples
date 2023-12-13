@@ -1,8 +1,6 @@
-# AWS IAM User Group Membership
+# Deactivate expired AWS IAM keys
 
-Check for AWS IAM users with multiple group membership and automate GitHub issue management at 9 AM UTC on weekdays.
-
-If run with `flowpipe server`, this mod will create/update/close GitHub issues every weekday at 9 AM UTC.
+Deactivates expired AWS IAM access keys and notifies via Slack channel.
 
 ## Requirements
 
@@ -21,7 +19,7 @@ Clone:
 
 ```sh
 git clone https://github.com/turbot/flowpipe-samples.git
-cd public_cloud/aws_iam_user_group_membership
+cd public_cloud/deactivate_expired_aws_iam_access_keys
 ```
 
 [Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
@@ -38,7 +36,7 @@ By default, the following environment variables will be used for authentication:
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_PROFILE`
-- `GITHUB_TOKEN`
+- `SLACK_TOKEN`
 
 You can also create `credential` resources in configuration files:
 
@@ -62,8 +60,8 @@ credential "aws" "aws_session_token" {
   session_token = "AQoDX..."
 }
 
-credential "github" "default" {
-  token = "ghp_..."
+credential "slack" "default" {
+  token = "xoxp-12345-..."
 }
 ```
 
@@ -71,19 +69,11 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 
 ## Usage
 
-Run the pipeline to check IAM user group membership and manage corresponding GitHub issues immediately:
+Run the pipeline and specify the `slack_channel` pipeline arguments:
 
 ```sh
-flowpipe pipeline run aws_iam_user_group_membership --arg github_repository_owner=my_gh_org --arg github_repository_name=my_gh_repo
+flowpipe pipeline run deactivate_expired_aws_iam_access_keys --arg slack_channel=my_notification_channel
 ```
-
-To perform the IAM user group membership check at the scheduled time, start the Flowpipe server:
-
-```sh
-flowpipe server
-```
-
-Once started, Flowpipe will run the pipeline automatically at the scheduled time.
 
 ## Configuration
 
@@ -96,8 +86,8 @@ vi flowpipe.fpvars
 
 ```hcl
 # Optional
-# github_cred = "non_default_cred"
-# aws_cred    = "non_default_cred"
+# aws_cred   = "non_default_cred"
+# slack_cred = "non_default_cred"
 ```
 
 ## Open Source & Contributing

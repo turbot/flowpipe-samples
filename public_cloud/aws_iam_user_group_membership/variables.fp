@@ -1,10 +1,11 @@
-variable "aws_region" {
+variable "github_cred" {
   type        = string
-  description = "The name of the Region."
-  default     = "us-east-1"
+  description = "Name for GitHub credentials to use. If not provided, the default credentials will be used."
+  default     = "default"
 }
 
-variable "github_repository_full_name" {
+variable "aws_cred" {
   type        = string
-  description = "The full name of the GitHub repository. Examples: turbot/steampipe, turbot/flowpipe."
+  description = "Name for AWS credentials to use. If not provided, the default credentials will be used."
+  default     = "default"
 }

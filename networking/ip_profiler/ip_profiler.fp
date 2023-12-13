@@ -2,6 +2,10 @@ pipeline "ip_profiler" {
   title       = "IP Profiler"
   description = "Get valuable information about an IP address by combining data from AbuseIPDB, ReallyFreeGeoIP and VirusTotal."
 
+  tags = {
+    type = "featured"
+  }
+
   param "abuseipdb_cred" {
     type        = string
     default     = "default"
@@ -19,7 +23,7 @@ pipeline "ip_profiler" {
     description = "The IPv4 or IPv6 address to check for reports."
   }
 
-  param "max_age_in_days" {
+  param "abuseipdb_max_age_in_days" {
     type        = number
     default     = 30
     description = "Maximum age in days for the AbuseIPDB reports to retrieve. Defaults to 30 days."
@@ -41,7 +45,7 @@ pipeline "ip_profiler" {
     args = {
       cred            = param.abuseipdb_cred
       ip_address      = each.value
-      max_age_in_days = param.max_age_in_days
+      max_age_in_days = param.abuseipdb_max_age_in_days
     }
   }
 
@@ -52,7 +56,7 @@ pipeline "ip_profiler" {
     args = {
       cred            = param.abuseipdb_cred
       ip_address      = each.value
-      max_age_in_days = param.max_age_in_days
+      max_age_in_days = param.abuseipdb_max_age_in_days
     }
   }
 

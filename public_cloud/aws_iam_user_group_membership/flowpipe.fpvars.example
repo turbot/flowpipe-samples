@@ -1,2 +1,3 @@
-aws_region = "us-east-1"
-github_repository_full_name="octo/helloworld"
+# Optional
+# aws_cred    = "non_default_cred"
+# github_cred = "non_default_cred"
