@@ -28,7 +28,6 @@ pipeline "run_search_in_splunk" {
     description = "Disable TLS verification."
   }
 
-  # Initiate search request
   step "http" "initiate_search" {
     method   = "post"
     insecure = param.insecure
@@ -44,7 +43,6 @@ pipeline "run_search_in_splunk" {
     })
   }
 
-  # Check search status
   step "http" "search_status" {
     depends_on = [step.http.initiate_search]
     method     = "post"
@@ -62,7 +60,6 @@ pipeline "run_search_in_splunk" {
     }
   }
 
-  # Fetch search result
   step "http" "search_result" {
     depends_on = [step.http.search_status]
     method     = "post"
