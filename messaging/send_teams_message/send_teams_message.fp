@@ -12,22 +12,22 @@ pipeline "send_teams_message" {
     default     = "default"
   }
 
-  param "team_id" {
+  param "teams_team_id" {
     type        = string
     description = "The unique identifier of the team."
   }
 
-  param "channel_id" {
+  param "teams_channel_id" {
     type        = string
     description = "The channel's unique identifier."
   }
 
-  param "message" {
+  param "teams_message" {
     type        = string
     description = "The message to send."
   }
 
-  param "message_content_type" {
+  param "teams_message_content_type" {
     type        = string
     description = "The type of the content. Possible values are text and html."
     optional    = true
@@ -38,10 +38,10 @@ pipeline "send_teams_message" {
     pipeline = teams.pipeline.send_channel_message
     args = {
       cred                 = param.teams_cred
-      team_id              = param.team_id
-      channel_id           = param.channel_id
-      message              = param.message
-      message_content_type = param.message_content_type
+      team_id              = param.teams_team_id
+      channel_id           = param.teams_channel_id
+      message              = param.teams_message
+      message_content_type = param.teams_message_content_type
     }
   }
 
