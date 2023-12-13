@@ -11,7 +11,7 @@ mod "invite_pipes_organization_member" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-pipes" {
-      version = "v0.1.0"
+      version = "0.1.0"
     }
   }
 }

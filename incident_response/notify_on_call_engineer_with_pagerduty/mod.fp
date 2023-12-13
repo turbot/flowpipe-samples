@@ -6,13 +6,13 @@ mod "notify_on_call_engineer_with_pagerduty" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-pagerduty" {
-      version = "v0.0.1-rc.13"
+      version = "0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "v0.0.1-rc.9"
+      version = "0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-sendgrid" {
-      version = "v0.0.1-rc.7"
+      version = "0.1.0"
     }
   }
 }

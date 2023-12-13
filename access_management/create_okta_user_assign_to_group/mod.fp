@@ -6,7 +6,7 @@ mod "create_okta_user_assign_to_group" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-okta" {
-      version = "v0.1.0"
+      version = "0.1.0"
     }
   }
 }

@@ -11,7 +11,7 @@ mod "send_top_show_hn_email" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-sendgrid" {
-      version = "0.0.1-rc.4"
+      version = "0.1.0"
     }
   }
 }

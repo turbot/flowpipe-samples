@@ -4,11 +4,11 @@ mod "deactivate_expired_aws_iam_access_keys" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "v0.4.0"
+      version = "0.1.0"
     }
 
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "v0.1.0"
+      version = "0.1.0"
     }
   }
 

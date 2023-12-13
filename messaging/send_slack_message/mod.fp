@@ -10,7 +10,7 @@ mod "send_slack_message" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "0.0.1-rc.6"
+      version = "0.1.0"
     }
   }
 }
