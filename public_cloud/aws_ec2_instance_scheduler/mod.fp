@@ -9,10 +9,10 @@ mod "aws_ec2_instance_scheduler" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "v0.2.0"
+      version = "v0.4.0"
     }
     mod "github.com/turbot/flowpipe-mod-teams" {
-      version = "v0.0.1-rc.17"
+      version = "v0.1.0"
     }
   }
 }
