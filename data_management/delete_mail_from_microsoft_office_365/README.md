@@ -2,10 +2,6 @@
 
 Delete an email from a specified user's mailbox in Microsoft Office 365.
 
-## Requirements
-
-Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
-
 ## Installation
 
 Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
@@ -45,6 +41,8 @@ credential "teams" "default" {
   access_token = "<access_token>"
 }
 ```
+
+For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
 ## Usage
 
