@@ -5,13 +5,13 @@ mod "summarize_github_issue_with_openai" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-github" {
-      version = "v0.1.0"
+      version = "0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-openai" {
-      version = "v0.1.0"
+      version = "0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "v0.1.0"
+      version = "0.1.0"
     }
   }
 }

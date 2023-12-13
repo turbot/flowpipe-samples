@@ -6,10 +6,10 @@ mod "offboard_entra_id_users" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-entra" {
-      version = "v0.1.0"
+      version = "0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "v0.2.0"
+      version = "0.1.0"
     }
   }
 }
