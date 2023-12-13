@@ -1,0 +1,7 @@
+# Required
+project_key    = "project-foo"
+
+
+# Optional
+# jira_cred = "non_default_cred"
+# azure_cred = "non_default_cred"
