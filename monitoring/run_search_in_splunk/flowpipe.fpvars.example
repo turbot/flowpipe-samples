@@ -1,2 +1,3 @@
-splunk_auth_token=<Splunk_Auth_Token>
-splunk_server=<Splunk_Server>
+# Required
+splunk_auth_token = "eyJraWQiOiJzcGx1bmsuc2Vjc..."
+splunk_server = "localhost"
