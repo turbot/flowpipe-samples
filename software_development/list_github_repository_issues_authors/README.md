@@ -49,19 +49,9 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 Run the pipeline to get list of GitHub repository issues authors:
 
 ```sh
-flowpipe pipeline run list_github_repository_issues_authors
+flowpipe pipeline run list_github_repository_issues_authors --arg repository_owner=turbot --arg repository_name=flowpipe
 ```
 
 ## Configuration
 
-To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
-
-```sh
-cp flowpipe.fpvars.example flowpipe.fpvars
-vi flowpipe.fpvars
-```
-
-```hcl
-# Required
-github_repository_full_name = "turbot/steampipe"
-```
+No additional configuration is required.

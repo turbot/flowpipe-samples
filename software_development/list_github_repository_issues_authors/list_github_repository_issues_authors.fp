@@ -8,16 +8,22 @@ pipeline "list_github_repository_issues_authors" {
     default     = "default"
   }
 
-  param "github_repository_full_name" {
+  param "repository_owner" {
     type        = string
-    description = "The GitHub repository full name."
-    default     = var.github_repository_full_name
+    description = "The organization or user name."
+  }
+
+  param "repository_name" {
+    type        = string
+    description = "The name of the repository."
   }
 
   step "pipeline" "list_issues" {
     pipeline = github.pipeline.list_issues
     args = {
-      cred   = param.github_cred
+      cred             = param.github_cred
+      repository_owner = param.repository_owner
+      repository_name  = param.repository_name
     }
   }
 
