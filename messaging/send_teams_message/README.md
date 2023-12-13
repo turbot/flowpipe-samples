@@ -49,7 +49,7 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 Run the pipeline and specify the `team_id`, `channel_id` and `message` pipeline arguments:
 
 ```sh
-flowpipe pipeline run send_teams_message --arg team_id=fake-team-id --arg channel_id='19:fake@thread.tacv2' --arg message="Hello from Flowpipe!"
+flowpipe pipeline run send_teams_message --arg team_id=fake-team-id --arg channel_id='19:fake@thread.tacv2' --arg message="Hello from Flowpipe"
 ```
 
 ## Open Source & Contributing
