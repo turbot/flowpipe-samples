@@ -4,10 +4,6 @@ Take remediation actions based on the incident event type.
 
 If run with `flowpipe server`, this mod will receive a [PagerDuty v3 webhook event](https://developer.pagerduty.com/docs/db0fa8c8984fc-overview) when an incident is triggered, annotated, and acknowledged.
 
-## Requirements
-
-Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
-
 ## Installation
 
 Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
@@ -47,6 +43,8 @@ credential "pagerduty" "pagerduty_cred" {
   api_key = "u+_szhL..."
 }
 ```
+
+For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
 ## Usage
 

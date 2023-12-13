@@ -12,59 +12,59 @@ pipeline "add_new_user_in_microsoft_office_365" {
     default     = "default"
   }
 
+  param "jira_project_key" {
+    type        = string
+    description = "The key identifying the Jira project."
+  }
+
   param "teams_cred" {
     type        = string
     description = "Name for Teams credentials to use. If not provided, the default credentials will be used."
     default     = "default"
   }
 
-  param "display_name" {
+  param "teams_display_name" {
     type        = string
     description = "The name to display in the address book for the user."
   }
 
-  param "account_enabled" {
+  param "teams_account_enabled" {
     type        = bool
     description = "If the account is enabled then true; otherwise, false."
   }
 
-  param "mail_nickname" {
+  param "teams_mail_nickname" {
     type        = string
     description = "The mail alias for the user."
   }
 
-  param "user_principal_name" {
+  param "teams_user_principal_name" {
     type        = string
     description = "The user principal name (someuser@contoso.com)."
   }
 
-  param "password" {
+  param "teams_password" {
     type        = string
     description = "The password for the user."
   }
 
-  param "license_sku_ids" {
+  param "teams_license_sku_ids" {
     type        = list(string)
     description = "The unique identifier for the available licenses."
   }
 
-  param "jira_project_key" {
-    type        = string
-    description = "The key identifying the Jira project."
-  }
-
-  param "team_id" {
+  param "teams_team_id" {
     type        = string
     description = "The unique identifier for the team."
   }
 
-  param "roles" {
+  param "teams_roles" {
     type        = list(string)
     default     = ["member"] // or "owner" or other applicable roles
     description = "The roles for the user."
   }
 
-  param "message" {
+  param "teams_message" {
     type        = string
     description = "The message to send."
   }
@@ -74,11 +74,11 @@ pipeline "add_new_user_in_microsoft_office_365" {
     pipeline = teams.pipeline.create_user
     args = {
       cred                = param.teams_cred
-      password            = param.password
-      user_principal_name = param.user_principal_name
-      mail_nickname       = param.mail_nickname
-      account_enabled     = param.account_enabled
-      display_name        = param.display_name
+      password            = param.teams_password
+      user_principal_name = param.teams_user_principal_name
+      mail_nickname       = param.teams_mail_nickname
+      account_enabled     = param.teams_account_enabled
+      display_name        = param.teams_display_name
     }
   }
 
@@ -88,8 +88,8 @@ pipeline "add_new_user_in_microsoft_office_365" {
     pipeline   = teams.pipeline.assign_licenses_to_user
     args = {
       cred    = param.teams_cred
-      sku_ids = param.license_sku_ids
-      user_id = param.user_principal_name
+      sku_ids = param.teams_license_sku_ids
+      user_id = param.teams_user_principal_name
     }
   }
 
@@ -112,9 +112,9 @@ pipeline "add_new_user_in_microsoft_office_365" {
     pipeline   = teams.pipeline.add_team_member
     args = {
       cred    = param.teams_cred
-      team_id = param.team_id
-      user_id = param.user_principal_name
-      roles   = param.roles
+      team_id = param.teams_team_id
+      user_id = param.teams_user_principal_name
+      roles   = param.teams_roles
     }
   }
 
@@ -125,7 +125,7 @@ pipeline "add_new_user_in_microsoft_office_365" {
     args = {
       cred      = param.teams_cred
       chat_type = "oneOnOne"
-      user_ids  = ["${param.user_principal_name}"]
+      user_ids  = ["${param.teams_user_principal_name}"]
     }
   }
 
@@ -136,7 +136,7 @@ pipeline "add_new_user_in_microsoft_office_365" {
     args = {
       cred    = param.teams_cred
       chat_id = step.pipeline.create_chat.output.chat.id
-      message = param.message
+      message = param.teams_message
     }
   }
 }

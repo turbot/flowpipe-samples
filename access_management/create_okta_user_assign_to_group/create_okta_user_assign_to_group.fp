@@ -2,16 +2,10 @@ pipeline "create_okta_user_assign_to_group" {
   title       = "Create User Assign Group"
   description = "Create a user and assign it to a group."
 
-  param "api_token" {
-    description = "The personal api_token to authenticate to the Okta APIs."
+  param "okta_cred" {
     type        = string
-    default     = var.api_token
-  }
-
-  param "domain" {
-    description = "The domain of your Okta account."
-    type        = string
-    default     = var.domain
+    description = "Name for Okta credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
   }
 
   param "first_name" {
@@ -47,8 +41,7 @@ pipeline "create_okta_user_assign_to_group" {
   step "pipeline" "create_user" {
     pipeline = okta.pipeline.create_user
     args = {
-      api_token  = param.api_token
-      domain     = param.domain
+      cred       = param.okta_cred
       first_name = param.first_name
       last_name  = param.last_name
       email      = param.email
@@ -60,10 +53,9 @@ pipeline "create_okta_user_assign_to_group" {
   step "pipeline" "assign_user" {
     pipeline = okta.pipeline.assign_user
     args = {
-      api_token = param.api_token
-      domain    = param.domain
-      group_id  = param.group_id
-      user_id   = step.pipeline.create_user.output.user.id
+      cred     = param.okta_cred
+      group_id = param.group_id
+      user_id  = step.pipeline.create_user.output.user.id
     }
   }
 
@@ -72,9 +64,8 @@ pipeline "create_okta_user_assign_to_group" {
 
     pipeline = okta.pipeline.list_member_users
     args = {
-      api_token = param.api_token
-      domain    = param.domain
-      group_id  = param.group_id
+      cred     = param.okta_cred
+      group_id = param.group_id
     }
   }
 

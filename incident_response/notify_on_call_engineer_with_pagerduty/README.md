@@ -2,10 +2,6 @@
 
 Allows anyone to see who is on-call for a particular escalation policy, send them an email, notify a Slack channel.
 
-## Requirements
-
-Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
-
 ## Installation
 
 Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
@@ -67,6 +63,8 @@ credential "slack" "default" {
   token = "xoxp-12345-..."
 }
 ```
+
+For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
 ## Usage
 

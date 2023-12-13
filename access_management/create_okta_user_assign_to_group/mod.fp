@@ -1,14 +1,12 @@
 mod "create_okta_user_assign_to_group" {
-  title       = "Create Okta User and Assign to Group"
-  description = "Create a user in Okta and assign to a group."
+  title         = "Create Okta User and Assign to Group"
+  description   = "Create a user in Okta and assign to a group."
+  documentation = file("./README.md")
+  categories    = ["access management"]
 
   require {
     mod "github.com/turbot/flowpipe-mod-okta" {
-      version = "v0.0.2-rc.2"
-      args = {
-        api_token = var.api_token
-        domain    = var.domain
-      }
+      version = "v0.1.0"
     }
   }
 }

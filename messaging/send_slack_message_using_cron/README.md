@@ -4,10 +4,6 @@ Send a message to a Slack channel every minute using cron.
 
 If run with `flowpipe server`, this mod will send a message to slack every minute.
 
-## Requirements
-
-Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
-
 ## Installation
 
 Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
@@ -55,7 +51,7 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 Run the pipeline to send a message immediately:
 
 ```sh
-flowpipe pipeline run send_slack_message_using_cron --arg channel=CH1234FEW --arg text="Hello!"
+flowpipe pipeline run send_slack_message_using_cron --arg channel=CH1234FEW --arg text="Hello"
 ```
 
 To send a message at the scheduled time, start the Flowpipe server:

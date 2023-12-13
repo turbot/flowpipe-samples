@@ -2,10 +2,6 @@
 
 Add a new user in Microsoft Office 365.
 
-## Requirements
-
-Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
-
 ## Installation
 
 Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
@@ -61,10 +57,21 @@ credential "teams" "default" {
 }
 ```
 
+For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+
 ## Usage
 
-Run the pipeline and specify the `display_name`, `account_enabled`, `mail_nickname`, `user_principal_name`, `password`, `license_sku_ids`, `jira_project_key`, `team_id` and `message` pipeline arguments:
+Run the pipeline and specify the `teams_display_name`, `teams_account_enabled`, `teams_mail_nickname`, `teams_user_principal_name`, `teams_password`, `teams_license_sku_ids`, `jira_project_key`, `teams_team_id` and `teams_message` pipeline arguments:
 
 ```sh
-flowpipe pipeline run add_new_user_in_microsoft_office_365 --arg display_name='John Doe' --arg account_enabled=true --arg mail_nickname='john.doe' --arg user_principal_name='john.doe@foo.com' --arg password='P@ssw0rd' --arg license_sku_ids='["<license_sku_id>"]' --arg jira_project_key='project-foo' --arg team_id='<team_id>' --arg message='New user created'
+flowpipe pipeline run add_new_user_in_microsoft_office_365 \
+  --arg teams_display_name='John Doe' \
+  --arg teams_account_enabled=true \
+  --arg teams_mail_nickname='john.doe' \
+  --arg teams_user_principal_name='john.doe@foo.com' \
+  --arg teams_password='P@ssw0rd' \
+  --arg teams_license_sku_ids='["<license_sku_id>"]' \
+  --arg jira_project_key='project-foo' \
+  --arg teams_team_id='<team_id>' \
+  --arg teams_message='New user created'
 ```

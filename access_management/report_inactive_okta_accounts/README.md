@@ -4,10 +4,6 @@ Routinely scan Okta environments for potential inactive accounts and deactivate 
 
 If run with `flowpipe server`, this mod will run the scan every day at 9 AM UTC.
 
-## Requirements
-
-Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
-
 ## Installation
 
 Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
