@@ -4,12 +4,12 @@ variable "slack_cred" {
   default     = "default"
 }
 
-variable "channel" {
+variable "slack_channel" {
   type        = string
   description = "Channel, private group, or IM channel to send message to. Can be an encoded ID, or a name."
 }
 
-variable "text" {
+variable "slack_text" {
   type        = string
   description = "The formatted text to describe the content of the message."
 }
