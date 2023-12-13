@@ -2,6 +2,32 @@
 
 Allows anyone to see who is on-call for a particular escalation policy, send them an email, notify a Slack channel.
 
+## Requirements
+
+Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
+
+## Installation
+
+Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
+
+```sh
+brew tap turbot/tap
+brew install flowpipe
+```
+
+Clone:
+
+```sh
+git clone https://github.com/turbot/flowpipe-samples.git
+cd incident_response/notify_on_call_engineer_with_pagerduty
+```
+
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
+
 ## Credentials
 
 By default, the following environment variables will be used for authentication:
@@ -43,12 +69,6 @@ credential "slack" "default" {
 ```
 
 ## Usage
-
-[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
-
-```sh
-flowpipe mod install
-```
 
 Run the pipeline and specify the `slack_message`, `slack_channel`, `email_subject`, `email_text` and `from` pipeline arguments:
 

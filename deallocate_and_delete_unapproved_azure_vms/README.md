@@ -4,6 +4,32 @@ Lists Azure VMs with a specific Tag values and checks them against the Approved 
 
 If run with `flowpipe server`, this mod will run the scan every day at 9 AM UTC.
 
+## Requirements
+
+Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
+
+## Installation
+
+Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
+
+```sh
+brew tap turbot/tap
+brew install flowpipe
+```
+
+Clone:
+
+```sh
+git clone https://github.com/turbot/flowpipe-samples.git
+cd public_cloud/deallocate_and_delete_unapproved_azure_vms
+```
+
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
+
 ## Credentials
 
 By default, the following environment variables will be used for authentication:
@@ -44,12 +70,6 @@ credential "zendesk" "default" {
 For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
 ## Usage
-
-[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
-
-```sh
-flowpipe mod install
-```
 
 Run the pipeline to run the scan immediately:
 

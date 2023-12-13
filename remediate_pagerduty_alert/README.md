@@ -4,6 +4,32 @@ Take remediation actions based on the incident event type.
 
 If run with `flowpipe server`, this mod will receive a [PagerDuty v3 webhook event](https://developer.pagerduty.com/docs/db0fa8c8984fc-overview) when an incident is triggered, annotated, and acknowledged.
 
+## Requirements
+
+Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
+
+## Installation
+
+Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
+
+```sh
+brew tap turbot/tap
+brew install flowpipe
+```
+
+Clone:
+
+```sh
+git clone https://github.com/turbot/flowpipe-samples.git
+cd incident_response/remediate_pagerduty_alert
+```
+
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
+
 ## Credentials
 
 By default, the following environment variables will be used for authentication:
@@ -23,12 +49,6 @@ credential "pagerduty" "pagerduty_cred" {
 ```
 
 ## Usage
-
-[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
-
-```sh
-flowpipe mod install
-```
 
 Run the pipeline to take action for PagerDuty incident acknowledged:
 
