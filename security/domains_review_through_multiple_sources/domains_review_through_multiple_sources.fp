@@ -10,7 +10,7 @@ pipeline "domains_review_through_multiple_sources" {
 
   param "ip2locationio_cred" {
     type        = string
-    description = "Name for IP2Location credentials to use. If not provided, the default credentials will be used."
+    description = "Name for IP2Locationio credentials to use. If not provided, the default credentials will be used."
     default     = "default"
   }
 
@@ -58,7 +58,7 @@ pipeline "domains_review_through_multiple_sources" {
     }
   }
 
-  step "pipeline" "ip2location_domain_scan" {
+  step "pipeline" "IP2Locationio_domain_scan" {
     pipeline = ip2locationio.pipeline.get_whois_info
     args = {
       cred   = param.ip2locationio_cred
@@ -99,7 +99,7 @@ pipeline "domains_review_through_multiple_sources" {
       virustotal_domain_scan : step.pipeline.virustotal_domain_scan.output.domain_report.data,
       urlscan_domain_scan : step.pipeline.urlscan_domain_scan.output.search_results,
       apivoid_domain_reputation : step.http.apivoid_domain_reputation.response_body.data,
-      domain_age : step.pipeline.ip2location_domain_scan.output.domain.domain_age,
+      domain_age : step.pipeline.ip2locationio_domain_scan.output.domain.domain_age,
       domain_parked_score : step.http.dnstwister_parked_score.response_body
     }
   }

@@ -10,7 +10,7 @@ pipeline "lookup_ip" {
 
   param "ip2locationio_cred" {
     type        = string
-    description = "Name for IP2Location credentials to use. If not provided, the default credentials will be used."
+    description = "Name for IP2Locationio credentials to use. If not provided, the default credentials will be used."
     default     = "default"
   }
 
@@ -50,7 +50,7 @@ pipeline "lookup_ip" {
     }
   }
 
-  step "pipeline" "ip2location_ip_lookup" {
+  step "pipeline" "ip2locationio_ip_lookup" {
     pipeline = ip2locationio.pipeline.get_ip_info
     args = {
       cred       = param.ip2locationio_cred
@@ -68,7 +68,7 @@ pipeline "lookup_ip" {
 
   output "lookup_ip" {
     value = {
-      ip2location_ip_lookup : step.pipeline.ip2location_ip_lookup.output.ip_address,
+      ip2locationio_ip_lookup : step.pipeline.ip2locationio_ip_lookup.output.ip_address,
       abuseipdb_ip_info : step.pipeline.abuseipdb_ip_info.output.ip_report,
       abuseipdb_abuse_reports : step.pipeline.abuseipdb_reports.output.reports,
       urlscan_ip_lookup : step.pipeline.urlscan_ip_lookup.output.search_results

@@ -35,7 +35,7 @@ By default, the following environment variables will be used for authentication:
 - `ABUSEIPDB_API_KEY`
 - `VTCLI_APIKEY`
 - `URLSCAN_API_KEY`
-- `IP2LOCATION_API_KEY`
+- `IP2LOCATIONIO_API_KEY`
 
 You can also create `credential` resources in configuration files:
 
@@ -62,7 +62,7 @@ credential "urlscan" "my_urlscan" {
 ```
 
 ```hcl
-credential "ip2location" "my_ip2location" {
+credential "ip2locationio" "my_ip2locationio" {
   token = "00B630jSCGU4jV4o5Yh4KQMAdqizwE2OgVcS7N9UHb"
 }
 ```
