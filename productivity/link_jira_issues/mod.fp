@@ -4,7 +4,7 @@ mod "link_jira_issues" {
   categories = ["productivity"]
   require {
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "0.0.1-rc.6"
+      version = "0.1.0"
     }
   }
 }

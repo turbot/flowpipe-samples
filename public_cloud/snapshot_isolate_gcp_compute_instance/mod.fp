@@ -4,11 +4,10 @@ mod "snapshot_isolate_gcp_compute_instance" {
   categories  = ["public cloud"]
   require {
     mod "github.com/turbot/flowpipe-mod-gcp" {
-      version = "0.0.1-rc.3"
-      args = {
-        project_id = var.gcp_project_id
-      }
+      version = "0.2.0"
+    }
+    mod "github.com/turbot/flowpipe-mod-jira" {
+      version = "0.1.0"
     }
   }
-
 }

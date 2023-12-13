@@ -4,14 +4,14 @@ mod "remediate_aws_guardduty_alerts" {
   categories  = ["public cloud"]
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "0.0.1-rc.7"
+      version = "0.4.0"
       args = {
         region = var.aws_region
       }
     }
 
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "0.0.1-rc.6"
+      version = "0.1.0"
     }
   }
 }
