@@ -1,6 +1,6 @@
 variable "aws_region" {
-  description = "AWS Region"
   type        = string
+  description = "The name of the Region."
 }
 
 variable "aws_cred" {
@@ -16,11 +16,11 @@ variable "teams_cred" {
 }
 
 variable "team_id" {
-  description = "Team ID"
   type        = string
+  description = "The unique identifier of the team."
 }
 
 variable "teams_channel_id" {
-  description = "Teams Channel ID"
   type        = string
+  description = "The unique identifier for the Teams channel."
 }

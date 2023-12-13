@@ -3,43 +3,43 @@ pipeline "aws_ec2_instance_scheduler" {
   description = "Pipeline for AWS EC2 Instance Scheduling using cron jobs."
 
   param "aws_region" {
-    description = "The AWS region to use."
     type        = string
+    description = "The name of the Region."
     default     = var.aws_region
   }
 
   param "aws_cred" {
-    description = "Name for AWS credential to use. If not provided, the default credential will be used."
     type        = string
+    description = "Name for AWS credential to use. If not provided, the default credential will be used."
     default     = var.aws_cred
   }
 
   param "teams_cred" {
-    description = "Name for Teams credential to use. If not provided, the default credential will be used."
     type        = string
+    description = "Name for Teams credential to use. If not provided, the default credential will be used."
     default     = var.teams_cred
   }
 
   param "team_id" {
-    description = "The unique identifier of the team."
     type        = string
+    description = "The unique identifier of the team."
     default     = var.team_id
   }
 
   param "teams_channel_id" {
-    description = "The unique identifier for the Teams channel."
     type        = string
+    description = "The unique identifier for the Teams channel."
     default     = var.teams_channel_id
   }
 
   param "schedule_name" {
+    type        = string
     description = "The name of the tag that is used to identify the schedule."
-    type    = string
   }
 
   param "action" {
+    type        = string
     description = "The action to perform on the EC2 instances. Valid values are 'start' and 'stop'."
-    type    = string
   }
 
   # List EC2 instances with the given schedule name
