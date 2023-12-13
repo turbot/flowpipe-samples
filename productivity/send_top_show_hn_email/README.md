@@ -4,15 +4,37 @@ Using [Steampipe](https://steampipe.io/) and the [Hacker News plugin](https://hu
 
 If run with `flowpipe server`, this mod will send an email every day at 12 PM UTC.
 
-## Getting Started
-
-### Requirements
+## Requirements
 
 Install [Steampipe](https://steampipe.io/downloads) and the [Hacker News plugin](https://hub.steampipe.io/plugins/turbot/hackernews#get-started).
 
 Then start Steampipe with `steampipe service start`.
 
-### Credentials
+Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
+
+## Installation
+
+Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
+
+```sh
+brew tap turbot/tap
+brew install flowpipe
+```
+
+Clone:
+
+```sh
+git clone https://github.com/turbot/flowpipe-samples.git
+cd productivity/send_top_show_hn_email
+```
+
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
+
+## Credentials
 
 By default, the following environment variables will be used for authentication:
 
@@ -32,7 +54,7 @@ credential "sendgrid" "default" {
 
 For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
-### Usage
+## Usage
 
 Run the pipeline to send an email immediately:
 
@@ -48,7 +70,7 @@ flowpipe server
 
 Once started, Flowpipe will run the pipeline automatically at the scheduled time.
 
-### Configuration
+## Configuration
 
 To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
 
@@ -63,5 +85,5 @@ to   = "user@example.com"
 from = "other.user@example.com"
 
 # Optional
-hn_story_count = "10"
+hn_story_count = 10
 ```
