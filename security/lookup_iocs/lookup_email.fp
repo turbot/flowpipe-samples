@@ -1,5 +1,5 @@
 pipeline "lookup_email" {
-  title       = "Lookup Email in Different Tools"
+  title       = "Lookup Email In Different Tools"
   description = "A composite Flowpipe mod that lookup email in VirusTotal, Urlscan and other tools."
 
   param "hunter_api_key" {
@@ -19,7 +19,6 @@ pipeline "lookup_email" {
     description = "The email ID to be scanned."
   }
 
-  # Hunter
   step "http" "hunter_email_verify_status" {
     method = "get"
     url    = "https://api.hunter.io/v2/email-verifier?email=${param.email}&api_key=${param.hunter_api_key}"
@@ -29,7 +28,6 @@ pipeline "lookup_email" {
     }
   }
 
-  # Kickbox
   step "http" "kickbox_email_verify_status" {
     method = "get"
     url    = "https://api.kickbox.com/v2/verify?email=${param.email}&apikey=${param.kickbox_api_key}"

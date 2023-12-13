@@ -1,6 +1,10 @@
 pipeline "lookup_iocs" {
-  title       = "Lookup IOCs in Different Tools"
+  title       = "Lookup IOCs In Different Tools"
   description = "A composite Flowpipe mod that lookup IOCs in VirusTotal, Urlscan and other tools."
+
+  tags = {
+    type = "featured"
+  }
 
   param "hunter_api_key" {
     type        = string
@@ -31,7 +35,6 @@ pipeline "lookup_iocs" {
     description = "The iocs to be scanned."
   }
 
-  # Domain
   step "pipeline" "domain_lookup" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "domain" }
     pipeline = pipeline.lookup_domain
@@ -40,7 +43,6 @@ pipeline "lookup_iocs" {
     }
   }
 
-  # Email
   step "pipeline" "email_lookup" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "email" }
     pipeline = pipeline.lookup_email
@@ -51,7 +53,6 @@ pipeline "lookup_iocs" {
     }
   }
 
-  # File hash
   step "pipeline" "file_hash_lookup" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "file_hash" }
     pipeline = pipeline.lookup_file_hash
@@ -61,7 +62,6 @@ pipeline "lookup_iocs" {
     }
   }
 
-  # IP
   step "pipeline" "ip_lookup" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "ip" }
     pipeline = pipeline.lookup_ip
@@ -70,7 +70,6 @@ pipeline "lookup_iocs" {
     }
   }
 
-  # URL
   step "pipeline" "url_lookup" {
     for_each = { for ioc in param.iocs : ioc.id => ioc if ioc.type == "url" }
     pipeline = pipeline.lookup_url

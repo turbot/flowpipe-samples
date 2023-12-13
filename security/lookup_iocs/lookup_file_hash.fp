@@ -1,6 +1,18 @@
 pipeline "lookup_file_hash" {
-  title       = "Lookup File hash in Different Tools"
+  title       = "Lookup File hash In Different Tools"
   description = "A composite Flowpipe mod that lookup a file hash in VirusTotal, Urlscan and other tools."
+
+  param "virustotal_cred" {
+    type        = string
+    description = "Name for VirusTotal credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
+  }
+
+  param "urlscanio_cred" {
+    type        = string
+    description = "Name for  URLScan.io credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
+  }
 
   param "hybrid_analysis_api_key" {
     type        = string
@@ -13,23 +25,22 @@ pipeline "lookup_file_hash" {
     description = "The file hash to be scanned."
   }
 
-  # VirusTotal
   step "pipeline" "virustotal_file_hash_lookup" {
     pipeline = virustotal.pipeline.get_file_analysis
     args = {
+      cred      = param.virustotal_cred
       file_hash = param.file_hash
     }
   }
 
-  # Urlscan.io
   step "pipeline" "urlscan_file_hash_lookup" {
     pipeline = urlscanio.pipeline.search_scan
     args = {
+      cred  = param.urlscanio_cred
       query = "hash:${param.file_hash}"
     }
   }
 
-  # Hybrid Analysis
   step "http" "hybrid_analysis_file_hash_lookup" {
     method = "post"
     url    = "https://www.hybrid-analysis.com/api/v2/search/hash"

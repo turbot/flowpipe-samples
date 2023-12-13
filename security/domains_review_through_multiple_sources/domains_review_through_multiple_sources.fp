@@ -1,6 +1,24 @@
 pipeline "domains_review_through_multiple_sources" {
   title       = "Analyze Domains Through Multiple Sources"
-  description = "A composite Flowpipe mod that analyze domain from VirusTotal, Urlscan and other tools"
+  description = "A composite Flowpipe mod that analyze domain from VirusTotal, Urlscan and other tools."
+
+  param "virustotal_cred" {
+    type        = string
+    description = "Name for VirusTotal credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
+  }
+
+  param "ip2locationio_cred" {
+    type        = string
+    description = "Name for IP2Location credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
+  }
+
+  param "urlscanio_cred" {
+    type        = string
+    description = "Name for  URLScan.io credentials to use. If not provided, the default credentials will be used."
+    default     = "default"
+  }
 
   param "apivoid_api_key" {
     type        = string
@@ -13,7 +31,6 @@ pipeline "domains_review_through_multiple_sources" {
     description = "The domain to be scanned."
   }
 
-  # URLhaus
   step "http" "urlhaus_domain_scan" {
     method = "post"
     url    = "https://urlhaus-api.abuse.ch/v1/host"
@@ -25,31 +42,30 @@ pipeline "domains_review_through_multiple_sources" {
     request_body = "host=${param.domain}"
   }
 
-  # VirusTotal
   step "pipeline" "virustotal_domain_scan" {
     pipeline = virustotal.pipeline.get_domain_report
     args = {
+      cred   = param.virustotal_cred
       domain = param.domain
     }
   }
 
-  # Urlscan.io
   step "pipeline" "urlscan_domain_scan" {
     pipeline = urlscanio.pipeline.search_scan
     args = {
+      cred   = param.urlscanio_cred
       query = "domain:${param.domain}"
     }
   }
 
-  # IP2Location.io
   step "pipeline" "ip2location_domain_scan" {
     pipeline = ip2locationio.pipeline.get_whois_info
     args = {
+      cred   = param.ip2locationio_cred
       domain = param.domain
     }
   }
 
-  # APIVoid
   step "http" "apivoid_domain_reputation" {
     method = "get"
     url    = "https://endpoint.apivoid.com/domainbl/v1/pay-as-you-go/?key=${param.apivoid_api_key}&host=${param.domain}"
@@ -59,7 +75,6 @@ pipeline "domains_review_through_multiple_sources" {
     }
   }
 
-  # dnstwister
   step "http" "dnstwister_get_hex" {
     method = "get"
     url    = "https://dnstwister.report/api/to_hex/${param.domain}"
