@@ -1,8 +1,10 @@
-# Invite Pipes Organization Member
+# Deactivate expired AWS IAM keys
 
-- Invite a member to an organization by email.
-- Create a new workspace in an organization and bring in the organization member.
-- Add organization member to an existing organization workspace.
+Deactivates expired AWS IAM access keys and notifies via Slack channel.
+
+## Requirements
+
+Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
 
 ## Installation
 
@@ -17,7 +19,7 @@ Clone:
 
 ```sh
 git clone https://github.com/turbot/flowpipe-samples.git
-cd access_management/invite_pipes_organization_member
+cd public_cloud/deactivate_expired_aws_iam_access_keys
 ```
 
 [Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
@@ -30,17 +32,36 @@ flowpipe mod install
 
 By default, the following environment variables will be used for authentication:
 
-- `PIPES_TOKEN`
+- `AWS_PROFILE`
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_PROFILE`
+- `SLACK_TOKEN`
 
 You can also create `credential` resources in configuration files:
 
 ```sh
-vi ~/.flowpipe/config/pipes.fpc
+vi creds.fpc
 ```
 
 ```hcl
-credential "pipes" "default" {
-  token = "tpt_..."
+credential "aws" "aws_profile" {
+  profile = "my-profile"
+}
+
+credential "aws" "aws_access_key_pair" {
+  access_key = "AKIA..."
+  secret_key = "dP+C+J..."
+}
+
+credential "aws" "aws_session_token" {
+  access_key = "AKIA..."
+  secret_key = "dP+C+J..."
+  session_token = "AQoDX..."
+}
+
+credential "slack" "default" {
+  token = "xoxp-12345-..."
 }
 ```
 
@@ -48,24 +69,25 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 
 ## Usage
 
-Run the pipeline and specify the necessary pipeline arguments:
-
-- Send email invitation to users to join as member in the organization:
+Run the pipeline and specify the `slack_channel` pipeline arguments:
 
 ```sh
-flowpipe pipeline run invite_organization_member_by_email --arg 'organization_handle=acme-demo' --arg 'email=acmeuser01@example.org'
+flowpipe pipeline run deactivate_expired_aws_iam_access_keys --arg slack_channel=my_notification_channel
 ```
 
-- Create a new workspace in an organization and bring in the organization member.
+## Configuration
+
+To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
 
 ```sh
-flowpipe pipeline run create_organization_workspace_and_add_member --arg 'organization_handle=acme-demo' --arg 'workspace_handle=demoworkspace' --arg 'member_handle=acmeuser01-icbc'
+cp flowpipe.fpvars.example flowpipe.fpvars
+vi flowpipe.fpvars
 ```
 
-- Add organization member to an existing organization workspace.
-
-```sh
-flowpipe pipeline run add_organization_member_to_workspace --arg 'organization_handle=acme-demo' --arg 'workspace_handle=demoworkspace' --arg 'member_handle=acmeuser01-icbc'
+```hcl
+# Optional
+# aws_cred   = "non_default_cred"
+# slack_cred = "non_default_cred"
 ```
 
 ## Open Source & Contributing
