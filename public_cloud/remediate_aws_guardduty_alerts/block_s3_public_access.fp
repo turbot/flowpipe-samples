@@ -15,6 +15,7 @@ pipeline "block_s3_public_access" {
   param "aws_region" {
     type        = string
     description = "AWS region."
+    default     = var.aws_region
   }
 
   param "aws_bucket" {
