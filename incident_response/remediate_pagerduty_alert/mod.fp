@@ -10,7 +10,7 @@ mod "remediate_pagerduty_alert" {
     }
 
     mod "github.com/turbot/flowpipe-mod-reallyfreegeoip" {
-      version = "v0.0.1-rc.10"
+      version = "v0.1.0"
     }
   }
 }

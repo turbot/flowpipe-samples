@@ -9,7 +9,7 @@ mod "scan_file_hash_on_virustotal" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-virustotal" {
-      version = "v0.2.0"
+      version = "v0.1.0"
     }
   }
 

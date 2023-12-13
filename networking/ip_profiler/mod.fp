@@ -11,7 +11,7 @@ mod "ip_profiler" {
       version = "v0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-virustotal" {
-      version = "v0.2.0"
+      version = "v0.1.0"
     }
   }
 }
