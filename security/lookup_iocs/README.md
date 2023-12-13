@@ -2,7 +2,31 @@
 
 Looks up submitted IOCs (Indicators of Compromise) in different applications and services, including AbuseIPDB, Hunter.io, VirusTotal, etc., and then returns selected results.
 
-## Getting Started
+## Requirements
+
+Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
+
+## Installation
+
+Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
+
+```sh
+brew tap turbot/tap
+brew install flowpipe
+```
+
+Clone:
+
+```sh
+git clone https://github.com/turbot/flowpipe-samples.git
+cd security/lookup_iocs
+```
+
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
 
 ### Credentials
 
@@ -16,7 +40,7 @@ By default, the following environment variables will be used for authentication:
 You can also create `credential` resources in configuration files:
 
 ```sh
-vi ~/.flowpipe/config/abuseipdb.fpc
+vi creds.fpc
 ```
 
 ```hcl
@@ -25,28 +49,16 @@ credential "abuseipdb" "abuseipdb_api_key" {
 }
 ```
 
-```sh
-vi ~/.flowpipe/config/virustotal.fpc
-```
-
 ```hcl
 credential "virustotal" "my_virustotal" {
   api_key = "AG.U7..."
 }
 ```
 
-```sh
-vi ~/.flowpipe/config/urlscan.fpc
-```
-
 ```hcl
 credential "urlscan" "my_urlscan" {
   api_key = "AKIA...2"
 }
-```
-
-```sh
-vi ~/.flowpipe/config/ip2location.fpc
 ```
 
 ```hcl

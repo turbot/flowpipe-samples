@@ -2,7 +2,27 @@
 
 Paginate the response from HTTP list call.
 
-## Getting Started
+## Installation
+
+Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
+
+```sh
+brew tap turbot/tap
+brew install flowpipe
+```
+
+Clone:
+
+```sh
+git clone https://github.com/turbot/flowpipe-samples.git
+cd monitoring/http_list_pagination
+```
+
+[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+
+```sh
+flowpipe mod install
+```
 
 ### Credentials
 

@@ -11,13 +11,13 @@ mod "domains_review_through_multiple_sources" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-virustotal" {
-      version = "v0.0.1-rc.10"
+      version = "v0.2.0"
     }
     mod "github.com/turbot/flowpipe-mod-urlscanio" {
-      version = "v0.0.1-rc.8"
+      version = "v0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-ip2locationio" {
-      version = "v0.0.1-rc.4"
+      version = "v0.2.0"
     }
   }
 }
