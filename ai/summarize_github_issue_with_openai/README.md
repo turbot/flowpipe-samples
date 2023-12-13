@@ -44,7 +44,7 @@ vi creds.fpc
 
 ```hcl
 credential "github" "default" {
-  access_token = "ghpat-..."
+  token = "ghpat-..."
 }
 
 credential "openai" "default" {
