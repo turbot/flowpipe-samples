@@ -14,10 +14,10 @@ mod "lookup_iocs" {
       version = "v0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-virustotal" {
-      version = "v0.2.0"
+      version = "v0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-urlscan" {
-      version = "v0.3.0"
+      version = "v0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-ip2locationio" {
       version = "v0.4.0"
