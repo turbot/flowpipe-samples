@@ -1,2 +1,2 @@
 # Required
-apivoid_api_key=<APIVoid_API_Key>
+apivoid_api_key = "api_key"

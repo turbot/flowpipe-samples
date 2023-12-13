@@ -1,7 +1,7 @@
 # Required
 aws_region       = "us-east-1"
 team_id          = "111aaa00-abcd-efgh-1234-000aaa111bbb"
-teams_channel_id = "<teams_channel_id>"
+teams_channel_id = "20-9234-20392-2913"
 
 # Optional
 # aws_cred   = "non_default_cred"
