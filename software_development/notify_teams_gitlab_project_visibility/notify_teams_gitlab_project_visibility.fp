@@ -1,8 +1,12 @@
 pipeline "notify_teams_gitlab_project_visibility" {
   title       = "Notify GitLab Project Visibility Changes"
-  description = "Notify a Slack channel when a GitLab's project visibility is changed."
+  description = "Notify a Microsoft Teams channel when a GitLab's project visibility is changed."
 
-  param "gitlab_credentials" {
+  tags = {
+    type = "featured"
+  }
+
+  param "gitlab_cred" {
     type        = string
     description = "Name for GitLab credentials to use. If not provided, the default credentials will be used."
     default     = "default"
@@ -19,7 +23,7 @@ pipeline "notify_teams_gitlab_project_visibility" {
     default     = false
   }
 
-  param "teams_credentials" {
+  param "teams_cred" {
     type        = string
     description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."
     default     = "default"
@@ -27,7 +31,6 @@ pipeline "notify_teams_gitlab_project_visibility" {
 
   param "team_id" {
     type        = string
-    default     = var.team_id
     description = "The unique identifier of the team."
   }
 
@@ -40,7 +43,7 @@ pipeline "notify_teams_gitlab_project_visibility" {
     pipeline = gitlab.pipeline.list_group_projects
 
     args = {
-      cred       = param.gitlab_credentials
+      cred       = param.gitlab_cred
       group_id   = param.group_id
       visibility = "public"
     }
@@ -55,7 +58,7 @@ pipeline "notify_teams_gitlab_project_visibility" {
     pipeline = gitlab.pipeline.update_project
 
     args = {
-      cred       = param.gitlab_credentials
+      cred       = param.gitlab_cred
       visibility = "private"
       project_id = tostring(each.value.id)
     }
@@ -64,7 +67,7 @@ pipeline "notify_teams_gitlab_project_visibility" {
   step "pipeline" "send_message" {
     pipeline = teams.pipeline.send_channel_message
     args = {
-      cred                 = param.teams_credentials
+      cred                 = param.teams_cred
       team_id              = param.team_id
       channel_id           = param.teams_channel_id
       message_content_type = "html"
