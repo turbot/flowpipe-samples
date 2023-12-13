@@ -33,7 +33,7 @@ No credentials are required.
 Run the pipeline to get paginated response from HTTP list call::
 
 ```sh
-flowpipe pipeline run http_list_pagination'
+flowpipe pipeline run http_list_pagination
 ```
 
 ### Configuration
