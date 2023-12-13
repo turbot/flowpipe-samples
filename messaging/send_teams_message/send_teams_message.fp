@@ -6,7 +6,7 @@ pipeline "send_teams_message" {
     type = "featured"
   }
 
-  param "team_cred" {
+  param "teams_cred" {
     type        = string
     description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."
     default     = "default"
@@ -37,7 +37,7 @@ pipeline "send_teams_message" {
   step "pipeline" "send_teams_message" {
     pipeline = teams.pipeline.send_channel_message
     args = {
-      cred                 = param.team_cred
+      cred                 = param.teams_cred
       team_id              = param.team_id
       channel_id           = param.channel_id
       message              = param.message
