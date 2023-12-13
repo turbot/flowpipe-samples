@@ -2,6 +2,10 @@ pipeline "local_csv_file_to_json" {
   title       = "Convert Local CSV File To JSON"
   description = "Read a CSV file and transform it into JSON format."
 
+  tags = {
+    type = "featured"
+  }
+
   # Input: Path to the CSV file
   param "local_csv_file_path" {
     type        = string
