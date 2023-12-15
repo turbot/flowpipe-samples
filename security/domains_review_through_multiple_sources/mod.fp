@@ -4,11 +4,6 @@ mod "domains_review_through_multiple_sources" {
   documentation = file("./README.md")
   categories  = ["security"]
 
-  opengraph {
-    title       = "Analyze Domains Through Multiple Sources"
-    description = "A composite Flowpipe mod that analyze domain from VirusTotal, Urlscan and other tools."
-  }
-
   require {
     mod "github.com/turbot/flowpipe-mod-virustotal" {
       version = "0.1.0"

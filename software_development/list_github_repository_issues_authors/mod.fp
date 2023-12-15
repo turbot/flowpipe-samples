@@ -4,11 +4,6 @@ mod "list_github_repository_issues_authors" {
   documentation = file("./README.md")
   categories  = ["software development"]
 
-  opengraph {
-    title       = "List GitHub Repository Issues Authors"
-    description = "Lists the authors of the issues in a GitHub repository."
-  }
-
   require {
     mod "github.com/turbot/flowpipe-mod-github" {
       version = "0.1.0"
