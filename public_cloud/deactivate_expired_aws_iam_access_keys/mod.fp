@@ -1,6 +1,8 @@
 mod "deactivate_expired_aws_iam_access_keys" {
-  title       = "Deactivate expired AWS IAM keys"
-  description = "Deactivates AWS IAM keys that have been active for a certain period of time."
+  title         = "Deactivate Expired AWS IAM Access Keys"
+  description   = "Deactivate AWS IAM access keys that have been active for a certain period of time."
+  documentation = file("./README.md")
+  categories    = ["public cloud", "security"]
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {

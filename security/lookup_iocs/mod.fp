@@ -4,11 +4,6 @@ mod "lookup_iocs" {
   documentation = file("./README.md")
   categories    = ["security"]
 
-  opengraph {
-    title       = "Lookup IOCs In Different Tools"
-    description = "A composite Flowpipe mod that lookup IOCS in VirusTotal, Urlscan and other tools."
-  }
-
   require {
     mod "github.com/turbot/flowpipe-mod-abuseipdb" {
       version = "0.1.0"
