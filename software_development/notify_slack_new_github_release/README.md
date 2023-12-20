@@ -18,7 +18,7 @@ git clone https://github.com/turbot/flowpipe-samples.git
 cd software_development/notify_slack_new_github_release
 ```
 
-[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+[Install mod dependencies](https://flowpipe.io/docs/build/mod-dependencies#mod-dependencies):
 
 ```sh
 flowpipe mod install

@@ -18,7 +18,7 @@ git clone https://github.com/turbot/flowpipe-samples.git
 cd messaging/throw_error_example_using_slack
 ```
 
-[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+[Install mod dependencies](https://flowpipe.io/docs/build/mod-dependencies#mod-dependencies):
 
 ```sh
 flowpipe mod install
