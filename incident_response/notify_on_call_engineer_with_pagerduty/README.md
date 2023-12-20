@@ -18,7 +18,7 @@ git clone https://github.com/turbot/flowpipe-samples.git
 cd incident_response/notify_on_call_engineer_with_pagerduty
 ```
 
-[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+[Install mod dependencies](https://flowpipe.io/docs/build/mod-dependencies#mod-dependencies):
 
 ```sh
 flowpipe mod install
