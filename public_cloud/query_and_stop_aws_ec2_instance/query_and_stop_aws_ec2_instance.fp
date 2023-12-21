@@ -1,6 +1,6 @@
-pipeline "decommission_aws_ec2_instance" {
-  title       = "Decommission AWS EC2 Instance"
-  description = "Decommission AWS EC2 Instance based on the tag value."
+pipeline "query_and_stop_aws_ec2_instance" {
+  title       = "Query and Stop AWS EC2 Instance"
+  description = "Query and Stop AWS EC2 Instance based on the tag value."
 
   param "aws_region" {
     type        = string
@@ -14,10 +14,10 @@ pipeline "decommission_aws_ec2_instance" {
     default     = var.aws_cred
   }
 
-  # List EC2 instances which need to decommission
+  # List EC2 instances which need to stop
   step "query" "list_ec2_instances" {
     connection_string = "postgres://steampipe@localhost:9193/steampipe"
-    sql = <<-EOQ
+    sql               = <<-EOQ
       select
         instance_id
       from

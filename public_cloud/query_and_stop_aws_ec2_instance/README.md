@@ -1,6 +1,6 @@
-# Decommission AWS EC2 Instance
+# Query and Stop AWS EC2 Instance
 
-Decommission AWS EC2 Instance based on the tag value.
+Query and Stop AWS EC2 Instance based on the tag value.
 
 ## Installation
 
@@ -15,7 +15,7 @@ Clone:
 
 ```sh
 git clone https://github.com/turbot/flowpipe-samples.git
-cd public_cloud/decommission_aws_ec2_instance
+cd public_cloud/query_and_stop_aws_ec2_instance
 ```
 
 [Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
@@ -63,7 +63,7 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 Run the pipeline and specify the `aws_region` pipeline arguments:
 
 ```sh
-flowpipe pipeline run decommission_aws_ec2_instance --arg aws_region=us-east-1
+flowpipe pipeline run query_and_stop_aws_ec2_instance --arg aws_region=us-east-1
 ```
 
 ## Configuration

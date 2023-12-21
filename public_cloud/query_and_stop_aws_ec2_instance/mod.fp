@@ -1,6 +1,6 @@
-mod "decommission_aws_ec2_instance" {
-  title         = "Decommission AWS EC2 Instance"
-  description   = "Decommission AWS EC2 Instance based on the tag value."
+mod "query_and_stop_aws_ec2_instance" {
+  title         = "Query and Stop AWS EC2 Instance"
+  description   = "Query and Stop AWS EC2 Instance based on the tag value."
   documentation = file("./README.md")
   categories    = ["public cloud"]
 
