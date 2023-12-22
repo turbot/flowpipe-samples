@@ -17,7 +17,7 @@ pipeline "query_and_stop_aws_ec2_instance" {
   # List EC2 instances which need to stop
   step "query" "list_ec2_instances" {
     connection_string = "postgres://steampipe@localhost:9193/steampipe"
-    sql               = <<-EOQ
+    sql = <<-EOQ
       select
         instance_id
       from
