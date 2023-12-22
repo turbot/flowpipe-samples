@@ -30,13 +30,12 @@ pipeline "query_and_stop_aws_ec2_instance" {
 
   # Stop the EC2 instances
   step "pipeline" "aws_ec2_instance_stop" {
-    depends_on = [step.query.list_ec2_instances]
-    for_each   = { for row in step.query.list_ec2_instances.rows : row.instance_id => row }
-    pipeline   = aws.pipeline.stop_ec2_instances
+    for_each = step.query.list_ec2_instances.rows
+    pipeline = aws.pipeline.stop_ec2_instances
     args = {
       region       = param.aws_region
       cred         = param.aws_cred
-      instance_ids = ["${each.key}"]
+      instance_ids = ["${each.value.instance_id}"]
     }
   }
 }
