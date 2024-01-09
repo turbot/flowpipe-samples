@@ -47,6 +47,6 @@ pipeline "router_pipeline" {
   }
 
   output "post_message_check" {
-    value = !is_error(step.pipeline.post_message) ? "Message sent to ${param.channel}" : "Error sending message: ${error_message(step.pipeline.post_message)}"
+    value = !is_error(step.pipeline.post_message) ? "Message sent to ${param.slack_channel}" : "Error sending message: ${error_message(step.pipeline.post_message)}"
   }
 }
