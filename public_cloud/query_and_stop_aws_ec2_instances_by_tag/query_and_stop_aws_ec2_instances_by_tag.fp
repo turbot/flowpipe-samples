@@ -1,6 +1,6 @@
-pipeline "query_and_stop_aws_ec2_instance" {
-  title       = "Query and Stop AWS EC2 Instance"
-  description = "Query and Stop AWS EC2 Instance based on the tag value."
+pipeline "query_and_stop_aws_ec2_instances_by_tag" {
+  title       = "Query and Stop AWS EC2 Instances by Tag"
+  description = "Query and stop AWS EC2 instance based on the `status` tag value."
 
   param "aws_region" {
     type        = string
@@ -14,10 +14,9 @@ pipeline "query_and_stop_aws_ec2_instance" {
     default     = var.aws_cred
   }
 
-  # List EC2 instances which need to stop
   step "query" "list_ec2_instances" {
     connection_string = "postgres://steampipe@localhost:9193/steampipe"
-    sql = <<-EOQ
+    sql               = <<-EOQ
       select
         instance_id
       from
@@ -28,8 +27,7 @@ pipeline "query_and_stop_aws_ec2_instance" {
     EOQ
   }
 
-  # Stop the EC2 instances
-  step "pipeline" "aws_ec2_instance_stop" {
+  step "pipeline" "stop_aws_ec2_instances" {
     for_each = step.query.list_ec2_instances.rows
     pipeline = aws.pipeline.stop_ec2_instances
     args = {
@@ -37,5 +35,10 @@ pipeline "query_and_stop_aws_ec2_instance" {
       cred         = param.aws_cred
       instance_ids = ["${each.value.instance_id}"]
     }
+  }
+
+  output "stopped_instances" {
+    description = "Stopped instances."
+    value       = join(", ", [for instance in values(step.pipeline.stop_aws_ec2_instances) : instance.output.instances[0].InstanceId])
   }
 }

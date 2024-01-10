@@ -1,6 +1,6 @@
-# Query and Stop AWS EC2 Instance
+# Query and Stop AWS EC2 Instances by Tag
 
-Query and Stop AWS EC2 Instance based on the tag value.
+Query a list of running AWS EC2 instances with the tag key-value pair `status: decom` using Steampipe and then stop them.
 
 ## Installation
 
@@ -18,7 +18,7 @@ git clone https://github.com/turbot/flowpipe-samples.git
 cd public_cloud/query_and_stop_aws_ec2_instance
 ```
 
-[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+[Install mod dependencies](https://flowpipe.io/docs/build/mod-dependencies#mod-dependencies):
 
 ```sh
 flowpipe mod install
