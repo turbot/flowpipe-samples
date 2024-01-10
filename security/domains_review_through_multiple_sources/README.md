@@ -63,7 +63,7 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 Run the pipeline to analyze domains through multiple sources:
 
 ```sh
-flowpipe pipeline run domains_review_through_multiple_sources --pipeline-arg 'domain=example.com'
+flowpipe pipeline run domains_review_through_multiple_sources --arg 'domain=example.com'
 ```
 
 ### Configuration
