@@ -1,8 +1,6 @@
-# Invite Pipes Organization Member
+# Query and Stop AWS EC2 Instances by Tag
 
-- Invite a member to an organization by email.
-- Create a new workspace in an organization and bring in the organization member.
-- Add organization member to an existing organization workspace.
+Query a list of running AWS EC2 instances with the tag key-value pair `status: decom` using Steampipe and then stop them.
 
 ## Installation
 
@@ -17,7 +15,7 @@ Clone:
 
 ```sh
 git clone https://github.com/turbot/flowpipe-samples.git
-cd access_management/invite_pipes_organization_member
+cd public_cloud/query_and_stop_aws_ec2_instance
 ```
 
 [Install mod dependencies](https://flowpipe.io/docs/build/mod-dependencies#mod-dependencies):
@@ -30,17 +28,31 @@ flowpipe mod install
 
 By default, the following environment variables will be used for authentication:
 
-- `PIPES_TOKEN`
+- `AWS_PROFILE`
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_PROFILE`
 
 You can also create `credential` resources in configuration files:
 
 ```sh
-vi ~/.flowpipe/config/pipes.fpc
+vi creds.fpc
 ```
 
 ```hcl
-credential "pipes" "default" {
-  token = "tpt_..."
+credential "aws" "aws_profile" {
+  profile = "my-profile"
+}
+
+credential "aws" "aws_access_key_pair" {
+  access_key = "AKIA..."
+  secret_key = "dP+C+J..."
+}
+
+credential "aws" "aws_session_token" {
+  access_key = "AKIA..."
+  secret_key = "dP+C+J..."
+  session_token = "AQoDX..."
 }
 ```
 
@@ -48,24 +60,24 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 
 ## Usage
 
-Run the pipeline and specify the necessary pipeline arguments:
-
-- Send email invitation to users to join as member in the organization:
+Run the pipeline and specify the `aws_region` pipeline arguments:
 
 ```sh
-flowpipe pipeline run invite_organization_member_by_email --arg 'organization_handle=acme-demo' --arg 'email=acmeuser01@example.org'
+flowpipe pipeline run query_and_stop_aws_ec2_instance --arg aws_region=us-east-1
 ```
 
-- Create a new workspace in an organization and bring in the organization member.
+## Configuration
+
+To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
 
 ```sh
-flowpipe pipeline run create_organization_workspace_and_add_member --arg 'organization_handle=acme-demo' --arg 'workspace_handle=demoworkspace' --arg 'member_handle=acmeuser01-icbc'
+cp flowpipe.fpvars.example flowpipe.fpvars
+vi flowpipe.fpvars
 ```
 
-- Add organization member to an existing organization workspace.
-
-```sh
-flowpipe pipeline run add_organization_member_to_workspace --arg 'organization_handle=acme-demo' --arg 'workspace_handle=demoworkspace' --arg 'member_handle=acmeuser01-icbc'
+```hcl
+# Optional
+# aws_cred = "non_default_cred"
 ```
 
 ## Open Source & Contributing

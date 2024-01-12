@@ -18,7 +18,7 @@ git clone https://github.com/turbot/flowpipe-samples.git
 cd security/domains_review_through_multiple_sources
 ```
 
-[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+[Install mod dependencies](https://flowpipe.io/docs/build/mod-dependencies#mod-dependencies):
 
 ```sh
 flowpipe mod install
@@ -63,7 +63,7 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 Run the pipeline to analyze domains through multiple sources:
 
 ```sh
-flowpipe pipeline run domains_review_through_multiple_sources --pipeline-arg 'domain=example.com'
+flowpipe pipeline run domains_review_through_multiple_sources --arg 'domain=example.com'
 ```
 
 ### Configuration

@@ -22,7 +22,7 @@ git clone https://github.com/turbot/flowpipe-samples.git
 cd public_cloud/snapshot_isolate_gcp_compute_instance
 ```
 
-[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+[Install mod dependencies](https://flowpipe.io/docs/build/mod-dependencies#mod-dependencies):
 
 ```sh
 flowpipe mod install

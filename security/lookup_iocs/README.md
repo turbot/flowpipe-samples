@@ -22,7 +22,7 @@ git clone https://github.com/turbot/flowpipe-samples.git
 cd security/lookup_iocs
 ```
 
-[Install mod dependencies](https://www.flowpipe.io/docs/mods/mod-dependencies#mod-dependencies):
+[Install mod dependencies](https://flowpipe.io/docs/build/mod-dependencies#mod-dependencies):
 
 ```sh
 flowpipe mod install
@@ -74,7 +74,7 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 Run the pipeline to lookup IOCs in different tools
 
 ```sh
-flowpipe pipeline run lookup_iocs --pipeline-arg 'iocs=[{"id" : "1","type" : "ip","value" : "192.168.1.10"},{"id" : "2","type" : "domain","value" : "malicious-domain.com"}]'`
+flowpipe pipeline run lookup_iocs --arg 'iocs=[{"id" : "1","type" : "ip","value" : "192.168.1.10"},{"id" : "2","type" : "domain","value" : "malicious-domain.com"}]'`
 ```
 
 ### Configuration
