@@ -1,3 +1,14 @@
+## v0.3 [2024-01-12]
+
+_What's new?_
+
+- Added the `query_and_stop_aws_ec2_instances_by_tag` sample mod that can be used with Flowpipe. ([#99](https://github.com/turbot/flowpipe-samples/pull/99))
+
+_Bug fixes_
+
+- Fixed the README docs to use `--arg` instead of `--pipeline-arg` as the argument flag. ([#102](https://github.com/turbot/flowpipe-samples/pull/102))
+- Fixed the link for installing mod dependencies in all the README docs. ([#98](https://github.com/turbot/flowpipe-samples/pull/98))
+
 ## v0.2.0 [2023-12-15]
 
 _Bug fixes_
