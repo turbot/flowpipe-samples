@@ -57,21 +57,13 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 To get notified in Slack when a new IAM access key is created, run:
 
 ```sh
+steampipe service start
 flowpipe server
 ```
 
 Once started, Flowpipe will run the pipeline automatically whenever a query trigger state is received.
 
 ## Configuration
-
-To configure the query trigger:
-
-1. Get the connection string of steampipe:
-
-```sh
-steampipe service start
-```
-2. Copy the `connection string` and replace it with the `database` in the query trigger.
 
 To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
 
