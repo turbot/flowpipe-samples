@@ -10,7 +10,9 @@ trigger "query" "expired_access_keys" {
         user_name,
         _ctx ->> 'connection_name' as connection
       from
-        aws_iam_access_key;
+        aws_iam_access_key
+      order by
+        user_name;
   EOQ
 
   capture "insert" {
@@ -43,12 +45,14 @@ pipeline "inserted_access_keys" {
 
   step "pipeline" "send_email_notification" {
     pipeline = pipeline.send_email_notification
-    for_each = param.access_keys
 
     args = {
-      subject = "IAM Access Key created for ${each.value.user_name}"
+      subject = "IAM Access Key created"
       body    = <<-EOS
-        <p>An IAM Access Key was created for user <b>${each.value.user_name}</b> at <b>${timestamp()}</b></p>
+        <p>
+          An IAM Access Key was created for the following users,  at ${timestamp()} :<br />
+          ${join("\n", [for access_key in param.access_keys : "<b>${access_key.user_name}</b><br />"])}
+        </p>
       EOS
     }
   }
@@ -65,12 +69,13 @@ pipeline "updated_access_keys" {
 
   step "pipeline" "send_email_notification" {
     pipeline = pipeline.send_email_notification
-    for_each = param.access_keys
 
     args = {
-      subject = "IAM Access Key changed for ${each.value.user_name}"
+      subject = "IAM Access Key changed"
       body    = <<-EOS
-        <p>An IAM Access Key was changed to ${each.value.status} for user <b>${each.value.user_name}</b> at <b>${timestamp()}</b></p>
+        <p>
+          ${join("\n", [for access_key in param.access_keys : "An IAM Access Key was changed to <b>${access_key.status}</b> for user <b>${access_key.user_name}</b><br />"])}
+        </p>
       EOS
     }
   }
@@ -87,12 +92,13 @@ pipeline "deleted_access_keys" {
 
   step "pipeline" "send_email_notification" {
     pipeline = pipeline.send_email_notification
-    for_each = param.access_keys
 
     args = {
-      subject = "IAM Access Key ${each.value} deleted"
+      subject = "IAM Access Key deleted"
       body    = <<-EOS
-        <p>The IAM Access Key <b>${each.value}</b> was deleted at <b>${timestamp()}</b></p>
+        <p>
+          ${join("\n", [for access_key in param.access_keys : "The IAM Access Key <b>${access_key}</b> was deleted<br />"])}
+        </p>
       EOS
     }
   }
