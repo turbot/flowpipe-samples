@@ -1,0 +1,28 @@
+ integration "slack" "slack_app" {
+   token = env("SLACK_TOKEN")
+ }
+
+ notifier "slack" {
+   notify {
+     integration = integration.slack.slack_app
+     channel     = "#random"
+   }
+ }
+
+integration "email" "email_app" {
+  from = "judell@turbot.com"
+  to = ["judell@turbot.com"]
+  subject = "Flowpipe: Action Requested"
+  smtp_tls   = "required" 
+  smtps_port = 587
+  smtp_host = "smtp.gmail.com"
+  smtp_username = "judell@turbot.com"
+  content_type = "text/html"
+  smtp_password = env("FLOWPIPE_EMAIL_APP_PW")
+} 
+
+ notifier "email" {
+   notify {
+     integration = integration.email.email_app
+   }
+ }
