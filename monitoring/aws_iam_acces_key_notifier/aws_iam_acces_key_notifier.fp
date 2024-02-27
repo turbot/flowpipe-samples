@@ -42,12 +42,15 @@ pipeline "inserted_access_keys" {
   }
 
   step "pipeline" "send_email_notification" {
+    pipeline = pipeline.send_email_notification
     for_each = param.access_keys
 
-    subject = "IAM Access Key created for ${each.value.user_name}"
-    body    = <<-EOS
-      <p>An IAM Access Key was created for user <b>${each.value.user_name}</b> at <b>${timestamp()}</b></p>
-    EOS
+    args = {
+      subject = "IAM Access Key created for ${each.value.user_name}"
+      body    = <<-EOS
+        <p>An IAM Access Key was created for user <b>${each.value.user_name}</b> at <b>${timestamp()}</b></p>
+      EOS
+    }
   }
 
   output "inserted_access_keys" {
@@ -61,12 +64,15 @@ pipeline "updated_access_keys" {
   }
 
   step "pipeline" "send_email_notification" {
+    pipeline = pipeline.send_email_notification
     for_each = param.access_keys
 
-    subject = "IAM Access Key changed for ${each.value.user_name}"
-    body    = <<-EOS
-      <p>An IAM Access Key was changed to ${each.value.status} for user <b>${each.value.user_name}</b> at <b>${timestamp()}</b></p>
-    EOS
+    args = {
+      subject = "IAM Access Key changed for ${each.value.user_name}"
+      body    = <<-EOS
+        <p>An IAM Access Key was changed to ${each.value.status} for user <b>${each.value.user_name}</b> at <b>${timestamp()}</b></p>
+      EOS
+    }
   }
 
   output "updated_access_keys" {
