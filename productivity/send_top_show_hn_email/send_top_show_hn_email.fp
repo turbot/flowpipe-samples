@@ -38,7 +38,8 @@ pipeline "send_top_show_hn_email" {
   }
 
   step "query" "list_show_hn_stories" {
-    connection_string = "postgres://steampipe@localhost:9193/steampipe"
+    database = "postgres://steampipe@localhost:9193/steampipe"
+
     sql = <<-EOQ
       select
         by,
