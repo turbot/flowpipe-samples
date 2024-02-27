@@ -1,7 +1,7 @@
 trigger "query" "expired_access_keys" {
   database    = "postgres://steampipe@localhost:9193/steampipe"
   primary_key = "access_key_id"
-  schedule    = "5m"
+  schedule    = var.schedule
 
   sql = <<EOQ
       select
