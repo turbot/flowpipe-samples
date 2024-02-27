@@ -1,0 +1,7 @@
+# Required
+email_destination_list = [""]
+email_from             = ""
+smtp_username          = ""
+smtp_password          = ""
+smtp_host              = ""
+smtp_port              = 587
