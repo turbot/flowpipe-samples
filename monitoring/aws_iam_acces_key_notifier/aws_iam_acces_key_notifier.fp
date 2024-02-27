@@ -84,6 +84,19 @@ pipeline "deleted_access_keys" {
   param "access_keys" {
     type = list
   }
+
+  step "pipeline" "send_email_notification" {
+    pipeline = pipeline.send_email_notification
+    for_each = param.access_keys
+
+    args = {
+      subject = "IAM Access Key ${each.value} deleted"
+      body    = <<-EOS
+        <p>The IAM Access Key <b>${each.value}</b> was deleted at <b>${timestamp()}</b></p>
+      EOS
+    }
+  }
+
   output "deleted_access_keys" {
     value = param.access_keys
   }
