@@ -1,0 +1,10 @@
+# Required
+email_from     = "sender-email@my-server.com"
+email_to       = ["recipient-one@my-server.com", "recipient-two@my-server.com"]
+smtp_username  = "my-smtp-username"
+smtp_password  = "my-smtp-password"
+smtp_host      = "smtp.mydomain.com"
+smtp_port      = 587
+
+# Optional
+schedule       = "24h"
