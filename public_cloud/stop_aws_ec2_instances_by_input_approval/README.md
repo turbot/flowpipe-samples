@@ -34,9 +34,13 @@ flowpipe mod install
 
 This mod uses the credentials configured in the [Steampipe AWS plugin](https://hub.steampipe.io/plugins/turbot/aws).
 
-You need to update the `integration.fpc` present in the current directory and provide the channel information:
+You need to create `integration` and `notifier` resources in configuration files:
 
 ```sh
+vi ~/.flowpipe/config/slack.fpc
+```
+
+```hcl
 integration "slack" "slack_app" {
   token = env("SLACK_TOKEN")
 }
