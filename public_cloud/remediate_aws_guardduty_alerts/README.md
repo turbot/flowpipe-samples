@@ -37,7 +37,7 @@ By default, the following environment variables will be used for authentication:
 - `JIRA_USER`
 - `AWS_PROFILE`
 - `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY` 
+- `AWS_SECRET_ACCESS_KEY`
 
 You can also create `credential` resources in configuration files:
 
@@ -46,9 +46,9 @@ vi ~/.flowpipe/config/jira.fpc
 ```
 
 ```hcl
-credential "jira" "jira_cred" {
+credential "jira" "default" {
   base_url    = "https://test.atlassian.net/"
-  api_token   = "ATATT3........."
+  api_token   = "ATATT3..."
   username    = "abc@email.com"
 }
 ```
@@ -58,19 +58,8 @@ vi ~/.flowpipe/config/aws.fpc
 ```
 
 ```hcl
-credential "aws" "aws_profile" {
+credential "aws" "default" {
   profile = "my-profile"
-}
-
-credential "aws" "aws_access_key_pair" {
-  access_key = "AKIA..."
-  secret_key = "dP+C+J..."
-}
-
-credential "aws" "aws_session_token" {
-  access_key = "AKIA..."
-  secret_key = "dP+C+J..."
-  session_token = "AQoDX..."
 }
 ```
 
@@ -113,10 +102,8 @@ vi flowpipe.fpvars
 ```
 
 ```hcl
-# Jira project_key
 jira_project_key="QWR"
 issue_type="Bug"
 
-# AWS region
 aws_region = "us-east-1"
 ```
