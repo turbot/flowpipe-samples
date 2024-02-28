@@ -38,6 +38,7 @@ By default, the following environment variables will be used for authentication:
 - `AWS_PROFILE`
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
+- `AWS_SESSION_TOKEN`
 
 You can also create `credential` resources in configuration files:
 
