@@ -1,0 +1,5 @@
+# Required
+aws_region = "us-east-1"
+
+# Optional
+# aws_cred = "non_default_cred"
