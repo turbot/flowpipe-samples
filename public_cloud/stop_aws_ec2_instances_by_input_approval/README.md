@@ -1,21 +1,27 @@
-# Query and Stop AWS EC2 Instances by Tag
+# Stop AWS EC2 Instances by input approval
 
-Query a list of running AWS EC2 instances with the tag key-value pair `status: decom` using Steampipe and then stop them.
+Stop AWS EC2 instance based on the input approval.
 
 ## Installation
 
-Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
+Download and install Flowpipe (https://flowpipe.io/downloads) and Steampipe (https://steampipe.io/downloads). Or use Brew:
 
 ```sh
-brew tap turbot/tap
-brew install flowpipe
+brew tap turbot/tap/flowpipe
+brew tap turbot/tap/steampipe
+```
+
+Install the AWS plugin with [Steampipe](https://steampipe.io):
+
+```sh
+steampipe plugin install aws
 ```
 
 Clone:
 
 ```sh
 git clone https://github.com/turbot/flowpipe-samples.git
-cd public_cloud/query_and_stop_aws_ec2_instance
+cd public_cloud/stop_aws_ec2_instances_by_input_approval
 ```
 
 [Install mod dependencies](https://flowpipe.io/docs/build/mod-dependencies#mod-dependencies):
@@ -26,33 +32,36 @@ flowpipe mod install
 
 ## Credentials
 
+This mod uses the credentials configured in the [Steampipe AWS plugin](https://hub.steampipe.io/plugins/turbot/aws).
+
+You need to update the `integration.fpc` present in the current directory and provide the channel information:
+
+```sh
+integration "slack" "slack_app" {
+  token = env("SLACK_TOKEN")
+}
+
+notifier "slack" {
+  notify {
+    integration = integration.slack.slack_app
+    channel     = "#random"
+  }
+}
+```
+
 By default, the following environment variables will be used for authentication:
 
-- `AWS_PROFILE`
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-- `AWS_PROFILE`
+- `SLACK_TOKEN`
 
 You can also create `credential` resources in configuration files:
 
 ```sh
-vi creds.fpc
+vi ~/.flowpipe/config/slack.fpc
 ```
 
 ```hcl
-credential "aws" "aws_profile" {
-  profile = "my-profile"
-}
-
-credential "aws" "aws_access_key_pair" {
-  access_key = "AKIA..."
-  secret_key = "dP+C+J..."
-}
-
-credential "aws" "aws_session_token" {
-  access_key = "AKIA..."
-  secret_key = "dP+C+J..."
-  session_token = "AQoDX..."
+credential "slack" "default" {
+  token = "xoxp-12345-..."
 }
 ```
 
@@ -60,24 +69,10 @@ For more information on credentials in Flowpipe, please see [Managing Credential
 
 ## Usage
 
-Run the pipeline and specify the `aws_region` pipeline arguments:
+Run the pipeline:
 
 ```sh
-flowpipe pipeline run query_and_stop_aws_ec2_instance --arg aws_region=us-east-1
-```
-
-## Configuration
-
-To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
-
-```sh
-cp flowpipe.fpvars.example flowpipe.fpvars
-vi flowpipe.fpvars
-```
-
-```hcl
-# Optional
-# aws_cred = "non_default_cred"
+flowpipe pipeline run stop_aws_ec2_instances_by_input_approval
 ```
 
 ## Open Source & Contributing

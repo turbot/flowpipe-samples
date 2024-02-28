@@ -1,6 +1,6 @@
 pipeline "stop_aws_ec2_instances_by_input_approval" {
-  title       = "Query and Stop AWS EC2 Instances by Input Approval"
-  description = "Query and stop AWS EC2 instance based on the input approval."
+  title       = "Stop AWS EC2 Instances by Input Approval"
+  description = "Stop AWS EC2 instance based on the input approval."
 
   step "query" "list_ec2_instances" {
     database = "postgres://steampipe@localhost:9193/steampipe"
@@ -28,10 +28,12 @@ pipeline "stop_aws_ec2_instances_by_input_approval" {
 }
 
 pipeline "stop_aws_ec2_instances_based_on_approval" {
-
+  title       = "Stop AWS EC2 Instances Based on Approval"
+  description = "Stop AWS EC2 instance based on the approval."
 
   param "instance_id" {
-    type = string
+    type        = string
+    description = "The instance ID."
   }
 
   param "aws_region" {
@@ -42,7 +44,6 @@ pipeline "stop_aws_ec2_instances_based_on_approval" {
   param "aws_cred" {
     type        = string
     description = "Name for AWS credential to use. If not provided, the default credential will be used."
-    default     = var.aws_cred
   }
 
   step "input" "stop_ec2_instances" {
