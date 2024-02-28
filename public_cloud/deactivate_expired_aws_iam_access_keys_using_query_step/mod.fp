@@ -9,5 +9,4 @@ mod "deactivate_expired_aws_iam_access_keys_using_query_step" {
       version = "0.1.0"
     }
   }
-
 }
