@@ -118,15 +118,9 @@ pipeline "send_email_notification" {
     type = string
   }
 
-  step "email" "send_it" {
-    to                = var.email_destination_list
-    from              = var.email_from
-    smtp_username     = var.smtp_username
-    smtp_password     = var.smtp_password
-    host              = var.smtp_host
-    port              = var.smtp_port
-    content_type      = "text/html"
-    subject           = param.subject
-    body              = param.body
+  step "message" "send_message" {
+    notifier = notifier.email
+    subject  = param.subject
+    body     = param.body
   }
 }
