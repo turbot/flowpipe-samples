@@ -43,7 +43,7 @@ pipeline "stop_aws_ec2_instances_based_on_approval" {
 
   param "aws_cred" {
     type        = string
-    description = "Name for AWS credential to use. If not provided, the default credential will be used."
+    description = "Name for AWS credential to use."
   }
 
   step "input" "stop_ec2_instances" {
