@@ -54,7 +54,7 @@ pipeline "process_changes" {
 
   step "pipeline" "send_insert_notification" {
     if = param.inserted_access_keys != null
-    pipeline = pipeline.send_email_notification
+    pipeline = pipeline.notifier
 
     args = {
       subject = "IAM Access Key created"
@@ -69,7 +69,7 @@ pipeline "process_changes" {
 
   step "pipeline" "send_update_notification" {
     if = param.updated_access_keys != null
-    pipeline = pipeline.send_email_notification
+    pipeline = pipeline.notifier
 
     args = {
       subject = "IAM Access Key changed"
@@ -83,7 +83,7 @@ pipeline "process_changes" {
 
   step "pipeline" "send_delete_notification" {
     if = param.deleted_access_keys != null
-    pipeline = pipeline.send_email_notification
+    pipeline = pipeline.notifier
 
     args = {
       subject = "IAM Access Key deleted"
@@ -106,25 +106,17 @@ pipeline "process_changes" {
   }
 }
 
-pipeline "send_email_notification" {
-
+pipeline "notifier" {
   param "subject" {
     type = string
   }
-
   param "body" {
     type = string
   }
 
-  step "email" "send_it" {
-    to                = var.email_destination_list
-    from              = var.email_from
-    smtp_username     = var.smtp_username
-    smtp_password     = var.smtp_password
-    host              = var.smtp_host
-    port              = var.smtp_port
-    content_type      = "text/html"
-    subject           = param.subject
-    body              = param.body
+  step "message" "send_message" {
+    notifier = notifier[var.notifier]
+    subject  = param.subject
+    body     = param.body
   }
 }

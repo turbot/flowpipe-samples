@@ -43,8 +43,8 @@ pipeline "inserted_access_keys" {
     type = list
   }
 
-  step "pipeline" "send_email_notification" {
-    pipeline = pipeline.send_email_notification
+  step "pipeline" "notifier" {
+    pipeline = pipeline.notifier
 
     args = {
       subject = "IAM Access Key created"
@@ -67,8 +67,8 @@ pipeline "updated_access_keys" {
     type = list
   }
 
-  step "pipeline" "send_email_notification" {
-    pipeline = pipeline.send_email_notification
+  step "pipeline" "notifier" {
+    pipeline = pipeline.notifier
 
     args = {
       subject = "IAM Access Key changed"
@@ -90,8 +90,8 @@ pipeline "deleted_access_keys" {
     type = list
   }
 
-  step "pipeline" "send_email_notification" {
-    pipeline = pipeline.send_email_notification
+  step "pipeline" "notifier" {
+    pipeline = pipeline.notifier
 
     args = {
       subject = "IAM Access Key deleted"
@@ -108,18 +108,16 @@ pipeline "deleted_access_keys" {
   }
 }
 
-pipeline "send_email_notification" {
-
+pipeline "notifier" {
   param "subject" {
     type = string
   }
-
   param "body" {
     type = string
   }
 
   step "message" "send_message" {
-    notifier = notifier.email
+    notifier = notifier[var.notifier]
     subject  = param.subject
     body     = param.body
   }

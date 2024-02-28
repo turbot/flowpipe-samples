@@ -28,16 +28,25 @@ cd public_cloud/aws_iam_access_key_notifier
 
 For the AWS, this mod uses the AWS credentials configured in the [Steampipe AWS plugin](https://hub.steampipe.io/plugins/turbot/aws).
 
-For the e-mail notification, you need to set the SMTP credentials and recipient email address at the `flowpipe.fpvars` file as shown below.
+For notification, we recommend using the Flowpipe email notifier. To configure it, open the `~/.flowpipe/config/flowpipe.fpc` file and add the following:
 
 ```hcl
-email_from    = "sender-email@my-server.com"
-email_to      = ["recipient-one@my-server.com", "recipient-two@my-server.com"]
+integration "email" "email_app" {
+  from      = "sender-email@my-server.com"
+  to        = ["recipient-one@my-server.com", "recipient-two@my-server.com"]
+  subject = "Flowpipe Notification"
+  smtp_tls   = "my-smtp-username"
+  smtps_port = 587
+  smtp_host = "smtp.mydomain.com"
+  smtp_username = "my-smtp-username"
+  smtp_password = "my-smtp-password"
+}
 
-smtp_username = "my-smtp-username"
-smtp_password = "my-smtp-password"
-smtp_host     = "smtp.mydomain.com"
-smtp_port     = 587
+notifier "email" {
+  notify {
+    integration = integration.email.email_app
+  }
+}
 ```
 
 ## Usage
