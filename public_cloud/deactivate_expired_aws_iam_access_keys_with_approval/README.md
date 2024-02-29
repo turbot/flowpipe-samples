@@ -92,6 +92,14 @@ notifier = "my_email"
 
 ## Usage
 
+Start the Steampipe service:
+
+```sh
+steampipe service start
+```
+
+**Note**: Please remember to set `search_path` or `search_path_prefix` in your [Steampipe workspace options](https://steampipe.io/docs/reference/config-files/workspace) to ensure the right connections are queried.
+
 You run the pipeline directly:
 
 ```sh
