@@ -1,6 +1,6 @@
-# Deactivate Expired AWS IAM Keys With Approval
+# Deactivate Expired AWS IAM Keys with Approval
 
-Find expired AWS IAM access keys and ask for approval to delete or send a notification.
+Find expired AWS IAM access keys and ask for approval to deactivate or just send a notification.
 
 ## Requirements
 
@@ -30,38 +30,54 @@ flowpipe mod install
 
 ## Credentials
 
-By default, the following environment variables will be used for authentication:
-
-- `AWS_PROFILE`
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-- `AWS_PROFILE`
-
-You can also create `credential` resources in configuration files:
+It is recommended to create a `credential_import` resource:
 
 ```sh
 vi ~/.flowpipe/config/aws.fpc
 ```
 
 ```hcl
-credential "aws" "default" {
-  profile = "my-profile"
+credential_import "steampipe" {
+  source      = "~/.steampipe/config/*.spc"
+  connections = ["*"]
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
-
-## Usage
-
-Run the pipeline and specify the `slack_channel` pipeline arguments:
-
-```sh
-flowpipe pipeline run deactivate_expired_aws_iam_access_keys --arg slack_channel=my_notification_channel
-```
+For more information on importing credentials, please see [Credential Import](https://flowpipe.io/docs/reference/config-files/credential-import).
 
 ## Configuration
 
-To avoid entering variable values when running the pipeline or starting the server, you can set variable values:
+Create a `notifier` resource, which will be used to route inputs and other messages.
+
+For instance:
+
+```sh
+vi ~/.flowpipe/config/integrations.fpc
+```
+
+```hcl
+integration "email" "my_email" {
+  from          = "user@company.com"
+  to            = ["user@company.com"]
+  smtp_tls      = "required"
+  smtps_port    = 587
+  smtp_host     = "smtp.gmail.com"
+  smtp_username = "cody@turbot.com"
+  smtp_password = env("FLOWPIPE_EMAIL_APP_PW")
+}
+
+notifier "my_email" {
+  notify {
+    integration = integration.email.email_app
+  }
+}
+```
+
+For more examples of integrations and notifiers, please see:
+- [Integrations](https://flowpipe.io/docs/reference/config-files/integration)
+- [Notifiers](https://flowpipe.io/docs/reference/config-files/notifier)
+
+Then set the variable values:
 
 ```sh
 cp flowpipe.fpvars.example flowpipe.fpvars
@@ -70,6 +86,20 @@ vi flowpipe.fpvars
 
 ```hcl
 # Optional
-# aws_cred   = "non_default_cred"
-# slack_cred = "non_default_cred"
+#database = "postgres://steampipe@localhost:9193/steampipe"
+notifier = "my_email"
+```
+
+## Usage
+
+You run the pipeline directly:
+
+```sh
+flowpipe pipeline run deactivate_expired_aws_iam_access_keys_with_approval --host local
+```
+
+Or run it with the Flowpipe server:
+
+```sh
+flowpipe server
 ```

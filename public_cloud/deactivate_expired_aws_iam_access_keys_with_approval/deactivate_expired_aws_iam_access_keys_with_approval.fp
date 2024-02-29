@@ -1,4 +1,3 @@
-/*
 trigger "query" "list_expired_iam_access_keys" {
   title       = "List Expired IAM Access Keys"
   description = "List expired IAM access keys."
@@ -20,29 +19,51 @@ trigger "query" "list_expired_iam_access_keys" {
   EOQ
 
   capture "insert" {
-    pipeline = pipeline.deactivate_expired_aws_iam_access_keys_with_approval
+    pipeline = pipeline.deactivate_expired_aws_iam_access_keys_with_approval_from_trigger
     args = {
       rows = self.inserted_rows
     }
   }
 }
-*/
+
+pipeline "deactivate_expired_aws_iam_access_keys_with_approval_from_trigger" {
+  title       = "Deactivate Expired AWS IAM Access Keys with Approval from Trigger"
+  description = "Deactivate expired AWS IAM access keys with approval from a query trigger."
+
+  param "rows" {
+    type        = list
+    description = "IAM access key row data."
+  }
+
+  param "notifier" {
+    type        = string
+    description = "Notifier to use."
+    default     = var.notifier
+  }
+
+  step "pipeline" "deactivate_expired_iam_access_keys" {
+    for_each = param.rows
+    pipeline = pipeline.deactivate_iam_access_keys_with_approval
+    args = {
+      access_key = each.value
+      notifier   = param.notifier
+    }
+  }
+
+  output "expired_access_keys" {
+    value = param.rows
+  }
+
+}
 
 pipeline "deactivate_expired_aws_iam_access_keys_with_approval" {
   title       = "Deactivate Expired AWS IAM Access Keys with Approval"
-  description = "Deactivates expired AWS IAM access keys with approval."
+  description = "Deactivate expired AWS IAM access keys with approval."
 
   param "database" {
     type        = string
     description = "Steampipe database connection string."
     default     = var.database
-  }
-
-  # TODO: Do we need to use credential_import to match Steampipe creds and Flowpipe creds?
-  param "aws_cred" {
-    type        = string
-    description = "Name for AWS credentials to use. If not provided, the default credentials will be used."
-    default     = var.aws_cred
   }
 
   param "notifier" {
@@ -98,7 +119,9 @@ pipeline "deactivate_iam_access_keys_with_approval" {
 
   step "input" "prompt_deactivate_expired_aws_iam_access_key" {
     notifier = notifier[param.notifier]
-    prompt   = "Do you want to deactivate the IAM access key ${param.access_key.access_key_id} belonging to ${param.access_key.user_name} [${param.access_key.account_id}?]"
+    # TODO: Re-add once subject is supported
+    #subject  = "Request to deactivate expired IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
+    prompt   = "Do you want to deactivate IAM access key ${param.access_key.access_key_id} belonging to ${param.access_key.user_name} [${param.access_key.account_id}?]"
     type     = "button"
 
     option "Deactivate" {
