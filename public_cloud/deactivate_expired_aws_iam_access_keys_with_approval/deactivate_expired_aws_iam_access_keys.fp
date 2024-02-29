@@ -34,7 +34,7 @@ pipeline "deactivate_expired_aws_iam_access_keys_with_approval" {
 
   param "database" {
     type        = string
-    description = "Database to connect to."
+    description = "Steampipe database connection string."
     default     = var.database
   }
 
@@ -71,11 +71,8 @@ pipeline "deactivate_expired_aws_iam_access_keys_with_approval" {
     for_each = step.query.list_expired_iam_access_keys.rows
     pipeline = pipeline.deactivate_iam_access_keys_with_approval
     args = {
-      aws_cred       = each.value.conn_name
-      access_key_id  = each.value.access_key_id
-      user_name      = each.value.user_name
-      notifier       = param.notifier
-      aws_account_id = each.value.account_id
+      access_key = each.value
+      notifier   = param.notifier
     }
   }
 
@@ -89,24 +86,9 @@ pipeline "deactivate_iam_access_keys_with_approval" {
   title       = "Deactivate IAM Access Keys with Approval"
   description = "Deactivate IAM access keys with approval or just send a notification."
 
-  param "aws_cred" {
-    type        = string
-    description = "Name for AWS credential to use."
-  }
-
-  param "access_key_id" {
-    type        = string
-    description = "Access key ID."
-  }
-
-  param "user_name" {
-    type        = string
-    description = "User who owns the key."
-  }
-
-  param "aws_account_id" {
-    type        = string
-    description = "AWS account ID."
+  param "access_key" {
+    type        = map(string)
+    description = "IAM access key row data."
   }
 
   param "notifier" {
@@ -116,12 +98,12 @@ pipeline "deactivate_iam_access_keys_with_approval" {
 
   step "input" "prompt_deactivate_expired_aws_iam_access_key" {
     notifier = notifier[param.notifier]
-    prompt   = "Do you want to deactivate the IAM access key ${param.access_key_id} belonging to ${param.user_name} [${param.aws_account_id}?]"
+    prompt   = "Do you want to deactivate the IAM access key ${param.access_key.access_key_id} belonging to ${param.access_key.user_name} [${param.access_key.account_id}?]"
     type     = "button"
 
     option "Deactivate" {
-      label = "Yes"
-      value = "yes"
+      label = "Deactivate"
+      value = "deactivate"
     }
 
     option "Alert" {
@@ -131,31 +113,31 @@ pipeline "deactivate_iam_access_keys_with_approval" {
   }
 
   step "pipeline" "deactivate_aws_iam_access_key" {
-    if       = step.input.prompt_deactivate_expired_aws_iam_access_key.value == "yes"
+    if       = step.input.prompt_deactivate_expired_aws_iam_access_key.value == "deactivate"
     pipeline = aws.pipeline.update_iam_access_key
     args = {
-      cred          = param.aws_cred
-      user_name     = param.user_name
-      access_key_id = param.access_key_id
+      cred          = param.access_key.conn_name
+      user_name     = param.access_key.user_name
+      access_key_id = param.access_key.access_key_id
       status        = "Inactive"
     }
   }
 
   step "message" "notify_iam_access_key_deactivated" {
-    if         = step.input.prompt_deactivate_expired_aws_iam_access_key.value == "yes"
+    if         = step.input.prompt_deactivate_expired_aws_iam_access_key.value == "deactivate"
     depends_on = [step.pipeline.deactivate_aws_iam_access_key]
 
     notifier = notifier[param.notifier]
-    subject  = "Deactivated IAM access key ${param.access_key_id} for user ${param.user_name} [${param.aws_account_id}]"
-    body     = "Deactivated IAM access key ${param.access_key_id} for user ${param.user_name} [${param.aws_account_id}]"
+    subject  = "Deactivated IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
+    body     = "Deactivated IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
   }
 
   step "message" "alert_iam_access_key_expired" {
     if = step.input.prompt_deactivate_expired_aws_iam_access_key.value == "alert"
 
     notifier = notifier[param.notifier]
-    subject  = "IAM access key ${param.access_key_id} for user ${param.user_name} is expired [${param.aws_account_id}]"
-    body     = "IAM access key ${param.access_key_id} for user ${param.user_name} is expired [${param.aws_account_id}]"
+    subject  = "IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} is expired [${param.access_key.account_id}]"
+    body     = "IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} is expired [${param.access_key.account_id}]"
   }
 
 }
