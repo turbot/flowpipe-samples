@@ -1,0 +1,4 @@
+# Optional
+# database = "postgres://steampipe@localhost:9193/steampipe"
+# schedule = "daily"
+# notifier = "my_email"
