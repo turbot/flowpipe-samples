@@ -55,6 +55,11 @@ pipeline "stop_aws_ec2_instances_based_on_approval" {
       label = "Yes"
       value = "yes"
     }
+
+    option "No" {
+      label = "No"
+      value = "no"
+    }
   }
 
   step "pipeline" "stop_aws_ec2_instances" {
