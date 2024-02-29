@@ -4,7 +4,7 @@ trigger "query" "new_aws_iam_access_key" {
   schedule          = "* * * * *"    # every minute
   primary_key       = "access_key_id"
   sql               = <<EOQ
-    select access_key_id, user_name, create_date
+    select access_key_id, account_id, user_name, create_date
     from aws_iam_access_key
     where create_date > now() - interval '2 weeks'
   EOQ
@@ -28,7 +28,7 @@ pipeline "notify_new_access_key" {
   step "message" "notify" {
     notifier = notifier["new_access_key"]
     for_each = param.rows
-    body = "New access key for ${each.value.user_name}: ${each.value.access_key_id},  ${each.value.create_date}"
+    body = "New access key for ${each.value.user_name}, ${each.value.account_id}: ${each.value.access_key_id},  ${each.value.create_date}"
   }  
   
 }
