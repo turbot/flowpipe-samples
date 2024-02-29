@@ -1,4 +1,4 @@
- integration "slack" "slack_app" {
+ integration "slack" "default" {
    token = env("SLACK_TOKEN")
  }
 
@@ -6,7 +6,7 @@
 notifier "new_access_key" {
   
    notify {
-     integration = integration.slack.slack_app
+     integration = integration.slack.default
      channel     = "security"
    }
 
