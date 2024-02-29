@@ -1,0 +1,7 @@
+# Required
+aws_region = "us-east-1"
+
+# Optional
+# schedule = "daily"
+# notifier = "email"
+# aws_cred   = "default"
