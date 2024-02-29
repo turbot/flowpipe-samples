@@ -119,8 +119,7 @@ pipeline "deactivate_iam_access_keys_with_approval" {
 
   step "input" "prompt_deactivate_expired_aws_iam_access_key" {
     notifier = notifier[param.notifier]
-    # TODO: Re-add once subject is supported
-    #subject  = "Request to deactivate expired IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
+    subject  = "Request to deactivate expired IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
     prompt   = "Do you want to deactivate IAM access key ${param.access_key.access_key_id} belonging to ${param.access_key.user_name} [${param.access_key.account_id}?]"
     type     = "button"
 
@@ -152,7 +151,7 @@ pipeline "deactivate_iam_access_keys_with_approval" {
 
     notifier = notifier[param.notifier]
     subject  = "Deactivated IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
-    body     = "Deactivated IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
+    text     = "Deactivated IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
   }
 
   step "message" "alert_iam_access_key_expired" {
@@ -160,7 +159,7 @@ pipeline "deactivate_iam_access_keys_with_approval" {
 
     notifier = notifier[param.notifier]
     subject  = "IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} is expired [${param.access_key.account_id}]"
-    body     = "IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} is expired [${param.access_key.account_id}]"
+    text     = "IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} is expired [${param.access_key.account_id}]"
   }
 
 }
