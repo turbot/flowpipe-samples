@@ -2,6 +2,7 @@
 aws_region = "us-east-1"
 
 # Optional
+# database = "postgres://steampipe@localhost:9193/steampipe"
 # schedule = "daily"
-# notifier = "email"
-# aws_cred   = "default"
+# notifier = "my_email"
+# aws_cred = "default"

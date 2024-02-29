@@ -1,5 +1,5 @@
-trigger "query" "expired_access_keys" {
-  database    = "postgres://steampipe@localhost:9193/steampipe"
+trigger "query" "watch_for_iam_access_keys" {
+  database    = var.database
   primary_key = "access_key_id"
   schedule    = var.schedule
 
@@ -58,7 +58,7 @@ pipeline "process_changes" {
 
     args = {
       subject = "IAM Access Key created"
-      body    = <<-EOS
+      text    = <<-EOS
         <p>
           An IAM Access Key was created for the following users, at ${timestamp()} :<br />
           ${join("\n", [for access_key in param.inserted_access_keys : "<b>${access_key.user_name}</b><br />"])}
@@ -73,7 +73,7 @@ pipeline "process_changes" {
 
     args = {
       subject = "IAM Access Key changed"
-      body    = <<-EOS
+      text    = <<-EOS
         <p>
           ${join("\n", [for access_key in param.updated_access_keys : "An IAM Access Key was changed to <b>${access_key.status}</b> for user <b>${access_key.user_name}</b><br />"])}
         </p>
@@ -87,7 +87,7 @@ pipeline "process_changes" {
 
     args = {
       subject = "IAM Access Key deleted"
-      body    = <<-EOS
+      text    = <<-EOS
         <p>
           ${join("\n", [for access_key in param.deleted_access_keys : "The IAM Access Key <b>${access_key}</b> was deleted<br />"])}
         </p>
@@ -110,13 +110,13 @@ pipeline "notifier" {
   param "subject" {
     type = string
   }
-  param "body" {
+  param "text" {
     type = string
   }
 
   step "message" "send_message" {
     notifier = notifier[var.notifier]
     subject  = param.subject
-    body     = param.body
+    text     = param.text
   }
 }

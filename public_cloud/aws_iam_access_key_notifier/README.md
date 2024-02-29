@@ -4,17 +4,11 @@ Watches for IAM access keys creations, changes and deletions and notifies throug
 
 ## Installation
 
-Download and install Flowpipe (https://flowpipe.io/downloads) and Steampipe (https://steampipe.io/downloads). Or use Brew:
+Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
 
 ```sh
-brew tap turbot/tap/flowpipe
-brew tap turbot/tap/steampipe
-```
-
-Install the AWS plugin with [Steampipe](https://steampipe.io):
-
-```sh
-steampipe plugin install aws
+brew tap turbot/tap
+brew install flowpipe
 ```
 
 Clone:
@@ -24,38 +18,64 @@ git clone https://github.com/turbot/flowpipe-samples.git
 cd public_cloud/aws_iam_access_key_notifier
 ```
 
-## Credentials
+## Configuration
 
-For the AWS, this mod uses the AWS credentials configured in the [Steampipe AWS plugin](https://hub.steampipe.io/plugins/turbot/aws).
+Create a `notifier` resource, which will be used to route inputs and other messages.
 
-For notification, we recommend using the Flowpipe email notifier. To configure it, open the `~/.flowpipe/config/flowpipe.fpc` file and add the following:
+For instance:
+
+```sh
+vi ~/.flowpipe/config/integrations.fpc
+```
 
 ```hcl
-integration "email" "email_app" {
-  from      = "sender-email@my-server.com"
-  to        = ["recipient-one@my-server.com", "recipient-two@my-server.com"]
-  subject = "Flowpipe Notification"
-  smtp_tls   = "my-smtp-username"
-  smtps_port = 587
-  smtp_host = "smtp.mydomain.com"
-  smtp_username = "my-smtp-username"
-  smtp_password = "my-smtp-password"
+integration "email" "my_email" {
+  from          = "user@company.com"
+  to            = ["user@company.com"]
+  smtp_tls      = "required"
+  smtps_port    = 587
+  smtp_host     = "smtp.mydomain.com"
+  smtp_username = "my_user@mydomain.com"
+  smtp_password = env("FLOWPIPE_EMAIL_APP_PW")
 }
 
-notifier "email" {
+notifier "my_email" {
   notify {
-    integration = integration.email.email_app
+    integration = integration.email.my_email
   }
 }
 ```
 
+For more examples of integrations and notifiers, please see:
+- [Integrations](https://flowpipe.io/docs/reference/config-files/integration)
+- [Notifiers](https://flowpipe.io/docs/reference/config-files/notifier)
+
+Then set the variable values:
+
+```sh
+cp flowpipe.fpvars.example flowpipe.fpvars
+vi flowpipe.fpvars
+```
+
+```hcl
+# Optional
+# database = "postgres://steampipe@localhost:9193/steampipe"
+# schedule = "daily"
+notifier = "my_email"
+```
+
 ## Usage
 
-To get notified in Slack when a new IAM access key is created, run:
+Start the Steampipe service:
 
 ```sh
 steampipe service start
-flowpipe server
 ```
 
-Once started, Flowpipe will run the pipeline automatically whenever a query trigger state is received.
+**Note**: Please remember to set `search_path` or `search_path_prefix` in your [Steampipe workspace options](https://steampipe.io/docs/reference/config-files/workspace) to ensure the right connections are queried.
+
+Run the mod with the Flowpipe server:
+
+```sh
+flowpipe server
+```

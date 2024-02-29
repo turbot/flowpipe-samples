@@ -1,5 +1,5 @@
 trigger "query" "find_deletable_buckets" {
-  database    = "postgres://steampipe@127.0.0.1:9193/steampipe"
+  database    = var.database
   primary_key = "name"
   schedule    = var.schedule
 
