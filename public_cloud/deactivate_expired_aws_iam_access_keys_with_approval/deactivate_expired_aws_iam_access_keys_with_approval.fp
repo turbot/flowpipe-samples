@@ -126,11 +126,13 @@ pipeline "deactivate_iam_access_keys_with_approval" {
     option "Deactivate" {
       label = "Deactivate"
       value = "deactivate"
+      style = "alert"
     }
 
     option "Alert" {
       label = "Alert"
       value = "alert"
+      style = "info"
     }
   }
 
