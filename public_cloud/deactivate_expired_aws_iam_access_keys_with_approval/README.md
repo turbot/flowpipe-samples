@@ -4,11 +4,13 @@ Find expired AWS IAM access keys and ask for approval to deactivate or just send
 
 ## Requirements
 
+[Steampipe](https://steampipe.io/downloads) must be installed along with the [AWS plugin](https://hub.steampipe.io/plugins/turbot/aws).
+
 Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
 
 ## Installation
 
-Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
+Download and install [Flowpipe](https://flowpipe.io/downloads). Or use Brew:
 
 ```sh
 brew tap turbot/tap
@@ -30,15 +32,15 @@ flowpipe mod install
 
 ## Credentials
 
-It is recommended to create a `credential_import` resource:
+It is recommended to create a `credential_import` resource to import your AWS connections:
 
 ```sh
 vi ~/.flowpipe/config/aws.fpc
 ```
 
 ```hcl
-credential_import "steampipe" {
-  source      = "~/.steampipe/config/*.spc"
+credential_import "aws" {
+  source      = "~/.steampipe/config/aws.spc"
   connections = ["*"]
 }
 ```
@@ -62,7 +64,7 @@ integration "email" "my_email" {
   smtp_tls      = "required"
   smtps_port    = 587
   smtp_host     = "smtp.gmail.com"
-  smtp_username = "cody@turbot.com"
+  smtp_username = "user@company.com"
   smtp_password = env("FLOWPIPE_EMAIL_APP_PW")
 }
 
@@ -77,7 +79,7 @@ For more examples of integrations and notifiers, please see:
 - [Integrations](https://flowpipe.io/docs/reference/config-files/integration)
 - [Notifiers](https://flowpipe.io/docs/reference/config-files/notifier)
 
-Then set the variable values:
+To update your database connection string, search path, or notifier, set the variable values:
 
 ```sh
 cp flowpipe.fpvars.example flowpipe.fpvars
@@ -85,8 +87,13 @@ vi flowpipe.fpvars
 ```
 
 ```hcl
-# Optional
-#database = "postgres://steampipe@localhost:9193/steampipe"
+# Steampipe database connection string
+# Defaults to local Steampipe database
+# You can also set a search path as part of this connection string
+database = "postgresql://steampipe@localhost:9193/steampipe?options=-c%20search_path%3Dput,search,path,here"
+
+# Set the notifier to use for inputs and messages
+# Defaults to the "default" notifier
 notifier = "my_email"
 ```
 
@@ -98,15 +105,7 @@ Start the Steampipe service:
 steampipe service start
 ```
 
-**Note**: Please remember to set `search_path` or `search_path_prefix` in your [Steampipe workspace options](https://steampipe.io/docs/reference/config-files/workspace) to ensure the right connections are queried.
-
-You run the pipeline directly:
-
-```sh
-flowpipe pipeline run deactivate_expired_aws_iam_access_keys_with_approval --host local
-```
-
-Or run it with the Flowpipe server:
+Start the Flowpipe server:
 
 ```sh
 flowpipe server
