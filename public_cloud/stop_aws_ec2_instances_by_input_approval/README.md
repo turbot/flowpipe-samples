@@ -94,7 +94,7 @@ steampipe service start
 Run the mod with the Flowpipe server in one terminal:
 
 ```sh
-flowpipe server
+flowpipe server --verbose
 ```
 
 In another terminal, run the mod:

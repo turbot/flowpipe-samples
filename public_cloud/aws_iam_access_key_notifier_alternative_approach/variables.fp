@@ -12,6 +12,6 @@ variable "schedule" {
 
 variable "notifier" {
   type        = string
-  description = "Notifier to use for alerting. This may be a named notifier (email, slack, etc). Defaults to email."
-  default     = "email"
+  description = "Notifier to use."
+  default     = "default"
 }
