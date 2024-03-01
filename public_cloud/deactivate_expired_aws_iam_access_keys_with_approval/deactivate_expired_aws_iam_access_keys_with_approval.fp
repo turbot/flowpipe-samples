@@ -1,6 +1,6 @@
 trigger "query" "list_expired_iam_access_keys" {
   title       = "List Expired IAM Access Keys"
-  description = "List expired IAM access keys."
+  description = "List IAM access keys older than 90 days."
   database    = var.database
   schedule    = "* * * * *" # Every minute
   primary_key = "access_key_id"
@@ -19,16 +19,16 @@ trigger "query" "list_expired_iam_access_keys" {
   EOQ
 
   capture "insert" {
-    pipeline = pipeline.deactivate_expired_aws_iam_access_keys_with_approval
+    pipeline = pipeline.deactivate_expired_iam_access_keys_with_approval
     args = {
       access_keys = self.inserted_rows
     }
   }
 }
 
-pipeline "deactivate_expired_aws_iam_access_keys_with_approval" {
-  title       = "Deactivate Expired AWS IAM Access Keys with Approval"
-  description = "Deactivate expired AWS IAM access keys with approval."
+pipeline "deactivate_expired_iam_access_keys_with_approval" {
+  title       = "Deactivate Expired IAM Access Keys with Approval"
+  description = "For expired IAM access keys, use row data to deactivate with approval or escalate."
 
   param "access_keys" {
     type        = list
@@ -70,7 +70,7 @@ pipeline "deactivate_iam_access_keys_with_approval" {
     description = "Notifier to use."
   }
 
-  step "input" "prompt_deactivate_expired_aws_iam_access_key" {
+  step "input" "prompt_deactivate_expired_iam_access_key" {
     notifier = notifier[param.notifier]
     subject  = "Request to deactivate expired IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
     prompt   = "Do you want to deactivate IAM access key ${param.access_key.access_key_id} belonging to ${param.access_key.user_name} [${param.access_key.account_id}]?"
@@ -88,8 +88,8 @@ pipeline "deactivate_iam_access_keys_with_approval" {
     }
   }
 
-  step "pipeline" "deactivate_aws_iam_access_key" {
-    if       = step.input.prompt_deactivate_expired_aws_iam_access_key.value == "deactivate"
+  step "pipeline" "deactivate_iam_access_key" {
+    if       = step.input.prompt_deactivate_expired_iam_access_key.value == "deactivate"
     pipeline = aws.pipeline.update_iam_access_key
     args = {
       cred          = param.access_key.conn_name
@@ -100,15 +100,15 @@ pipeline "deactivate_iam_access_keys_with_approval" {
   }
 
   step "message" "notify_iam_access_key_deactivated" {
-    if         = step.input.prompt_deactivate_expired_aws_iam_access_key.value == "deactivate"
-    depends_on = [step.pipeline.deactivate_aws_iam_access_key]
+    if         = step.input.prompt_deactivate_expired_iam_access_key.value == "deactivate"
+    depends_on = [step.pipeline.deactivate_iam_access_key]
 
     notifier = notifier[param.notifier]
     text     = "Deactivated IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
   }
 
   step "message" "alert_iam_access_key_expired" {
-    if = step.input.prompt_deactivate_expired_aws_iam_access_key.value == "escalate"
+    if = step.input.prompt_deactivate_expired_iam_access_key.value == "escalate"
 
     notifier = notifier[param.notifier]
     text     = "IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}] is expired"

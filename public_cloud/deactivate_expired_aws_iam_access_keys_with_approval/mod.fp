@@ -1,6 +1,6 @@
 mod "deactivate_expired_aws_iam_access_keys_with_approval" {
   title         = "Deactivate Expired AWS IAM Access Keys with Approval"
-  description   = "Deactivate AWS IAM access keys that have been created for a certain period of time."
+  description   = "Find expired AWS IAM access keys and deactivate them (with approval) or escalate with a notification."
   documentation = file("./README.md")
   categories    = ["public cloud", "security"]
 

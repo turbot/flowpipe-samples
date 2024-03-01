@@ -1,6 +1,6 @@
 # Deactivate Expired AWS IAM Keys with Approval
 
-Find expired AWS IAM access keys and ask for approval to deactivate or just send a notification.
+Find expired AWS IAM access keys and deactivate them (with approval) or escalate with a notification.
 
 ## Requirements
 
