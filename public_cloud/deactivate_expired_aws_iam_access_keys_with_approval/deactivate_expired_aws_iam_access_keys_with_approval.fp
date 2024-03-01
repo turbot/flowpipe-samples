@@ -79,12 +79,13 @@ pipeline "deactivate_iam_access_keys_with_approval" {
     option "Deactivate" {
       label = "Deactivate"
       value = "deactivate"
-      style = "alert"
+      style = "ok"
     }
 
-    option "Escalate" {
-      label = "Escalate"
-      value = "escalate"
+    option "Active" {
+      label = "Keep expired key active"
+      value = "active"
+      style = "alert"
     }
   }
 
@@ -107,11 +108,11 @@ pipeline "deactivate_iam_access_keys_with_approval" {
     text     = "Deactivated IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
   }
 
-  step "message" "alert_iam_access_key_expired" {
-    if = step.input.prompt_deactivate_expired_iam_access_key.value == "escalate"
+  step "message" "alert_expired_iam_access_key_active" {
+    if = step.input.prompt_deactivate_expired_iam_access_key.value == "active"
 
     notifier = notifier[param.notifier]
-    text     = "IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}] is expired"
+    text     = "Expired IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}] left active against policy"
   }
 
 }
