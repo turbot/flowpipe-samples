@@ -1,10 +1,16 @@
-# Attach AWS Cost Center Tag to S3 Bucket
+# Add S3 Bucket Cost Center Tags
 
-Watches for S3 buckets without cost center tag and notifies through email/slack asking for appropriate value to update.
+Find S3 buckets without the `cost_center` and add the tag with a user selected value.
+
+## Requirements
+
+[Steampipe](https://steampipe.io/downloads) must be installed along with the [AWS plugin](https://hub.steampipe.io/plugins/turbot/aws).
+
+Docker daemon must be installed and running. Please see [Install Docker Engine](https://docs.docker.com/engine/install/) for more information.
 
 ## Installation
 
-Download and install Flowpipe (https://flowpipe.io/downloads). Or use Brew:
+Download and install [Flowpipe](https://flowpipe.io/downloads). Or use Brew:
 
 ```sh
 brew tap turbot/tap
@@ -15,7 +21,7 @@ Clone:
 
 ```sh
 git clone https://github.com/turbot/flowpipe-samples.git
-cd public_cloud/attach_cost_center_tag_to_aws_s3_bucket
+cd public_cloud/add_s3_bucket_cost_center_tags
 ```
 
 [Install mod dependencies](https://flowpipe.io/docs/build/mod-dependencies#mod-dependencies):
@@ -57,14 +63,13 @@ integration "email" "my_email" {
   to            = ["user@company.com"]
   smtp_tls      = "required"
   smtps_port    = 587
-  smtp_host     = "smtp.mydomain.com"
-  smtp_username = "my_user@mydomain.com"
+  smtp_host     = "smtp.gmail.com"
+  smtp_username = "user@company.com"
   smtp_password = env("FLOWPIPE_EMAIL_APP_PW")
 }
-
 notifier "my_email" {
   notify {
-    integration = integration.email.my_email
+    integration = integration.email.email_app
   }
 }
 ```
@@ -73,7 +78,7 @@ For more examples of integrations and notifiers, please see:
 - [Integrations](https://flowpipe.io/docs/reference/config-files/integration)
 - [Notifiers](https://flowpipe.io/docs/reference/config-files/notifier)
 
-Then set the variable values:
+To update your database connection string, search path, or notifier, set the variable values:
 
 ```sh
 cp flowpipe.fpvars.example flowpipe.fpvars
@@ -81,14 +86,13 @@ vi flowpipe.fpvars
 ```
 
 ```hcl
-# Required
-aws_region = "us-east-1"
-
-# Optional
-# database = "postgres://steampipe@localhost:9193/steampipe"
-# schedule = "daily"
-# notifier = "my_email"
-# aws_cred = "default"
+# Steampipe database connection string
+# Defaults to local Steampipe database
+# You can also set a search path as part of this connection string
+database = "postgresql://steampipe@localhost:9193/steampipe?options=-c%20search_path%3Dput,search,path,here"
+# Set the notifier to use for inputs and messages
+# Defaults to the "default" notifier
+notifier = "my_email"
 ```
 
 ## Usage
@@ -99,9 +103,7 @@ Start the Steampipe service:
 steampipe service start
 ```
 
-**Note**: Please remember to set `search_path` or `search_path_prefix` in your [Steampipe workspace options](https://steampipe.io/docs/reference/config-files/workspace) to ensure the right connections are queried.
-
-Run the mod with the Flowpipe server:
+Start the Flowpipe server:
 
 ```sh
 flowpipe server
