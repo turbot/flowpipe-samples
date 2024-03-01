@@ -5,12 +5,13 @@ trigger "query" "attach_cost_center_tag_to_aws_s3_bucket" {
 
   sql = <<EOQ
     select
-      arn
+      distinct(arn)
     from
-      aws_s3_bucket,
-      jsonb_array_elements(tags_src) as tag
+      aws_s3_bucket
+      left join lateral jsonb_array_elements(tags_src) as tag on true
     where
-      tag ->> 'Key' <> 'cost_center';
+      tags_src is null
+      or tag ->> 'Key' <> 'cost_center';
   EOQ
 
   capture "insert" {
