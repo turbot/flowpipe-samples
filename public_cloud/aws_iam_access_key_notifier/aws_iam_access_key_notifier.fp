@@ -19,21 +19,21 @@ trigger "query" "watch_for_iam_access_keys" {
     pipeline = pipeline.inserted_access_keys
 
     args = {
-        access_keys = self.inserted_rows
+      access_keys = self.inserted_rows
     }
   }
   capture "update" {
     pipeline = pipeline.updated_access_keys
 
     args = {
-        access_keys = self.updated_rows
+      access_keys = self.updated_rows
     }
   }
   capture "delete" {
     pipeline = pipeline.deleted_access_keys
 
     args = {
-        access_keys = self.deleted_rows
+      access_keys = self.deleted_rows
     }
   }
 }

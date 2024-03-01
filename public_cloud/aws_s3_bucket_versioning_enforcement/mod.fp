@@ -6,7 +6,7 @@ mod "aws_s3_bucket_versioning_enforcement" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "0.1.0"
+      version = ">=0.1.0"
     }
   }
 }

@@ -81,14 +81,24 @@ vi flowpipe.fpvars
 ```
 
 ```hcl
-# Required
+# AWS Region
 aws_region = "us-east-1"
 
-# Optional
-# database = "postgres://steampipe@localhost:9193/steampipe"
-# schedule = "daily"
-# notifier = "my_email"
+# Set the AWS credentials profile to use
 # aws_cred = "default"
+
+# Steampipe database connection string
+# Defaults to local Steampipe database
+# You can also set a search path as part of this connection string
+# database = "postgresql://steampipe@localhost:9193/steampipe?options=-c%20search_path%3Dput,search,path,here"
+
+# Set the notifier to use for inputs and messages
+# Defaults to the "default" notifier
+notifier = "my_email"
+
+# Set the schedule for the mod to run
+# schedule = "daily"
+
 ```
 
 ## Usage
