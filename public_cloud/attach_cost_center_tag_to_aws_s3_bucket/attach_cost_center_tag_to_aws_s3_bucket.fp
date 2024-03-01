@@ -63,6 +63,6 @@ pipeline "attach_cost_center_tag" {
   step "message" "notifier" {
     notifier = notifier[var.notifier]
     subject  = "Tag Update: ${param.bucket}"
-    body     = "Attached tag {cost_center:${step.input.attach_cost_center_tag.value}} to ${param.bucket}"
+    text     = "Attached tag {cost_center:${step.input.attach_cost_center_tag.value}} to ${param.bucket}"
   }
 }
