@@ -2,12 +2,8 @@ pipeline "deactivate_expired_aws_iam_access_keys_using_query_step" {
   title       = "Deactivate expired AWS IAM access keys Using Query Step"
   description = "Deactivates expired AWS IAM access keys and notifies via email."
 
-  tags = {
-    type = "featured"
-  }
-
   step "query" "list_iam_access_keys" {
-    database = "postgres://steampipe@localhost:9193/steampipe"
+    database = var.database
     sql      = <<-EOQ
       select
         access_key_id,
@@ -32,8 +28,9 @@ pipeline "deactivate_expired_aws_iam_access_keys_using_query_step" {
     }
   }
 
-  step "message" "send_email_message" {
-    notifier = notifier.email_notifier
-    body     = jsonencode(step.query.list_iam_access_keys.rows)
+  step "message" "notifier" {
+    notifier = notifier[var.notifier]
+    subject  = "Deactivated expired AWS IAM Keys"
+    text     = jsonencode(step.query.list_iam_access_keys.rows)
   }
 }

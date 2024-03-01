@@ -4,17 +4,11 @@ Stop AWS EC2 instance based on the input approval.
 
 ## Installation
 
-Download and install Flowpipe (https://flowpipe.io/downloads) and Steampipe (https://steampipe.io/downloads). Or use Brew:
+Download and install Flowpipe (https://flowpipe.io/downloads)
 
 ```sh
-brew tap turbot/tap/flowpipe
-brew tap turbot/tap/steampipe
-```
-
-Install the AWS plugin with [Steampipe](https://steampipe.io):
-
-```sh
-steampipe plugin install aws
+brew tap turbot/tap
+brew install flowpipe
 ```
 
 Clone:
@@ -32,12 +26,29 @@ flowpipe mod install
 
 ## Credentials
 
-This mod uses the credentials configured in the [Steampipe AWS plugin](https://hub.steampipe.io/plugins/turbot/aws).
-
-You need to create `integration` and `notifier` resources in configuration files:
+It is recommended to create a `credential_import` resource to import your AWS connections:
 
 ```sh
-vi ~/.flowpipe/config/slack.fpc
+vi ~/.flowpipe/config/aws.fpc
+```
+
+```hcl
+credential_import "aws" {
+  source      = "~/.steampipe/config/aws.spc"
+  connections = ["*"]
+}
+```
+
+For more information on importing credentials, please see [Credential Import](https://flowpipe.io/docs/reference/config-files/credential-import).
+
+## Configuration
+
+Create a `notifier` resource, which will be used to route inputs and other messages.
+
+For instance:
+
+```sh
+vi ~/.flowpipe/config/integrations.fpc
 ```
 
 ```hcl
@@ -45,7 +56,7 @@ integration "slack" "slack_app" {
   token = env("SLACK_TOKEN")
 }
 
-notifier "slack" {
+notifier "my_slack" {
   notify {
     integration = integration.slack.slack_app
     channel     = "#random"
@@ -53,43 +64,41 @@ notifier "slack" {
 }
 ```
 
-By default, the following environment variables will be used for authentication:
+For more examples of integrations and notifiers, please see:
+- [Integrations](https://flowpipe.io/docs/reference/config-files/integration)
+- [Notifiers](https://flowpipe.io/docs/reference/config-files/notifier)
 
-- `SLACK_TOKEN`
-
-You can also create `credential` resources in configuration files:
+Then set the variable values:
 
 ```sh
-vi ~/.flowpipe/config/slack.fpc
+cp flowpipe.fpvars.example flowpipe.fpvars
+vi flowpipe.fpvars
 ```
 
 ```hcl
-credential "slack" "default" {
-  token = "xoxp-12345-..."
-}
+# Optional
+# database = "postgres://steampipe@localhost:9193/steampipe"
+notifier = "my_slack"
 ```
-
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
 ## Usage
 
-Run the pipeline:
+Start the Steampipe service:
+
+```sh
+steampipe service start
+```
+
+**Note**: Please remember to set `search_path` or `search_path_prefix` in your [Steampipe workspace options](https://steampipe.io/docs/reference/config-files/workspace) to ensure the right connections are queried.
+
+Run the mod with the Flowpipe server in one terminal:
+
+```sh
+flowpipe server
+```
+
+In another terminal, run the mod:
 
 ```sh
 flowpipe pipeline run stop_aws_ec2_instances_by_input_approval
 ```
-
-## Open Source & Contributing
-
-This repository is published under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0). Please see our [code of conduct](https://github.com/turbot/.github/blob/main/CODE_OF_CONDUCT.md). We look forward to collaborating with you!
-
-[Flowpipe](https://flowpipe.io) is a product produced from this open source software, exclusively by [Turbot HQ, Inc](https://turbot.com). It is distributed under our commercial terms. Others are allowed to make their own distribution of the software, but cannot use any of the Turbot trademarks, cloud services, etc. You can learn more in our [Open Source FAQ](https://turbot.com/open-source).
-
-## Get Involved
-
-**[Join #flowpipe on Slack →](https://flowpipe.io/community/join)**
-
-Want to help but not sure where to start? Pick up one of the `help wanted` issues:
-
-- [Flowpipe](https://github.com/turbot/flowpipe/labels/help%20wanted)
-- [Samples Mod](https://github.com/turbot/flowpipe-samples/labels/help%20wanted)

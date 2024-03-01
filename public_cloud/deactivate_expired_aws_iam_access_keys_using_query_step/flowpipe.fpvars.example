@@ -1,0 +1,3 @@
+# Optional
+# database = "postgres://steampipe@localhost:9193/steampipe"
+# notifier = "my_email"

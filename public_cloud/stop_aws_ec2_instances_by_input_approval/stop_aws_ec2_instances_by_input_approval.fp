@@ -3,7 +3,7 @@ pipeline "stop_aws_ec2_instances_by_input_approval" {
   description = "Stop AWS EC2 instance based on the input approval."
 
   step "query" "list_ec2_instances" {
-    database = "postgres://steampipe@localhost:9193/steampipe"
+    database = var.database
     sql      = <<EOQ
     select
       instance_id,
@@ -47,7 +47,7 @@ pipeline "stop_aws_ec2_instances_based_on_approval" {
   }
 
   step "input" "stop_ec2_instances" {
-    notifier = notifier["slack"]
+    notifier = notifier[var.notifier]
     prompt   = "Do you want to stop the EC2 instance: ${param.instance_id}?"
     type     = "button"
 
