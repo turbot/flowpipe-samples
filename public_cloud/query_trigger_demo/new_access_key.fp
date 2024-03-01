@@ -12,7 +12,7 @@ trigger "query" "new_aws_iam_access_key" {
   capture "insert" {
     pipeline = pipeline.notify_new_access_key
     args = {
-      rows = self.inserted_rows
+      keys = self.inserted_rows
     }
   }
 
@@ -21,17 +21,27 @@ trigger "query" "new_aws_iam_access_key" {
 pipeline "notify_new_access_key" {
   description = "Loop over new access keys, send each to notifier."
 
-  param "rows" {
+  param "keys" {
     type = list
   }
 
   step "message" "notify" {
     notifier = notifier["new_access_key"]
-    for_each = param.rows
-    body = "New access key for ${each.value.user_name}, ${each.value.account_id}: ${each.value.access_key_id},  ${each.value.create_date}"
+    for_each = param.keys
+    text = <<EOQ
+      New access key for ${each.value.user_name}, ${each.value.account_id}: 
+      ${each.value.access_key_id},  ${each.value.create_date}
+    EOQ
   }  
   
 }
+
+
+
+
+
+
+
 
 
 /*
