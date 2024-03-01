@@ -108,5 +108,5 @@ steampipe service start
 Start the Flowpipe server:
 
 ```sh
-flowpipe server
+flowpipe server --verbose
 ```
