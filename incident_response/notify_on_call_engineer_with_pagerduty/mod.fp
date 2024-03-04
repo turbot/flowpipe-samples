@@ -9,7 +9,7 @@ mod "notify_on_call_engineer_with_pagerduty" {
       version = "0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "0.1.0"
+      version = "0.2.1"
     }
     mod "github.com/turbot/flowpipe-mod-sendgrid" {
       version = "0.1.0"
