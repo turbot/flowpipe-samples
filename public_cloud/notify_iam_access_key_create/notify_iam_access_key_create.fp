@@ -14,7 +14,7 @@ trigger "query" "new_access_keys" {
 
 
   capture "insert" {
-    pipeline = pipeline.notify_slack_iam_access_key_create
+    pipeline = pipeline.notify_iam_access_key_create
 
     args = {
       rows = self.inserted_rows
@@ -24,7 +24,7 @@ trigger "query" "new_access_keys" {
 
 pipeline "notify_iam_access_key_create" {
   title       = "Notify New IAM Access Key Create"
-  description = "Notify a slack channel or email when a new IAM access key is created."
+  description = "Send a notification when a new IAM access key is created."
 
   param "rows" {
     type = list
