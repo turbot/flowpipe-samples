@@ -6,7 +6,7 @@ mod "deactivate_expired_aws_iam_access_keys_with_approval" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = ">=0.1.0"
+      version = ">=0.1.1"
     }
   }
 

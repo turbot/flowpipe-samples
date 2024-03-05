@@ -50,10 +50,6 @@ pipeline "add_s3_bucket_cost_center_tags" {
     }
   }
 
-  output "buckets_missing_tag" {
-    value = param.buckets
-  }
-
 }
 
 pipeline "add_cost_center_tag_to_s3_bucket" {

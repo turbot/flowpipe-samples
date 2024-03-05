@@ -1,4 +1,4 @@
-# Deactivate expired AWS IAM keys
+# Deactivate Expired AWS IAM Keys
 
 Deactivates expired AWS IAM access keys and notifies via Slack channel.
 

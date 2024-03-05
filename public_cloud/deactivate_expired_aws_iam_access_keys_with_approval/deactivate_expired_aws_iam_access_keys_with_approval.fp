@@ -50,10 +50,6 @@ pipeline "deactivate_expired_iam_access_keys_with_approval" {
     }
   }
 
-  output "expired_access_keys" {
-    value = param.access_keys
-  }
-
 }
 
 pipeline "deactivate_iam_access_keys_with_approval" {
