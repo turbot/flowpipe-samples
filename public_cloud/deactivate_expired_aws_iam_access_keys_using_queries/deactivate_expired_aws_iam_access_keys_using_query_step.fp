@@ -32,7 +32,6 @@ pipeline "deactivate_expired_aws_iam_access_keys_using_query_step" {
         aws_iam_access_key
       where
         create_date < now() - interval '${param.expire_after_days} days'
-        and user_name = 'graza'
         and status = 'Active';
     EOQ
   }

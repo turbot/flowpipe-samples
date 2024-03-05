@@ -107,7 +107,8 @@ pipeline "add_cost_center_tag_to_s3_bucket" {
   }
 
   step "message" "notify_s3_bucket_tagged" {
-    notifier = notifier[param.notifier]
-    text     = "Added cost_center:${step.input.prompt_select_cost_center_tag_value.value} to S3 bucket ${param.bucket.name} [${param.bucket.account_id} ${param.bucket.region}]"
+    depends_on = [step.pipeline.add_tag_to_s3_bucket]
+    notifier   = notifier[param.notifier]
+    text       = "Added tag cost_center:${step.input.prompt_select_cost_center_tag_value.value} to S3 bucket ${param.bucket.name} [${param.bucket.account_id} ${param.bucket.region}]"
   }
 }
