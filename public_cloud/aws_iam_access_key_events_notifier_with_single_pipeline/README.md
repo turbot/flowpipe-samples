@@ -1,4 +1,4 @@
-# Notify AWS IAM Access Key Notifier with a Single Pipeline
+# AWS IAM Access Key Events Notifier with a Single Pipeline
 
 Send notifications for AWS IAM access key create, update, and delete events using a single pipeline that can handle all event types.
 
