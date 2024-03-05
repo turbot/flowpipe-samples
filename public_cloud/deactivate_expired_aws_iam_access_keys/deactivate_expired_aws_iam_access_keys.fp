@@ -23,7 +23,7 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
     description = "Channel, private group, or IM channel to send message to."
   }
 
-  param "aws_expire_after_days" {
+  param "expire_after_days" {
     type        = number
     description = "Number of days after which the access key should be deactivated."
     default     = 90
@@ -45,7 +45,7 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
   step "pipeline" "update_iam_access_key" {
     for_each = flatten([for accessKey in step.pipeline.list_iam_access_keys : accessKey.output.access_keys])
     # Run only if the access key is active and older than specified number of days.
-    if       = each.value.Status == "Active" && timecmp(each.value.CreateDate, timeadd(timestamp(), "-${param.aws_expire_after_days * 24}h")) < 0
+    if       = each.value.Status == "Active" && timecmp(each.value.CreateDate, timeadd(timestamp(), "-${param.expire_after_days * 24}h")) < 0
     pipeline = aws.pipeline.update_iam_access_key
     args = {
       cred          = param.aws_cred
@@ -58,7 +58,7 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
   step "pipeline" "post_message" {
     for_each = flatten([for accessKey in step.pipeline.list_iam_access_keys : accessKey.output.access_keys])
     # Run only if the access key is active and older than specified number of days.
-    if = each.value.Status == "Active" && timecmp(each.value.CreateDate, timeadd(timestamp(), "-${param.aws_expire_after_days * 24}h")) < 0
+    if = each.value.Status == "Active" && timecmp(each.value.CreateDate, timeadd(timestamp(), "-${param.expire_after_days * 24}h")) < 0
 
     pipeline = slack.pipeline.post_message
     args = {

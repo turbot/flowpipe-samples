@@ -1,4 +1,20 @@
-## v0.3 [2024-01-12]
+## v0.4.0 [2024-03-05]
+
+_What's new?_
+
+- Added the following new sample mods: ([#108](https://github.com/turbot/flowpipe-samples/pull/108))
+  - `add_s3_bucket_cost_center_tags`
+  - `aws_iam_access_key_events_notifier_with_multiple_pipelines`
+  - `aws_iam_access_key_events_notifier_with_single_pipeline`
+  - `deactivate_expired_aws_iam_access_keys_using_queries`
+  - `deactivate_expired_aws_iam_access_keys_with_approval`
+  - `notify_new_aws_iam_access_keys`
+
+_Enhancements_
+
+- Updated all AWS, Azure, PagerDuty, Slack, Zendesk library mod dependency versions in several sample mods. ([#108](https://github.com/turbot/flowpipe-samples/pull/108))
+
+## v0.3.0 [2024-01-12]
 
 _What's new?_
 

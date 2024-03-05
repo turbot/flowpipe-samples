@@ -1,0 +1,8 @@
+# Steampipe database connection string
+# Defaults to local Steampipe database
+# You can also set a search path as part of this connection string
+# database = "postgresql://steampipe@localhost:9193/steampipe?options=-c%20search_path%3Dput,search,path,here"
+
+# Set the notifier to use for inputs and messages
+# Defaults to the "default" notifier
+# notifier = "default"

@@ -19,7 +19,7 @@ pipeline "router_pipeline" {
   }
 
   param "request_body" {
-    type        = object
+    type        = object({})
     description = "GitHub event request body."
   }
 
