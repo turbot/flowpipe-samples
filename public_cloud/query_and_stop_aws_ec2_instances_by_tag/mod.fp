@@ -6,7 +6,7 @@ mod "query_and_stop_aws_ec2_instances_by_tag" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "0.1.0"
+      version = ">=0.1.0"
     }
   }
 }

@@ -6,7 +6,7 @@ mod "remediate_aws_guardduty_alerts" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "0.1.0"
+      version = ">=0.1.0"
     }
 
     mod "github.com/turbot/flowpipe-mod-jira" {

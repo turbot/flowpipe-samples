@@ -6,7 +6,7 @@ mod "aws_iam_user_group_membership" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "0.1.0"
+      version = ">=0.1.0"
     }
     mod "github.com/turbot/flowpipe-mod-github" {
       version = "0.1.0"

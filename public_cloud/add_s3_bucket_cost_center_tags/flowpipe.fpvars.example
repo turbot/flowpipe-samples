@@ -1,4 +1,3 @@
-# Optional
 # Steampipe database connection string
 # Defaults to local Steampipe database
 # You can also set a search path as part of this connection string

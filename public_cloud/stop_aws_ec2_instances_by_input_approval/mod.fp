@@ -6,7 +6,7 @@ mod "stop_aws_ec2_instances_by_input_approval" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "0.1.0"
+      version = ">=0.1.0"
     }
   }
 }
