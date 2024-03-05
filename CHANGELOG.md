@@ -1,3 +1,9 @@
+## v0.4.1 [2024-03-05]
+
+_Bug fixes_
+
+- Fixed broken links to credential import docs in various sample READMEs.
+
 ## v0.4.0 [2024-03-05]
 
 _What's new?_
