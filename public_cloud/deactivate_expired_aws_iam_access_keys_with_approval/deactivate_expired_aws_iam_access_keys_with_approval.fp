@@ -43,7 +43,7 @@ pipeline "deactivate_expired_iam_access_keys_with_approval" {
 
   step "pipeline" "deactivate_expired_iam_access_keys" {
     for_each = param.access_keys
-    pipeline = pipeline.deactivate_iam_access_keys_with_approval
+    pipeline = pipeline.deactivate_iam_access_key_with_approval
     args = {
       access_key = each.value
       notifier   = param.notifier
@@ -54,7 +54,7 @@ pipeline "deactivate_expired_iam_access_keys_with_approval" {
 
 pipeline "deactivate_iam_access_key_with_approval" {
   title       = "Deactivate IAM Access Key with Approval"
-  description = "Deactivate IAM access keys with approval or just send a notification."
+  description = "Deactivate IAM access key with approval or just send a notification."
 
   param "access_key" {
     type        = map(string)
