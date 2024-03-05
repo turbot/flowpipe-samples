@@ -1,4 +1,6 @@
 trigger "query" "list_new_iam_access_keys" {
+  title       = "List New IAM Access Keys"
+  description = "List new IAM access keys created in the last 24 hours."
   database    = var.database
   primary_key = "access_key_id"
   schedule    = "* * * * *" # Every minute

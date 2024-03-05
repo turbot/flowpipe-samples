@@ -52,8 +52,8 @@ pipeline "deactivate_expired_iam_access_keys_with_approval" {
 
 }
 
-pipeline "deactivate_iam_access_keys_with_approval" {
-  title       = "Deactivate IAM Access Keys with Approval"
+pipeline "deactivate_iam_access_key_with_approval" {
+  title       = "Deactivate IAM Access Key with Approval"
   description = "Deactivate IAM access keys with approval or just send a notification."
 
   param "access_key" {

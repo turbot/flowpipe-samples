@@ -1,5 +1,5 @@
 pipeline "deactivate_expired_aws_iam_access_keys_using_query_step" {
-  title       = "Deactivate expired AWS IAM access keys Using Query Step"
+  title       = "Deactivate Expired AWS IAM Access Keys Using Query Step"
   description = "Find expired keys using a query step, deactivate them, and send a notification."
 
   param "expire_after_days" {
