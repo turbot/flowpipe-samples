@@ -34,7 +34,7 @@ credential_import "aws" {
 }
 ```
 
-For more information on importing credentials, please see [Credential Import](https://flowpipe.io/docs/reference/config-files/credential-import).
+For more information on importing credentials, please see [Credential Import](https://flowpipe.io/docs/reference/config-files/credential_import).
 
 For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
 
@@ -99,7 +99,3 @@ vi flowpipe.fpvars
 # Defaults to the "default" notifier
 notifier = "my_email"
 ```
-
-For more examples of integrations and notifiers, please see:
-- [Integrations](https://flowpipe.io/docs/reference/config-files/integration)
-- [Notifiers](https://flowpipe.io/docs/reference/config-files/notifier)
