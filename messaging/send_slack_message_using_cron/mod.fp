@@ -6,7 +6,7 @@ mod "send_slack_message_using_cron" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "0.1.0"
+      version = "0.2.1"
     }
   }
 }

@@ -31,7 +31,12 @@ pipeline "lookup_iocs" {
   }
 
   param "iocs" {
-    type        = list(map)
+    type = list(object({
+      id    = string
+      type  = string
+      value = string
+    }))
+
     description = "The iocs to be scanned."
   }
 
