@@ -8,13 +8,20 @@ pipeline "button_example" {
   step "input" "my_input_step" {
     notifier = notifier[param.notifier]
     type   = "button"
-    prompt = "Do you want to approve?"
+    prompt = "Get quote for BTC or ETH?"
 
-    option "Approve" {}
-    option "Deny" {}
+    option "BTCUSDT" {}
+    option "ETHUSDT" {}
   }
 
   output "my_input_step" {
     value = step.input.my_input_step.value
+  }
+
+  step "pipeline" "get_coin_price" {
+    pipeline = pipeline.get_coin_price
+    args = {
+      symbols = [step.input.my_input_step.value]
+    }
   }
 }

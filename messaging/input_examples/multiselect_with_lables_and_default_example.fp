@@ -8,26 +8,30 @@ pipeline "multiselect_with_lables_and_default_example" {
   step "input" "my_input_step" {
     notifier = notifier[param.notifier]
     type     = "multiselect"
-    prompt   = "Select regions:"
+    prompt   = "Get quote for:"
 
-    option "us-east-1" {
-      label     = "N. Virginia"
-      selected  = true
+    option "btc_button" {
+      label = "Bitcoin"
+      value = "BTCUSDT"
     }
-    option "us-east-2" {
-      label     = "Ohio"
-      selected  = true
+    option "eth_button" {
+      label = "Ethereum"
+      value = "ETHUSDT"
     }
-
-    option "us-west-1" {
-      label     = "N. California"
+    option "pepe_button" {
+      label = "Pepe Coin"
+      value = "PEPEUSDT"
     }
-    option "us-west-2" {
-      label     = "Oregon"
+    option "doge_button" {
+      label = "Doge Coin"
+      value = "DOGEUSDT"
     }
   }
 
-  output "my_input_step" {
-    value = step.input.my_input_step.value
+  step "pipeline" "get_coin_price" {
+    pipeline = pipeline.get_coin_price
+    args = {
+      symbols = step.input.my_input_step.value
+    }
   }
 }

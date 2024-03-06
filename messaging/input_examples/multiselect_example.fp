@@ -8,15 +8,18 @@ pipeline "multiselect_example" {
   step "input" "my_input_step" {
     notifier = notifier[param.notifier]
     type     = "multiselect"
-    prompt   = "Select regions:"
+    prompt   = "Get quote for:"
 
-    option "us-east-1" {}
-    option "us-east-2" {}
-    option "us-west-1" {}
-    option "us-west-2" {}
+    option "BTCUSDT" {}
+    option "ETHUSDT" {}
+    option "PEPEUSDT" {}
+    option "DOGEUSDT" {}
   }
 
-  output "my_input_step" {
-    value = step.input.my_input_step.value
+  step "pipeline" "get_coin_price" {
+    pipeline = pipeline.get_coin_price
+    args = {
+      symbols = step.input.my_input_step.value
+    }
   }
 }
