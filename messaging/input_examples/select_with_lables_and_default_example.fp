@@ -1,0 +1,39 @@
+pipeline "select_with_lables_and_default_example" {
+  title = "Select with Labels and Default Example"
+  description = "This pipeline demonstrates how to use a select input step by customizing the labels and values of the options to select. It prompts the user to select a coin and then calls another pipeline to get the price of the selected coin."
+
+  param "notifier" {
+    type = string
+    default = "default"
+  }
+
+  step "input" "my_input_step" {
+    notifier = notifier[param.notifier]
+    type     = "select"
+    prompt   = "Get quote for:"
+
+    option "btc_button" {
+      label = "Bitcoin"
+      value = "BTCUSDT"
+    }
+    option "eth_button" {
+      label = "Ethereum"
+      value = "ETHUSDT"
+    }
+    option "pepe_button" {
+      label = "Pepe Coin"
+      value = "PEPEUSDT"
+    }
+    option "doge_button" {
+      label = "Doge Coin"
+      value = "DOGEUSDT"
+    }
+  }
+
+  step "pipeline" "get_coin_price" {
+    pipeline = pipeline.get_coin_price
+    args = {
+      symbols = [step.input.my_input_step.value]
+    }
+  }
+}
