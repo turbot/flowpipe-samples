@@ -1,4 +1,6 @@
 pipeline "multiselect_example" {
+  title = "Multiselect Example"
+  description = "This pipeline demonstrates how to use the multiselect input type. It prompts the user to select one or more coin and then calls another pipeline to get the price of the selected coins."
 
   param "notifier" {
     type = string

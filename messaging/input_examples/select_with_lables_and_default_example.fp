@@ -1,4 +1,6 @@
 pipeline "select_with_lables_and_default_example" {
+  title = "Select with Labels and Default Example"
+  description = "This pipeline demonstrates how to use a select input step by customizing the labels and values of the options to select. It prompts the user to select a coin and then calls another pipeline to get the price of the selected coin."
 
   param "notifier" {
     type = string

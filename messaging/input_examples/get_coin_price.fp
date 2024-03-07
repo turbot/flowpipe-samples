@@ -1,4 +1,7 @@
 pipeline "get_coin_price" {
+  title = "Get Coin Price"
+  description = "Gets the price of a coin from Binance API"
+
   param "symbols" {
     type = list(string)
   }

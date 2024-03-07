@@ -1,4 +1,6 @@
 pipeline "multiselect_with_lables_and_default_example" {
+  title = "Multiselect with labels and default example"
+  description = "This pipeline demonstrates how to use a multiselect input step with custom labels and a default choice. It prompts the user to select one or more coin and then calls another pipeline to get the price of the selected coins."
 
   param "notifier" {
     type = string

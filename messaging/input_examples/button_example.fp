@@ -1,4 +1,6 @@
 pipeline "button_example" {
+  title = "Button Example"
+  description = "This pipeline demonstrates how to use the button input type. It prompts the user to select a coin and then calls another pipeline to get the price of the selected coin."
 
   param "notifier" {
     type = string
