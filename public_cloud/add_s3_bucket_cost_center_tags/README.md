@@ -46,7 +46,7 @@ Clone:
 
 ```sh
 git clone https://github.com/turbot/flowpipe-samples.git
-cd public_cloud/notify_new_aws_iam_access_keys
+cd public_cloud/add_s3_bucket_cost_center_tags
 ```
 
 ### Usage
