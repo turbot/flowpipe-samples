@@ -3,13 +3,13 @@ pipeline "notify_teams_gitlab_project_visibility" {
   description = "Notify a Microsoft Teams channel when a GitLab's project visibility is changed."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "gitlab_cred" {
-    type        = string
-    description = "Name for GitLab credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "gitlab_conn" {
+    type        = connection.gitlab
+    description = "Name of GitLab connection to use. If not provided, the default GitLab connection will be used."
+    default     = connection.gitlab.default
   }
 
   param "group_id" {
@@ -20,13 +20,12 @@ pipeline "notify_teams_gitlab_project_visibility" {
   param "action_public_to_private" {
     type        = bool
     description = "Pass true to make unapproved public projects to private."
-    default     = false
   }
 
-  param "teams_cred" {
-    type        = string
-    description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "teams_conn" {
+    type        = connection.teams
+    description = "Name of Teams connection to use. If not provided, the default Teams connection will be used."
+    default     = connection.teams.default
   }
 
   param "team_id" {
@@ -43,7 +42,7 @@ pipeline "notify_teams_gitlab_project_visibility" {
     pipeline = gitlab.pipeline.list_group_projects
 
     args = {
-      cred       = param.gitlab_cred
+      conn       = param.gitlab_conn
       group_id   = param.group_id
       visibility = "public"
     }
@@ -58,7 +57,7 @@ pipeline "notify_teams_gitlab_project_visibility" {
     pipeline = gitlab.pipeline.update_project
 
     args = {
-      cred       = param.gitlab_cred
+      conn       = param.gitlab_conn
       visibility = "private"
       project_id = tostring(each.value.id)
     }
@@ -67,7 +66,7 @@ pipeline "notify_teams_gitlab_project_visibility" {
   step "pipeline" "send_message" {
     pipeline = teams.pipeline.send_channel_message
     args = {
-      cred                 = param.teams_cred
+      conn                 = param.teams_conn
       team_id              = param.team_id
       channel_id           = param.teams_channel_id
       message_content_type = "html"

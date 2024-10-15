@@ -6,7 +6,7 @@ mod "list_github_repository_issues_authors" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-github" {
-      version = "0.1.0"
+      version = "0.2.0-rc.2"
     }
   }
 }

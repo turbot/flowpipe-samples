@@ -6,7 +6,7 @@ mod "notify_slack_new_github_release" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "0.2.1"
+      version = "0.3.0-rc.1"
     }
   }
 }

@@ -6,10 +6,10 @@ mod "notify_teams_gitlab_project_visibility" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-gitlab" {
-      version = "0.1.0"
+      version = "0.1.0-rc.1"
     }
     mod "github.com/turbot/flowpipe-mod-teams" {
-      version = "0.1.0"
+      version = "0.1.0-rc.1"
     }
   }
 }
