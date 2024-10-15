@@ -6,7 +6,7 @@ mod "link_jira_issues" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "0.1.0"
+      version = "1.0.0-rc.1"
     }
   }
 }

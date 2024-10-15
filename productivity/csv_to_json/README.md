@@ -24,9 +24,9 @@ cd productivity/csv_to_json
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
-No credentials are required.
+No connections are required.
 
 ## Usage
 
