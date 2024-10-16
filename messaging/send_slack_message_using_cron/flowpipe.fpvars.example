@@ -1,5 +1,5 @@
 # Required
-channel = "CH1234FEW"
+channel = "channel-name"
 text    = "Hello!"
 
 # Optional

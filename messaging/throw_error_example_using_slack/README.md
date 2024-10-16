@@ -24,30 +24,30 @@ cd messaging/throw_error_example_using_slack
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
 - `SLACK_TOKEN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/slack.fpc
 ```
 
 ```hcl
-credential "slack" "default" {
+connection "slack" "default" {
   token = "xoxp-12345-..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 
 Run the pipeline and specify the `channel` pipeline arguments:
 
 ```sh
-flowpipe pipeline run throw_error_example_using_slack --arg channel=C01AABBCCDD
+flowpipe pipeline run throw_error_example_using_slack --arg 'channel=channel-name'
 ```

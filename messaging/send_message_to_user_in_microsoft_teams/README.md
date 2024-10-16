@@ -24,25 +24,25 @@ cd messaging/send_message_to_user_in_microsoft_teams
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
 - `TEAMS_ACCESS_TOKEN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/teams.fpc
 ```
 
 ```hcl
-credential "teams" "default" {
+connection "teams" "default" {
   access_token = "<access_token>"
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 

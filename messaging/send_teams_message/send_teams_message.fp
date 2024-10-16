@@ -6,10 +6,10 @@ pipeline "send_teams_message" {
     type = "featured"
   }
 
-  param "teams_cred" {
-    type        = string
-    description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "teams_conn" {
+    type        = connection.teams
+    description = "Name for Microsoft Teams connections to use. If not provided, the default connection will be used."
+    default     = connection.teams.default
   }
 
   param "teams_team_id" {
@@ -37,7 +37,7 @@ pipeline "send_teams_message" {
   step "pipeline" "send_teams_message" {
     pipeline = teams.pipeline.send_channel_message
     args = {
-      cred                 = param.teams_cred
+      conn                 = param.teams_conn
       team_id              = param.teams_team_id
       channel_id           = param.teams_channel_id
       message              = param.teams_message

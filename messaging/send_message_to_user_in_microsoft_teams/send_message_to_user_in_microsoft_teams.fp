@@ -6,10 +6,10 @@ pipeline "send_message_to_user_in_microsoft_teams" {
     type = "featured"
   }
 
-  param "teams_cred" {
-    type        = string
+  param "teams_conn" {
+    type        = connection.teams
     description = "Name for Microsoft Teams credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+    default     = connection.teams.default
   }
 
   param "to_email" {
