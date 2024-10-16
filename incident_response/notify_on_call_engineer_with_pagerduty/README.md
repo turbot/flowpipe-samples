@@ -24,7 +24,7 @@ cd incident_response/notify_on_call_engineer_with_pagerduty
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
@@ -32,14 +32,14 @@ By default, the following environment variables will be used for authentication:
 - `SENDGRID_API_KEY`
 - `SLACK_TOKEN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/pagerduty.fpc
 ```
 
 ```hcl
-credential "pagerduty" "pagerduty_cred" {
+connection "pagerduty" "pagerduty_cred" {
   api_key = "u+_szhL..."
 }
 ```
@@ -49,7 +49,7 @@ vi ~/.flowpipe/config/sendgrid.fpc
 ```
 
 ```hcl
-credential "sendgrid" "default" {
+connection "sendgrid" "default" {
   api_key = "SG.R6pHsRv..."
 }
 ```
@@ -59,12 +59,12 @@ vi ~/.flowpipe/config/slack.fpc
 ```
 
 ```hcl
-credential "slack" "default" {
+connection "slack" "default" {
   token = "xoxp-12345-..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 
