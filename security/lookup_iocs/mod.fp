@@ -6,16 +6,16 @@ mod "lookup_iocs" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-abuseipdb" {
-      version = "0.1.0"
+      version = "v1.0.0-rc.1"
     }
     mod "github.com/turbot/flowpipe-mod-virustotal" {
-      version = "0.1.0"
+      version = "v1.0.0-rc.1"
     }
     mod "github.com/turbot/flowpipe-mod-urlscan" {
-      version = "0.1.0"
+      version = "v1.0.0-rc.1"
     }
     mod "github.com/turbot/flowpipe-mod-ip2locationio" {
-      version = "0.1.0"
+      version = "v1.0.0-rc.1"
     }
   }
 }
