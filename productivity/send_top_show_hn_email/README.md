@@ -34,25 +34,25 @@ cd productivity/send_top_show_hn_email
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
 - `SENDGRID_API_KEY`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/sendgrid.fpc
 ```
 
 ```hcl
-credential "sendgrid" "default" {
+connection "sendgrid" "default" {
   api_key = "SG.R6pHsRv..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connectionss](https://flowpipe.io/docs/run/credentials).
 
 ## Usage
 

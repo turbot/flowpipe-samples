@@ -10,13 +10,13 @@ pipeline "send_top_show_hn_email" {
   description = "Send an email using SendGrid containing top stories from 'Show HN'."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "sendgrid_cred" {
-    type        = string
-    description = "Name for SendGrid credentials to use. If not provided, the default credentials will be used."
-    default     = var.sendgrid_cred
+  param "sendgrid_conn" {
+    type        = connection.sendgrid
+    description = "Name for SendGrid connections to use. If not provided, the default connection will be used."
+    default     = var.sendgrid_conn
   }
 
   param "hn_story_count" {
@@ -38,7 +38,7 @@ pipeline "send_top_show_hn_email" {
   }
 
   step "query" "list_show_hn_stories" {
-    database = "postgres://steampipe@localhost:9193/steampipe"
+    database = var.database
 
     sql = <<-EOQ
       select
@@ -58,7 +58,7 @@ pipeline "send_top_show_hn_email" {
   step "pipeline" "send_mail" {
     pipeline = sendgrid.pipeline.send_mail
     args = {
-      cred    = param.sendgrid_cred
+      conn    = param.sendgrid_conn
       to      = param.to
       from    = param.from
       subject = "Top ${param.hn_story_count} Show HN stories on ${timestamp()}"
