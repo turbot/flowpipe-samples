@@ -6,11 +6,12 @@ mod "remediate_pagerduty_alert" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-pagerduty" {
-      version = "0.1.1"
+      version = "0.1.1-rc.1"
     }
 
     mod "github.com/turbot/flowpipe-mod-reallyfreegeoip" {
-      version = "0.1.0"
+      version = "0.1.0-rc.1"
     }
   }
 }
+
