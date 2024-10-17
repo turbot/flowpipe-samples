@@ -50,9 +50,15 @@ pipeline "create_iam_access_key_event" {
     description = "Row data for IAM access keys."
   }
 
+  param "notifier" {
+    type        = notifier
+    description = "Notifier to use."
+    default     = var.notifier
+  }
+
   step "message" "notify_iam_access_key_created" {
     for_each = param.access_keys
-    notifier = notifier[var.notifier]
+    notifier = param.notifier
     text     = "New IAM access key ${each.value.access_key_id} for ${each.value.user_name} [${each.value.account_id}] created at ${each.value.create_date}"
   }
 }
@@ -66,9 +72,15 @@ pipeline "update_iam_access_key_event" {
     description = "Row data for IAM access keys."
   }
 
+  param "notifier" {
+    type        = notifier
+    description = "Notifier to use."
+    default     = var.notifier
+  }
+
   step "message" "notify_iam_access_key_updated" {
     for_each = param.access_keys
-    notifier = notifier[var.notifier]
+    notifier = param.notifier
     text     = "Access key ${each.value.access_key_id} for ${each.value.user_name} [${each.value.account_id}] status is now ${each.value.status}"
   }
 }
@@ -82,9 +94,15 @@ pipeline "delete_iam_access_key_event" {
     description = "Row data for IAM access keys."
   }
 
+  param "notifier" {
+    type        = notifier
+    description = "Notifier to use."
+    default     = var.notifier
+  }
+
   step "message" "notify_iam_access_key_deleted" {
     for_each = param.access_keys
-    notifier = notifier[var.notifier]
+    notifier = param.notifier
     text     = "IAM access key ${each.value} has been deleted"
   }
 }

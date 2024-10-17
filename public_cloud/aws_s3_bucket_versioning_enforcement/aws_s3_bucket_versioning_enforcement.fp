@@ -62,7 +62,7 @@ pipeline "versioning_enforcement" {
     pipeline  = aws.pipeline.put_s3_bucket_versioning
     args = {
       region      = var.aws_region
-      cred        = var.aws_cred
+      conn        = var.aws_conn
       bucket      = param.bucket
       versioning  = true
     }
@@ -73,7 +73,7 @@ pipeline "versioning_enforcement" {
     pipeline = aws.pipeline.delete_s3_bucket
     args = {
       region = var.aws_region
-      cred   = var.aws_cred
+      conn   = var.aws_conn
       bucket = param.bucket
     }
   }

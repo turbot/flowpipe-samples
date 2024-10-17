@@ -2,14 +2,14 @@ mod "aws_iam_user_group_membership" {
   title         = "AWS IAM User Group Membership"
   description   = "Create or Update a GitHub issue if an AWS IAM User belongs to multiple groups."
   documentation = file("./README.md")
-  categories    = ["public cloud"]
+  categories    = ["public cloud", "sample"]
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = ">=0.1.1"
+      version = "1.0.0-rc.6"
     }
     mod "github.com/turbot/flowpipe-mod-github" {
-      version = "0.1.0"
+      version = "1.0.0-rc.0"
     }
   }
 }
