@@ -6,7 +6,7 @@ mod "send_message_to_user_in_microsoft_teams" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-teams" {
-      version = "0.1.0"
+      version = "1.0.0-rc-1.1"
     }
   }
 }
