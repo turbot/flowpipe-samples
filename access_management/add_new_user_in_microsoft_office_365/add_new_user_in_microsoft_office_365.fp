@@ -3,13 +3,13 @@ pipeline "add_new_user_in_microsoft_office_365" {
   description = "Add a new user in Microsoft Office 365."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "jira_cred" {
-    type        = string
-    description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "jira_conn" {
+    type        = connection.jira
+    description = "Name of Jira connection to use. If not provided, the default Jira connection will be used."
+    default     = connection.jira.default
   }
 
   param "jira_project_key" {
@@ -17,10 +17,15 @@ pipeline "add_new_user_in_microsoft_office_365" {
     description = "The key identifying the Jira project."
   }
 
-  param "teams_cred" {
+  param "jira_issue_type" {
     type        = string
-    description = "Name for Teams credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+    description = "The issue type the Jira project."
+  }
+
+  param "teams_conn" {
+    type        = connection.teams
+    description = "Name of Teams connection to use. If not provided, the default Teams connection will be used."
+    default     = connection.teams.default
   }
 
   param "teams_display_name" {
@@ -48,6 +53,16 @@ pipeline "add_new_user_in_microsoft_office_365" {
     description = "The password for the user."
   }
 
+  param "teams_chat_type" {
+    type        = string
+    description = "Specifies the type of chat."
+  }
+
+  param "teams_message_content_type" {
+    type        = string
+    description = "The type of the content. Possible values are text and html."
+  }
+
   param "teams_license_sku_ids" {
     type        = list(string)
     description = "The unique identifier for the available licenses."
@@ -60,7 +75,6 @@ pipeline "add_new_user_in_microsoft_office_365" {
 
   param "teams_roles" {
     type        = list(string)
-    default     = ["member"] // or "owner" or other applicable roles
     description = "The roles for the user."
   }
 
@@ -73,7 +87,7 @@ pipeline "add_new_user_in_microsoft_office_365" {
   step "pipeline" "create_user" {
     pipeline = teams.pipeline.create_user
     args = {
-      cred                = param.teams_cred
+      conn                = param.teams_conn
       password            = param.teams_password
       user_principal_name = param.teams_user_principal_name
       mail_nickname       = param.teams_mail_nickname
@@ -87,7 +101,7 @@ pipeline "add_new_user_in_microsoft_office_365" {
     depends_on = [step.pipeline.create_user]
     pipeline   = teams.pipeline.assign_licenses_to_user
     args = {
-      cred    = param.teams_cred
+      conn    = param.teams_conn
       sku_ids = param.teams_license_sku_ids
       user_id = param.teams_user_principal_name
     }
@@ -95,14 +109,14 @@ pipeline "add_new_user_in_microsoft_office_365" {
 
   # Create JIRA issue
   step "pipeline" "create_issue" {
-    depends_on = [step.pipeline.assign_licenses_to_user]
+    depends_on = [step.pipeline.create_user]
     pipeline   = jira.pipeline.create_issue
     args = {
-      cred        = param.jira_cred
+      conn        = param.jira_conn
       project_key = param.jira_project_key
       summary     = "Add a new user: ${step.pipeline.create_user.output.user.userPrincipalName}"
       description = jsonencode(step.pipeline.create_user.output.user)
-      issue_type  = "New Feature"
+      issue_type  = param.jira_issue_type
     }
   }
 
@@ -111,7 +125,7 @@ pipeline "add_new_user_in_microsoft_office_365" {
     depends_on = [step.pipeline.create_issue]
     pipeline   = teams.pipeline.add_team_member
     args = {
-      cred    = param.teams_cred
+      conn    = param.teams_conn
       team_id = param.teams_team_id
       user_id = param.teams_user_principal_name
       roles   = param.teams_roles
@@ -123,8 +137,8 @@ pipeline "add_new_user_in_microsoft_office_365" {
     depends_on = [step.pipeline.add_team_member]
     pipeline   = teams.pipeline.create_chat
     args = {
-      cred      = param.teams_cred
-      chat_type = "oneOnOne"
+      conn      = param.teams_conn
+      chat_type = param.teams_chat_type
       user_ids  = ["${param.teams_user_principal_name}"]
     }
   }
@@ -134,9 +148,10 @@ pipeline "add_new_user_in_microsoft_office_365" {
     depends_on = [step.pipeline.create_chat]
     pipeline   = teams.pipeline.send_chat_message
     args = {
-      cred    = param.teams_cred
-      chat_id = step.pipeline.create_chat.output.chat.id
-      message = param.teams_message
+      conn                 = param.teams_conn
+      chat_id              = step.pipeline.create_chat.output.chat.id
+      message              = param.teams_message
+      message_content_type = param.teams_message_content_type
     }
   }
 }

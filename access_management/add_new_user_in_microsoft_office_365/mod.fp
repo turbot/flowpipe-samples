@@ -6,11 +6,11 @@ mod "add_new_user_in_microsoft_office_365" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-teams" {
-      version = "0.1.0"
+      version = "1.0.0-rc-1.1"
     }
 
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "0.1.0"
+      version = "1.0.0-rc.1"
     }
   }
 }
