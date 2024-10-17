@@ -24,30 +24,30 @@ cd messaging/send_discord_message
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
 - `DISCORD_TOKEN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/discord.fpc
 ```
 
 ```hcl
-credential "discord" "default" {
+connection "discord" "default" {
   token = "xoxp-12345-..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 
 Run the pipeline and specify the `discord_channel_id` and `discord_message` pipeline arguments:
 
 ```sh
-flowpipe pipeline run send_discord_message --arg 'discord_channel_id=my-channel' --arg 'discord_message=Hello world!'
+flowpipe pipeline run send_discord_message --arg 'discord_channel_id=1162602104318332928' --arg 'discord_message=Hello world'
 ```

@@ -6,7 +6,7 @@ mod "send_teams_message" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-teams" {
-      version = "0.1.0"
+      version = "1.0.0-rc-1.1"
     }
   }
 }
