@@ -8,16 +8,16 @@ trigger "schedule" "deallocate_and_delete_unapproved_azure_vms" {
 
 pipeline "deallocate_and_delete_unapproved_azure_vms" {
 
-  param "azure_cred" {
-    type        = string
-    description = "Name for Azure credentials to use. If not provided, the default credentials will be used."
-    default     = var.azure_cred
+  param "azure_conn" {
+    type        = connection.azure
+    description = "Name for Azure connections to use. If not provided, the default connection will be used."
+    default     = var.azure_conn
   }
 
-  param "zendesk_cred" {
-    type        = string
-    description = "Name for Zendesk credentials to use. If not provided, the default credentials will be used."
-    default     = var.zendesk_cred
+  param "zendesk_conn" {
+    type        = connection.zendesk
+    description = "Name for Zendesk connections to use. If not provided, the default connection will be used."
+    default     = var.zendesk_conn
   }
 
   param "subscription_id" {
@@ -42,7 +42,7 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
   step "pipeline" "list_azure_vms" {
     pipeline = azure.pipeline.list_compute_virtual_machines
     args = {
-      cred            = param.azure_cred
+      conn            = param.azure_conn
       subscription_id = param.subscription_id
       resource_group  = param.resource_group
       query           = param.tags_query
@@ -60,7 +60,7 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     for_each = { for name in step.pipeline.list_azure_vms.output.stdout : name => name }
     pipeline = azure.pipeline.get_compute_virtual_machine_instance_view
     args = {
-      cred            = param.azure_cred
+      conn            = param.azure_conn
       subscription_id = param.subscription_id
       resource_group  = param.resource_group
       vm_name         = each.value
@@ -75,7 +75,7 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     }
     pipeline = azure.pipeline.deallocate_compute_virtual_machine
     args = {
-      cred            = param.azure_cred
+      conn            = param.azure_conn
       subscription_id = param.subscription_id
       resource_group  = param.resource_group
       vm_name         = each.key
@@ -89,7 +89,7 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     }
     pipeline = azure.pipeline.delete_compute_virtual_machine
     args = {
-      cred            = param.azure_cred
+      conn            = param.azure_conn
       subscription_id = param.subscription_id
       resource_group  = param.resource_group
       vm_name         = each.key
@@ -104,7 +104,7 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
     depends_on = [step.pipeline.delete_instances]
     pipeline   = zendesk.pipeline.create_ticket
     args = {
-      cred    = param.zendesk_cred
+      conn    = param.zendesk_conn
       subject = "Unapproved Azure VM Deleted"
       comment = ({
         body   = "Unapproved Azure VM Deleted\nSubscriptionId: ${param.subscription_id}\nResourceGroup: ${param.resource_group}\nName: ${each.key}\n",

@@ -6,16 +6,16 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
     type = "featured"
   }
 
-  param "aws_cred" {
-    type        = string
-    description = "Name for AWS credentials to use. If not provided, the default credentials will be used."
-    default     = var.aws_cred
+  param "aws_conn" {
+    type        = connection.aws
+    description = "Name for AWS connections to use. If not provided, the default connection will be used."
+    default     = var.aws_conn
   }
 
-  param "slack_cred" {
-    type        = string
-    description = "Name for Slack credentials to use. If not provided, the default credentials will be used."
-    default     = var.slack_cred
+  param "slack_conn" {
+    type        = connection.slak
+    description = "Name for Slack connections to use. If not provided, the default connection will be used."
+    default     = var.slack_conn
   }
 
   param "slack_channel" {
@@ -37,7 +37,7 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
     for_each = { for user in step.pipeline.list_iam_users.output.users : user.UserName => user.UserName }
     pipeline = aws.pipeline.list_iam_access_keys
     args = {
-      cred      = param.aws_cred
+      conn      = param.aws_conn
       user_name = each.value
     }
   }
@@ -48,7 +48,7 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
     if       = each.value.Status == "Active" && timecmp(each.value.CreateDate, timeadd(timestamp(), "-${param.expire_after_days * 24}h")) < 0
     pipeline = aws.pipeline.update_iam_access_key
     args = {
-      cred          = param.aws_cred
+      conn          = param.aws_conn
       user_name     = each.value.UserName
       access_key_id = each.value.AccessKeyId
       status        = "Inactive"
@@ -62,7 +62,7 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
 
     pipeline = slack.pipeline.post_message
     args = {
-      cred    = param.slack_cred
+      conn    = param.slack_conn
       channel = param.slack_channel
       text    = "The access key ${each.value.AccessKeyId} for user ${each.value.UserName} has been deactivated."
     }
