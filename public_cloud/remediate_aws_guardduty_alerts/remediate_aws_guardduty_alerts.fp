@@ -16,10 +16,10 @@ pipeline "remediate_aws_guardduty_alerts" {
     type = "featured"
   }
 
-  param "jira_cred" {
-    type        = string
-    description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
-    default     = var.jira_cred
+  param "jira_conn" {
+    type        = connection.jira
+    description = "Name for Jira connections to use. If not provided, the default connection will be used."
+    default     = var.jira_conn
   }
 
   param "jira_issue_type" {
@@ -42,7 +42,7 @@ pipeline "remediate_aws_guardduty_alerts" {
     if       = jsondecode(param.alert).detail.type == "Policy:S3/BucketBlockPublicAccessDisabled"
     pipeline = jira.pipeline.create_issue
     args = {
-      cred        = param.jira_cred
+      conn        = param.jira_conn
       project_key = param.jira_project_key
       summary     = "Block ${jsondecode(param.alert).detail.resource.s3BucketDetails[0].name} S3 bucket public access."
       issue_type  = param.jira_issue_type
@@ -63,7 +63,7 @@ pipeline "remediate_aws_guardduty_alerts" {
     if       = jsondecode(param.alert).detail.type == "UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.InsideAWS"
     pipeline = jira.pipeline.create_issue
     args = {
-      cred        = param.jira_cred
+      conn        = param.jira_conn
       project_key = param.jira_project_key
       summary     = "Disasscociate ${jsondecode(param.alert).detail.resource.instanceDetails.instanceId} IAM role."
       issue_type  = param.jira_issue_type
@@ -76,7 +76,7 @@ pipeline "remediate_aws_guardduty_alerts" {
     pipeline   = pipeline.disassociate_iam_instance_profile_actions
     args = {
       aws_instance_id = jsondecode(param.alert).detail.resource.instanceDetails.instanceId
-      jira_issue_id    = step.pipeline.create_disassociate_iam_instance_profile_issue.output.issue.id
+      jira_issue_id   = step.pipeline.create_disassociate_iam_instance_profile_issue.output.issue.id
     }
   }
 

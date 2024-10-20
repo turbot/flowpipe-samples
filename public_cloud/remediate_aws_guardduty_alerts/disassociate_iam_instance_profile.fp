@@ -1,15 +1,15 @@
 pipeline "disassociate_iam_instance_profile_actions" {
 
-  param "jira_cred" {
-    type        = string
-    description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
-    default     = var.jira_cred
+  param "jira_conn" {
+    type        = connection.jira
+    description = "Name for Jira connections to use. If not provided, the default connection will be used."
+    default     = var.jira_conn
   }
 
-  param "aws_cred" {
-    type        = string
-    description = "Name for AWS credentials to use. If not provided, the default credentials will be used."
-    default     = var.aws_cred
+  param "aws_conn" {
+    type        = connection.aws
+    description = "Name for AWS connections to use. If not provided, the default connection will be used."
+    default     = var.aws_conn
   }
 
   param "jira_issue_id" {
@@ -31,7 +31,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
   step "pipeline" "describe_iam_instance_profile_associations" {
     pipeline = aws.pipeline.describe_iam_instance_profile_associations
     args = {
-      cred        = param.aws_cred
+      conn        = param.aws_conn
       region      = param.aws_region
       instance_id = param.aws_instance_id
     }
@@ -42,7 +42,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
     for_each   = step.pipeline.describe_iam_instance_profile_associations.output.iam_instance_profile_associations != null ? { for each_association in step.pipeline.describe_iam_instance_profile_associations.output.iam_instance_profile_associations : each_association.InstanceId => each_association.AssociationId } : tomap({})
     pipeline   = aws.pipeline.disassociate_iam_instance_profile
     args = {
-      cred           = param.aws_cred
+      conn           = param.aws_conn
       region         = param.aws_region
       association_id = each.value
     }
@@ -52,7 +52,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
     depends_on = [step.pipeline.disassociate_iam_instance_profile]
     pipeline   = jira.pipeline.add_comment
     args = {
-      cred         = param.jira_cred
+      conn         = param.jira_conn
       issue_id     = param.jira_issue_id
       comment_text = "Disassociated IAM Instance Profile from ${param.aws_instance_id}."
     }
@@ -62,7 +62,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
     depends_on = [step.pipeline.add_comment]
     pipeline   = jira.pipeline.get_issue_transitions
     args = {
-      cred      = param.jira_cred
+      conn      = param.jira_conn
       issue_key = param.jira_issue_id
     }
   }
@@ -71,7 +71,7 @@ pipeline "disassociate_iam_instance_profile_actions" {
     depends_on = [step.pipeline.get_issue_transitions]
     pipeline   = jira.pipeline.transition_issue
     args = {
-      cred          = param.jira_cred
+      conn          = param.jira_conn
       issue_id      = param.jira_issue_id
       transition_id = tonumber([for transition in step.pipeline.get_issue_transitions.output.transitions : transition.id if transition.name == "Done"][0])
     }
