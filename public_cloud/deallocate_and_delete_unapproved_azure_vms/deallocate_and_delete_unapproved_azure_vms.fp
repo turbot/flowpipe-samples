@@ -50,14 +50,14 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
 
     # When there are no VMs, exit the pipeline.
     throw {
-      if      = result.output.stdout == ""
+      if      = result.output.virtual_machines == ""
       message = "There are no VMs matching the desired tags. Exiting the pipeline."
     }
   }
 
   # For list of VMs with required Tags, get the instance status of each VM.
   step "pipeline" "get_compute_virtual_machine_instance_view" {
-    for_each = { for name in step.pipeline.list_azure_vms.output.stdout : name => name }
+    for_each = { for name in step.pipeline.list_azure_vms.output.virtual_machines : name => name }
     pipeline = azure.pipeline.get_compute_virtual_machine_instance_view
     args = {
       conn            = param.azure_conn
@@ -70,8 +70,8 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
 
   # For list of VMs with required Tags, NOT added to approved list and in running state, then deallocate the VMs.
   step "pipeline" "deallocate_instances" {
-    for_each = { for vm_name, vm_status in step.pipeline.get_compute_virtual_machine_instance_view : vm_name => vm_status.output.stdout
-      if vm_status.output.stdout.displayStatus == "VM running" && !contains(local.approved_vm_names, vm_name)
+    for_each = { for vm_name, vm_status in step.pipeline.get_compute_virtual_machine_instance_view : vm_name => vm_status.output.instance_view
+      if vm_status.output.instance_view.displayStatus == "VM running" && !contains(local.approved_vm_names, vm_name)
     }
     pipeline = azure.pipeline.deallocate_compute_virtual_machine
     args = {
@@ -84,9 +84,8 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
 
   # For list of VMs with required Tags, NOT added to approved list and in deallocated or stopped state, then delete the VMs.
   step "pipeline" "delete_instances" {
-    for_each = { for vm_name, vm_status in step.pipeline.get_compute_virtual_machine_instance_view : vm_name => vm_status.output.stdout
-      if(vm_status.output.stdout.displayStatus == "VM deallocated" || vm_status.output.stdout.displayStatus == "VM stopped") && !contains(local.approved_vm_names, vm_name)
-    }
+    for_each = { for vm_name, vm_status in step.pipeline.get_compute_virtual_machine_instance_view : vm_name => vm_status.output.instance_view}
+    depends_on = [step.pipeline.deallocate_instances]
     pipeline = azure.pipeline.delete_compute_virtual_machine
     args = {
       conn            = param.azure_conn
@@ -98,9 +97,7 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
 
   # For list of VMs with required Tags, NOT added to approved list and are deleted, create a Zendesk ticket.
   step "pipeline" "zendesk_create_ticket" {
-    for_each = { for vm_name, vm_status in step.pipeline.get_compute_virtual_machine_instance_view : vm_name => vm_status.output.stdout
-      if(vm_status.output.stdout.displayStatus == "VM deallocated" || vm_status.output.stdout.displayStatus == "VM stopped") && !contains(local.approved_vm_names, vm_name)
-    }
+    for_each = { for vm_name, vm_status in step.pipeline.get_compute_virtual_machine_instance_view : vm_name => vm_status.output.instance_view}
     depends_on = [step.pipeline.delete_instances]
     pipeline   = zendesk.pipeline.create_ticket
     args = {
@@ -115,22 +112,22 @@ pipeline "deallocate_and_delete_unapproved_azure_vms" {
 
   output "vms_with_tag" {
     description = "List of Azure VMs with the desired tags."
-    value       = step.pipeline.list_azure_vms.output.stdout
+    value       = step.pipeline.list_azure_vms.output.virtual_machines
   }
 
   output "vm_statuses" {
     description = "List of Azure VMs with their instance status."
-    value       = { for vm_name, vm_status in step.pipeline.get_compute_virtual_machine_instance_view : vm_name => vm_status.output.stdout }
+    value       = { for vm_name, vm_status in step.pipeline.get_compute_virtual_machine_instance_view : vm_name => vm_status.output.instance_view }
   }
 
   output "deallocated_vms" {
     description = "List of Azure VMs that are deallocated."
-    value       = { for vm_name, vm_deallocation in step.pipeline.deallocate_instances : vm_name => "${vm_name} deallocated" if vm_deallocation.output.stdout == "" }
+    value       = { for vm_name, vm_deallocation in step.pipeline.deallocate_instances : vm_name => "${vm_name} deallocated" if(!is_error(step.pipeline.delete_instances)) }
   }
 
   output "deleted_vms" {
     description = "List of Azure VMs that are deleted."
-    value       = { for vm_name, vm_deletion in step.pipeline.delete_instances : vm_name => "${vm_name} deleted" if vm_deletion.output.stdout == "" }
+    value       = { for vm_name, vm_deletion in step.pipeline.delete_instances : vm_name => "${vm_name} deleted" if(!is_error(step.pipeline.delete_instances))}
   }
 
   output "zendesk_tickets" {
