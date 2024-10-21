@@ -24,7 +24,7 @@ cd monitoring/http_list_pagination
 flowpipe mod install
 ```
 
-### Credentials
+### Connections
 
 No credentials are required.
 
