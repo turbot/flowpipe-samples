@@ -28,7 +28,7 @@ cd security/lookup_iocs
 flowpipe mod install
 ```
 
-### Credentials
+### Connections
 
 By default, the following environment variables will be used for authentication:
 
@@ -37,37 +37,37 @@ By default, the following environment variables will be used for authentication:
 - `URLSCAN_API_KEY`
 - `IP2LOCATIONIO_API_KEY`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
-vi creds.fpc
+vi ~/.flowpipe/config/connections.fpc
 ```
 
 ```hcl
-credential "abuseipdb" "abuseipdb_api_key" {
+connection "abuseipdb" "abuseipdb_api_key" {
   api_key = "bfc6f1c42dsfsdfdxxxx26977977b2xxxsfsdda98f313c3d389126de0d"
 }
 ```
 
 ```hcl
-credential "virustotal" "my_virustotal" {
+connection "virustotal" "my_virustotal" {
   api_key = "AG.U7..."
 }
 ```
 
 ```hcl
-credential "urlscan" "my_urlscan" {
+connection "urlscan" "my_urlscan" {
   api_key = "AKIA...2"
 }
 ```
 
 ```hcl
-credential "ip2locationio" "my_ip2locationio" {
+connection "ip2locationio" "my_ip2locationio" {
   token = "00B630jSCGU4jV4o5Yh4KQMAdqizwE2OgVcS7N9UHb"
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 
