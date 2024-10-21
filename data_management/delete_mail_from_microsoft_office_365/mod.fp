@@ -6,7 +6,7 @@ mod "delete_mail_from_microsoft_office_365" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-teams" {
-      version = "0.1.0"
+      version = "1.0.0-rc.4"
     }
   }
 }
