@@ -6,10 +6,10 @@ pipeline "invite_organization_member_by_email" {
     type = "featured"
   }
 
-  param "pipes_cred" {
-    type        = string
-    description = "Name for Pipes credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "conn" {
+    type        = connection.pipes
+    description = "Name of Pipes connection to use. If not provided, the default Pipes connection will be used."
+    default     = connection.pipes.default
   }
 
   param "organization_handle" {
@@ -36,7 +36,7 @@ pipeline "invite_organization_member_by_email" {
   step "pipeline" "invite_organization_member_by_email" {
     pipeline = pipes.pipeline.invite_organization_member_by_email
     args = {
-      cred       = param.pipes_cred
+      conn       = param.conn
       org_handle = param.organization_handle
       role       = param.role
       email      = param.email
