@@ -11,16 +11,16 @@ pipeline "enable_entra_id_user" {
   title       = "Enable Entra ID User"
   description = "Enable user from Entra ID based on approval status."
 
-  param "azure_cred" {
-    type        = string
-    description = "Name for Azure credentials to use. If not provided, the default credentials will be used."
-    default     = var.azure_cred
+  param "azure_conn" {
+    type        = connection.azure
+    description = "Name of Azure connection to use. If not provided, the default Azure connection will be used."
+    default     = connection.azure.default
   }
 
-  param "jira_cred" {
-    type        = string
-    description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
-    default     = var.jira_cred
+  param "jira_conn" {
+    type        = connection.jira
+    description = "Name of Jira connection to use. If not provided, the default Jira connection will be used."
+    default     = connection.jira.default
   }
 
   param "project_key" {
@@ -32,7 +32,7 @@ pipeline "enable_entra_id_user" {
   step "pipeline" "list_issues" {
     pipeline = jira.pipeline.list_issues
     args = {
-      cred        = param.jira_cred
+      conn        = param.jira_conn
       project_key = param.project_key
     }
   }
@@ -43,7 +43,7 @@ pipeline "enable_entra_id_user" {
 
     pipeline = entra.pipeline.update_user
     args = {
-      cred            = param.azure_cred
+      conn            = param.azure_conn
       user_id         = split(" ", each.value.fields.summary)[1]
       account_enabled = split(" ", lower(each.value.fields.summary))[0] == "enable" ? "true" : "true"
     }

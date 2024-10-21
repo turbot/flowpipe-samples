@@ -30,7 +30,7 @@ cd public_cloud/offboard_entra_id_users
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
@@ -41,14 +41,14 @@ By default, the following environment variables will be used for authentication:
 - `JIRA_URL`
 - `JIRA_USER`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/azure.fpc
 ```
 
 ```hcl
-credential "azure" "default" {
+connection "azure" "default" {
   client_id     = "<your client id>"
   client_secret = "<your client secret>"
   tenant_id     = "<your tenant id>"
@@ -60,14 +60,14 @@ vi ~/.flowpipe/config/jira.fpc
 ```
 
 ```hcl
-credential "jira" "default" {
+connection "jira" "default" {
   base_url    = "https://test.atlassian.net/"
   api_token   = "ATATT3........."
   username    = "abc@email.com"
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 
@@ -99,6 +99,6 @@ vi flowpipe.fpvars
 project_key    = "project-foo"
 
 # Optional
-# jira_cred = "non_default_cred"
-# azure_cred = "non_default_cred"
+# jira_conn = "non_default_conn"
+# azure_conn = "non_default_conn"
 ```
