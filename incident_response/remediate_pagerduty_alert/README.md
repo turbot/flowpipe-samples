@@ -26,25 +26,25 @@ cd incident_response/remediate_pagerduty_alert
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
 - `PAGERDUTY_TOKEN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/pagerduty.fpc
 ```
 
 ```hcl
-credential "pagerduty" "pagerduty_cred" {
+connection "pagerduty" "default" {
   api_key = "u+_szhL..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 

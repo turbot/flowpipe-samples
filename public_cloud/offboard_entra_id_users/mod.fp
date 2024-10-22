@@ -5,11 +5,14 @@ mod "offboard_entra_id_users" {
   categories    = ["public cloud"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-entra" {
-      version = "0.1.0"
+      version = "^1"
     }
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "0.1.0"
+      version = "^1"
     }
   }
 }

@@ -2,10 +2,10 @@ pipeline "pagerduty_incident_acknowledged" {
   title       = "PagerDuty Incident Acknowledged"
   description = "Takes remediation action for PagerDuty incident 'acknowledged'."
 
-  param "pagerduty_cred" {
-    type        = string
-    description = "Name for PagerDuty credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "pagerduty_conn" {
+    type        = connection.pagerduty
+    description = "Name of PagerDuty connection to use. If not provided, the default PagerDuty connection will be used."
+    default     = connection.pagerduty.default
   }
 
   param "incident_id" {
@@ -17,7 +17,7 @@ pipeline "pagerduty_incident_acknowledged" {
   step "pipeline" "get_current_user" {
     pipeline = pagerduty.pipeline.get_current_user
     args = {
-      cred = param.pagerduty_cred
+      conn = param.pagerduty_conn
     }
   }
 
@@ -27,7 +27,7 @@ pipeline "pagerduty_incident_acknowledged" {
 
     pipeline = pagerduty.pipeline.create_status_update_on_incident
     args = {
-      cred        = param.pagerduty_cred
+      conn = param.pagerduty_conn
       from        = step.pipeline.get_current_user.output.user.email
       incident_id = param.incident_id
       message     = "Acknowledged"
@@ -40,7 +40,7 @@ pipeline "pagerduty_incident_acknowledged" {
 
     pipeline = pagerduty.pipeline.create_note_on_incident
     args = {
-      cred        = param.pagerduty_cred
+      conn = param.pagerduty_conn
       from        = step.pipeline.get_current_user.output.user.email
       incident_id = param.incident_id
       content     = "The incident is acknowledged by ${step.pipeline.get_current_user.output.user.name}"

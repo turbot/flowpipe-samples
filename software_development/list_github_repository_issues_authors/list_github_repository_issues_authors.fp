@@ -2,10 +2,10 @@ pipeline "list_github_repository_issues_authors" {
   title       = "List GitHub Repository Issues Authors"
   description = "Lists the authors of the issues in a GitHub repository."
 
-  param "github_cred" {
-    type        = string
-    description = "Name for GitHub credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "conn" {
+    type        = connection.github
+    description = "Name of Github connection to use. If not provided, the default Github connection will be used."
+    default     = connection.github.default
   }
 
   param "repository_owner" {
@@ -18,12 +18,18 @@ pipeline "list_github_repository_issues_authors" {
     description = "The name of the repository."
   }
 
+  param "issue_state" {
+    type        = string
+    description = "The possible states of an issue. Allowed values are OPEN and CLOSED."
+  }
+
   step "pipeline" "list_issues" {
     pipeline = github.pipeline.list_issues
     args = {
-      cred             = param.github_cred
+      conn             = param.conn
       repository_owner = param.repository_owner
       repository_name  = param.repository_name
+      issue_state      = param.issue_state
     }
   }
 

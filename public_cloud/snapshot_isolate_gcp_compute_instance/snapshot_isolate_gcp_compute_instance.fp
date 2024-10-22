@@ -2,16 +2,16 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
   title       = "Snapshot and Isolate GCP Compute Instance"
   description = "For a given GCP Compute instance, create a snapshot for all of its disks, detach the disks, and then create ingress and egress firewall rules blocking all traffic."
 
-  param "gcp_cred" {
-    type        = string
-    description = "Name for GCP credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "gcp_conn" {
+    type        = connection.gcp
+    description = "Name for GCP connections to use. If not provided, the default connection will be used."
+    default     = connection.gcp.default
   }
 
-  param "jira_cred" {
-    type        = string
-    description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "jira_conn" {
+    type        = connection.jira
+    description = "Name for Jira connections to use. If not provided, the default connection will be used."
+    default     = connection.jira.default
   }
 
   param "jira_project_key" {
@@ -43,7 +43,7 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
   step "pipeline" "get_compute_instance" {
     pipeline = gcp.pipeline.get_compute_instance
     args = {
-      cred          = param.gcp_cred
+      conn          = param.gcp_conn
       instance_name = param.gcp_instance_name
       project_id    = param.gcp_project_id
       zone          = param.gcp_zone
@@ -55,7 +55,7 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     for_each   = { for disk in step.pipeline.get_compute_instance.output.instance.disks : disk.source => disk }
     pipeline   = gcp.pipeline.create_compute_snapshot
     args = {
-      cred             = param.gcp_cred
+      conn             = param.gcp_conn
       source_disk_name = regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]
       project_id       = param.gcp_project_id
       snapshot_name    = "isolate-disk-${regex("projects/.+/zones/.+/disks/(.+)", each.key)[0]}"
@@ -67,7 +67,7 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     depends_on = [step.pipeline.create_compute_snapshot]
     pipeline   = gcp.pipeline.stop_compute_instance
     args = {
-      cred          = param.gcp_cred
+      conn          = param.gcp_conn
       instance_name = param.gcp_instance_name
       project_id    = param.gcp_project_id
       zone          = param.gcp_zone
@@ -79,7 +79,7 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     for_each   = { for disk in step.pipeline.get_compute_instance.output.instance.disks : disk.source => disk }
     pipeline   = gcp.pipeline.detach_compute_disk_from_instance
     args = {
-      cred          = param.gcp_cred
+      conn          = param.gcp_conn
       instance_name = param.gcp_instance_name
       project_id    = param.gcp_project_id
       zone          = param.gcp_zone
@@ -91,7 +91,7 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     depends_on = [step.pipeline.detach_compute_disk_from_instance]
     pipeline   = gcp.pipeline.create_vpc_firewall_rule
     args = {
-      cred               = param.gcp_cred
+      conn               = param.gcp_conn
       project_id         = param.gcp_project_id
       network_name       = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.instance.networkInterfaces[0].network)[0]
       firewall_rule_name = "block-ingress"
@@ -106,7 +106,7 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     depends_on = [step.pipeline.create_ingress_vpc_firewall_rule]
     pipeline   = gcp.pipeline.create_vpc_firewall_rule
     args = {
-      cred               = param.gcp_cred
+      conn               = param.gcp_conn
       project_id         = param.gcp_project_id
       network_name       = regex("projects/.+/global/networks/(.+)", step.pipeline.get_compute_instance.output.instance.networkInterfaces[0].network)[0]
       firewall_rule_name = "block-egress"
@@ -121,7 +121,7 @@ pipeline "snapshot_isolate_gcp_compute_instance" {
     depends_on = [step.pipeline.create_egress_vpc_firewall_rule]
     pipeline   = jira.pipeline.create_issue
     args = {
-      cred        = param.jira_cred
+      conn        = param.jira_conn
       summary     = "Isolated GCP instance ${param.gcp_instance_name}"
       description = " - Created snapshots: ${join(", ", [for disk in step.pipeline.get_compute_instance.output.instance.disks : "isolate-disk-${regex("projects/.+/zones/.+/disks/(.+)", disk.source)[0]}"])}\n - Detached disks: ${join(", ", [for disk in step.pipeline.get_compute_instance.output.instance.disks : regex("projects/.+/zones/.+/disks/(.+)", disk.source)[0]])}\n - Created VPC firewall rules to block ingress and egress traffic"
       project_key = param.jira_project_key

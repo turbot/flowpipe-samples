@@ -5,4 +5,4 @@
 
 # Set the notifier to use for inputs and messages
 # Defaults to the "default" notifier
-# notifier = "default"
+# notifier = notifier.default

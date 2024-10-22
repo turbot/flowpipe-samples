@@ -13,13 +13,13 @@ pipeline "remediate_pagerduty_alert" {
   description = "Takes Remediation Actions based on the event."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "pagerduty_cred" {
-    type        = string
-    description = "Name for PagerDuty credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "pagerduty_conn" {
+    type        = connection.pagerduty
+    description = "Name of PagerDuty connection to use. If not provided, the default PagerDuty connection will be used."
+    default     = connection.pagerduty.default
   }
 
   param "event" {
@@ -31,7 +31,7 @@ pipeline "remediate_pagerduty_alert" {
     if       = param.event.event_type == "incident.acknowledged"
     pipeline = pipeline.pagerduty_incident_acknowledged
     args = {
-      pagerduty_cred = param.pagerduty_cred
+      pagerduty_conn = param.pagerduty_conn
       incident_id    = param.event.data.id
     }
   }
@@ -40,7 +40,7 @@ pipeline "remediate_pagerduty_alert" {
     if       = param.event.event_type == "incident.triggered"
     pipeline = pipeline.pagerduty_incident_triggered
     args = {
-      pagerduty_cred = param.pagerduty_cred
+      pagerduty_conn = param.pagerduty_conn
       incident_id    = param.event.data.id
     }
   }
@@ -49,7 +49,7 @@ pipeline "remediate_pagerduty_alert" {
     if       = param.event.event_type == "incident.annotated"
     pipeline = pipeline.pagerduty_incident_annotated
     args = {
-      pagerduty_cred = param.pagerduty_cred
+      pagerduty_conn = param.pagerduty_conn
       incident_id    = param.event.data.incident.id
     }
   }

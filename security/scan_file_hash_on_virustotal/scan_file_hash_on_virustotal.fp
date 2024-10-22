@@ -2,10 +2,10 @@ pipeline "scan_file_hash_on_virustotal" {
   title = "Scan File Hash on VirusTotal"
   description = "Scans a file hash on VirusTotal."
 
-  param "virustotal_cred" {
-    type        = string
-    description = "Name for VirusTotal credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "virustotal_conn" {
+    type        = connection.virustotal
+    description = "Name for VirusTotal connections to use. If not provided, the default connections will be used."
+    default     = connection.virustotal.default
   }
 
   param "file_hash" {
@@ -16,7 +16,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_analysis" {
     pipeline = virustotal.pipeline.get_file_analysis
     args = {
-      cred      = param.virustotal_cred
+      conn      = param.virustotal_conn
       file_hash = param.file_hash
     }
   }
@@ -24,7 +24,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_behaviour_summary" {
     pipeline = virustotal.pipeline.get_file_behaviour_summary
     args = {
-      cred      = param.virustotal_cred
+      conn      = param.virustotal_conn
       file_hash = param.file_hash
     }
   }
@@ -32,7 +32,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_behaviours" {
     pipeline = virustotal.pipeline.get_file_behaviours
     args = {
-      cred      = param.virustotal_cred
+      conn      = param.virustotal_conn
       file_hash = param.file_hash
     }
   }
@@ -40,7 +40,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_behaviour_mitre_trees" {
     pipeline = virustotal.pipeline.get_file_behaviour_mitre_trees
     args = {
-      cred      = param.virustotal_cred
+      conn      = param.virustotal_conn
       file_hash = param.file_hash
     }
   }
@@ -48,7 +48,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_comments" {
     pipeline = virustotal.pipeline.get_file_comments
     args = {
-      cred      = param.virustotal_cred
+      conn      = param.virustotal_conn
       file_hash = param.file_hash
     }
   }
@@ -56,7 +56,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_collections" {
     pipeline = virustotal.pipeline.get_file_collections
     args = {
-      cred      = param.virustotal_cred
+      conn      = param.virustotal_conn
       file_hash = param.file_hash
     }
   }
@@ -64,7 +64,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_execution_parents" {
     pipeline = virustotal.pipeline.get_file_execution_parents
     args = {
-      cred      = param.virustotal_cred
+      conn      = param.virustotal_conn
       file_hash = param.file_hash
     }
   }
@@ -72,7 +72,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_pe_resource_children" {
     pipeline = virustotal.pipeline.get_file_pe_resource_children
     args = {
-      cred      = param.virustotal_cred
+      conn      = param.virustotal_conn
       file_hash = param.file_hash
     }
   }
@@ -80,7 +80,7 @@ pipeline "scan_file_hash_on_virustotal" {
   step "pipeline" "get_file_pe_resource_parents" {
     pipeline = virustotal.pipeline.get_file_pe_resource_parents
     args = {
-      cred      = param.virustotal_cred
+      conn      = param.virustotal_conn
       file_hash = param.file_hash
     }
   }

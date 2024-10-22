@@ -24,32 +24,38 @@ cd software_development/list_github_repository_issues_authors
 flowpipe mod install
 ```
 
-### Credentials
+### Connections
 
 By default, the following environment variables will be used for authentication:
 
 - `GITHUB_TOKEN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
-vi creds.fpc
+vi ~/.flowpipe/config/github.fpc
 ```
 
 ```hcl
-credential "github" "default" {
+connection "github" "default" {
   token = "ghp_..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ### Usage
 
 Run the pipeline to get list of GitHub repository issues authors:
 
 ```sh
-flowpipe pipeline run list_github_repository_issues_authors --arg repository_owner=turbot --arg repository_name=flowpipe
+flowpipe pipeline run list_github_repository_issues_authors --arg 'repository_owner=turbot' --arg 'repository_name=flowpipe' --arg 'issue_state=OPEN'
+```
+
+To use a specific `connection`, specify the `conn` pipeline argument:
+
+```sh
+flowpipe pipeline run list_github_repository_issues_authors --arg 'repository_owner=turbot' --arg 'repository_name=flowpipe' --arg 'issue_state=OPEN' --arg 'conn=connection.github.github_profile'
 ```
 
 ## Configuration

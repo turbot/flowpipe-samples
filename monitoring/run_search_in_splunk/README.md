@@ -23,9 +23,9 @@ cd monitoring/run_search_in_splunk
 ```sh
 flowpipe mod install
 ```
-### Credentials
+### Connections
 
-No credentials are required.
+No connections are required.
 
 ## Usage
 

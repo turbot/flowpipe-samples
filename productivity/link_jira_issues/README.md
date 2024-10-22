@@ -24,7 +24,7 @@ cd productivity/link_jira_issues
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
@@ -33,21 +33,21 @@ By default, the following environment variables will be used for authentication:
 - `JIRA_URL`
 - `JIRA_USER`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/jira.fpc
 ```
 
 ```hcl
-credential "jira" "jira_cred" {
+connection "jira" "jira_conn" {
   base_url    = "https://test.atlassian.net/"
   api_token   = "ATATT3........."
   username    = "abc@email.com"
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 

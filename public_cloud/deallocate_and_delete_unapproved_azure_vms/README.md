@@ -30,7 +30,7 @@ cd public_cloud/deallocate_and_delete_unapproved_azure_vms
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
@@ -41,14 +41,14 @@ By default, the following environment variables will be used for authentication:
 - `ZENDESK_EMAIL`
 - `ZENDESK_SUBDOMAIN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/azure.fpc
 ```
 
 ```hcl
-credential "azure" "default" {
+connection "azure" "default" {
   client_id     = "<your client id>"
   client_secret = "<your client secret>"
   tenant_id     = "<your tenant id>"
@@ -60,14 +60,14 @@ vi ~/.flowpipe/config/zendesk.fpc
 ```
 
 ```hcl
-credential "zendesk" "default" {
+connection "zendesk" "default" {
   email      = "foo@bar.com"
   subdomain  = "bar"
   token      = "00B63........"
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 
@@ -100,7 +100,7 @@ subscription_id="sdfdsfdf-wxyz-1234-bbbb-529d4c76659c"
 resource_group="sandbox"
 
 # Optional
-# azure_cred = "non_default_cred"
-# zendesk_cred = "non_default_cred"
+# azure_conn = "non_default_conn"
+# zendesk_conn = "non_default_conn"
 # tags_query = "[?tags.environment=='development' || tags.environment=='dev'].name"
 ```

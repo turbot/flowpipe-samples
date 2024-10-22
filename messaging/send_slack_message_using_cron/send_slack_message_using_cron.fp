@@ -10,13 +10,13 @@ pipeline "send_slack_message_using_cron" {
   description = "Send a message to a Slack channel every minute using cron."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "slack_cred" {
-    type        = string
-    description = "Name for Slack credentials to use. If not provided, the default credentials will be used."
-    default     = var.slack_cred
+  param "slack_conn" {
+    type        = connection.slack
+    description = "Name for Slack connections to use. If not provided, the default connection will be used."
+    default     = var.slack_conn
   }
 
   param "channel" {
@@ -34,7 +34,7 @@ pipeline "send_slack_message_using_cron" {
   step "pipeline" "post_message" {
     pipeline = slack.pipeline.post_message
     args = {
-      cred    = param.slack_cred
+      conn    = param.slack_conn
       channel = param.channel
       text    = param.text
     }

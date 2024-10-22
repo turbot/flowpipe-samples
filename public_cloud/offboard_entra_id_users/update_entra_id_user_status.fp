@@ -3,19 +3,19 @@ pipeline "update_entra_id_user_status" {
   description = "Create Jira issue to update Entra ID user status."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "azure_cred" {
-    type        = string
-    description = "Name for Azure credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "azure_conn" {
+    type        = connection.azure
+    description = "Name of Azure connection to use. If not provided, the default Azure connection will be used."
+    default     = connection.azure.default
   }
 
-  param "jira_cred" {
-    type        = string
-    description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "jira_conn" {
+    type        = connection.jira
+    description = "Name of Jira connection to use. If not provided, the default Jira connection will be used."
+    default     = connection.jira.default
   }
 
   param "user_id" {
@@ -42,7 +42,7 @@ pipeline "update_entra_id_user_status" {
   step "pipeline" "get_user" {
     pipeline = entra.pipeline.get_user
     args = {
-      cred    = param.azure_cred
+      conn    = param.azure_conn
       user_id = param.user_id
     }
   }
@@ -53,7 +53,7 @@ pipeline "update_entra_id_user_status" {
 
     pipeline = jira.pipeline.create_issue
     args = {
-      cred        = param.jira_cred
+      conn        = param.jira_conn
       project_key = param.project_key
       summary     = "Disable ${step.pipeline.get_user.output.user.userPrincipalName}"
       description = "User Details ${jsonencode(step.pipeline.get_user.output.user)}"
@@ -67,7 +67,7 @@ pipeline "update_entra_id_user_status" {
 
     pipeline = jira.pipeline.create_issue
     args = {
-      cred        = param.jira_cred
+      conn        = param.jira_conn
       project_key = param.project_key
       summary     = "Enable ${step.pipeline.get_user.output.user.userPrincipalName}"
       description = "User Details ${jsonencode(step.pipeline.get_user.output.user)}"
@@ -81,7 +81,7 @@ pipeline "update_entra_id_user_status" {
 
     pipeline = jira.pipeline.create_issue
     args = {
-      cred        = param.jira_cred
+      conn        = param.jira_conn
       project_key = param.project_key
       summary     = "Delete ${step.pipeline.get_user.output.user.userPrincipalName}"
       description = "User Details ${jsonencode(step.pipeline.get_user.output.user)}"

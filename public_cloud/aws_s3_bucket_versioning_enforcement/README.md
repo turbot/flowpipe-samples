@@ -24,22 +24,22 @@ cd public_cloud/aws_s3_bucket_versioning_enforcement
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
-It is recommended to create a `credential_import` resource to import your AWS connections:
+It is recommended to create a `connection_import` resource to import your AWS connections:
 
 ```sh
 vi ~/.flowpipe/config/aws.fpc
 ```
 
 ```hcl
-credential_import "aws" {
+connection_import "aws" {
   source      = "~/.steampipe/config/aws.spc"
   connections = ["*"]
 }
 ```
 
-For more information on importing credentials, please see [Credential Import](https://flowpipe.io/docs/reference/config-files/credential-import).
+For more information on importing connections, please see [Connection Import](https://flowpipe.io/docs/reference/config-files/connection-import).
 
 ## Configuration
 
@@ -84,8 +84,8 @@ vi flowpipe.fpvars
 # AWS Region
 aws_region = "us-east-1"
 
-# Set the AWS credentials profile to use
-# aws_cred = "default"
+# Set the AWS connections profile to use
+# aws_conn = "default"
 
 # Steampipe database connection string
 # Defaults to local Steampipe database

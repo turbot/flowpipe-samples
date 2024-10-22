@@ -28,7 +28,7 @@ cd public_cloud/remediate_aws_guardduty_alerts
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
@@ -39,14 +39,14 @@ By default, the following environment variables will be used for authentication:
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY` 
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/jira.fpc
 ```
 
 ```hcl
-credential "jira" "jira_cred" {
+connection "jira" "jira_conn" {
   base_url    = "https://test.atlassian.net/"
   api_token   = "ATATT3........."
   username    = "abc@email.com"
@@ -58,23 +58,23 @@ vi ~/.flowpipe/config/aws.fpc
 ```
 
 ```hcl
-credential "aws" "aws_profile" {
+connection "aws" "aws_profile" {
   profile = "my-profile"
 }
 
-credential "aws" "aws_access_key_pair" {
+connection "aws" "aws_access_key_pair" {
   access_key = "AKIA..."
   secret_key = "dP+C+J..."
 }
 
-credential "aws" "aws_session_token" {
+connection "aws" "aws_session_token" {
   access_key = "AKIA..."
   secret_key = "dP+C+J..."
   session_token = "AQoDX..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 

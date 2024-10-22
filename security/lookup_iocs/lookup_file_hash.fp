@@ -2,16 +2,16 @@ pipeline "lookup_file_hash" {
   title       = "Lookup File hash In Different Tools"
   description = "A composite Flowpipe mod that lookup a file hash in VirusTotal, Urlscan and other tools."
 
-  param "virustotal_cred" {
-    type        = string
-    description = "Name for VirusTotal credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "virustotal_conn" {
+    type        = connection.virustotal
+    description = "Name of VirusTotal connection to use. If not provided, the default VirusTotal connection will be used."
+    default     = connection.virustotal.default
   }
 
-  param "urlscan_cred" {
-    type        = string
-    description = "Name for  URLScan.io credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "urlscan_conn" {
+    type        = connection.urlscan
+    description = "Name of URL Scan connection to use. If not provided, the default URL Scan connection will be used."
+    default = connection.urlscan.default
   }
 
   param "hybrid_analysis_api_key" {
@@ -28,7 +28,7 @@ pipeline "lookup_file_hash" {
   step "pipeline" "virustotal_file_hash_lookup" {
     pipeline = virustotal.pipeline.get_file_analysis
     args = {
-      cred      = param.virustotal_cred
+      conn      = param.virustotal_conn
       file_hash = param.file_hash
     }
   }
@@ -36,7 +36,7 @@ pipeline "lookup_file_hash" {
   step "pipeline" "urlscan_file_hash_lookup" {
     pipeline = urlscan.pipeline.search_scan
     args = {
-      cred  = param.urlscan_cred
+      conn  = param.urlscan_conn
       query = "hash:${param.file_hash}"
     }
   }

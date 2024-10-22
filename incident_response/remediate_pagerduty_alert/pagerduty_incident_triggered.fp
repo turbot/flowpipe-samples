@@ -2,10 +2,10 @@ pipeline "pagerduty_incident_triggered" {
   title       = "PagerDuty Incident Triggered"
   description = "Takes remediation action for PagerDuty incident 'triggered'."
 
-  param "pagerduty_cred" {
-    type        = string
-    description = "Name for PagerDuty credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "pagerduty_conn" {
+    type        = connection.pagerduty
+    description = "Name of PagerDuty connection to use. If not provided, the default PagerDuty connection will be used."
+    default     = connection.pagerduty.default
   }
 
   param "incident_id" {
@@ -16,7 +16,7 @@ pipeline "pagerduty_incident_triggered" {
   step "pipeline" "get_incident" {
     pipeline = pagerduty.pipeline.get_incident
     args = {
-      cred        = param.pagerduty_cred
+      conn = param.pagerduty_conn
       incident_id = param.incident_id
     }
   }
@@ -38,7 +38,7 @@ pipeline "pagerduty_incident_triggered" {
 
     pipeline = pagerduty.pipeline.get_current_user
     args = {
-      cred = param.pagerduty_cred
+      conn = param.pagerduty_conn
     }
   }
 
@@ -49,7 +49,7 @@ pipeline "pagerduty_incident_triggered" {
 
     pipeline = pagerduty.pipeline.create_note_on_incident
     args = {
-      cred        = param.pagerduty_cred
+      conn = param.pagerduty_conn
       from        = step.pipeline.get_current_user.output.current_user.user.email
       incident_id = param.incident_id
       content     = jsonencode(step.pipeline.geo_lookup_ip)

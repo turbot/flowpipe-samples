@@ -19,24 +19,24 @@ Install the AWS plugin with [Steampipe](https://steampipe.io):
 steampipe plugin install aws
 ```
 
-Steampipe will automatically use your default AWS credentials. Optionally, you can [setup multiple accounts](https://hub.steampipe.io/plugins/turbot/aws#multi-account-connections) or [customize AWS credentials](https://hub.steampipe.io/plugins/turbot/aws#configuring-aws-credentials).
+Steampipe will automatically use your default AWS connections. Optionally, you can [setup multiple accounts](https://hub.steampipe.io/plugins/turbot/aws#multi-account-connections) or [customize AWS connections](https://hub.steampipe.io/plugins/turbot/aws#configuring-aws-connections).
 
-Create a `credential_import` resource to import your Steampipe AWS connections:
+Create a `connection_import` resource to import your Steampipe AWS connections:
 
 ```sh
 vi ~/.flowpipe/config/aws.fpc
 ```
 
 ```hcl
-credential_import "aws" {
+connection_import "aws" {
   source      = "~/.steampipe/config/aws.spc"
   connections = ["*"]
 }
 ```
 
-For more information on importing credentials, please see [Credential Import](https://flowpipe.io/docs/reference/config-files/credential_import).
+For more information on importing connections, please see [Connection Import](https://flowpipe.io/docs/reference/config-files/connection_import).
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 Clone:
 
@@ -97,5 +97,5 @@ vi flowpipe.fpvars
 ```hcl
 # Set the notifier to use for inputs and messages
 # Defaults to the "default" notifier
-notifier = "my_email"
+notifier = notifier.my_email
 ```

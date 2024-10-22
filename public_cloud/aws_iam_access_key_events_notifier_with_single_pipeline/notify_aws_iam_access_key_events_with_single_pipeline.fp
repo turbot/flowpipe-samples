@@ -63,21 +63,27 @@ pipeline "handle_iam_access_key_events" {
     optional    = true
   }
 
+  param "notifier" {
+    type        = notifier
+    description = "Notifier to use."
+    default     = var.notifier
+  }
+
   step "message" "notify_new_iam_access_keys" {
     for_each = param.inserted_access_keys != null ? param.inserted_access_keys : []
-    notifier = notifier[var.notifier]
+    notifier = param.notifier
     text     = "New IAM access key ${each.value.access_key_id} for ${each.value.user_name} [${each.value.account_id}] created at ${each.value.create_date}"
   }
 
   step "message" "notify_iam_access_key_updated" {
     for_each = param.updated_access_keys != null ? param.updated_access_keys : []
-    notifier = notifier[var.notifier]
+    notifier = param.notifier
     text     = "Access key ${each.value.access_key_id} for ${each.value.user_name} [${each.value.account_id}] status is now ${each.value.status}"
   }
 
   step "message" "notify_iam_access_key_deleted" {
     for_each = param.deleted_access_keys != null ? param.deleted_access_keys : []
-    notifier = notifier[var.notifier]
+    notifier = param.notifier
     text     = "IAM access key ${each.value} has been deleted"
   }
 

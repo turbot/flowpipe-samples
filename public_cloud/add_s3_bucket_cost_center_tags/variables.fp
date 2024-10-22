@@ -5,7 +5,13 @@ variable "database" {
 }
 
 variable "notifier" {
-  type        = string
+  type        = notifier
   description = "Notifier to use."
-  default     = "default"
+  default     = notifier.default
+}
+
+variable "aws_conn" {
+  type        = connection.aws
+  description = "Name for AWS connections to use. If not provided, the default connections will be used."
+  default     = connection.aws.default
 }

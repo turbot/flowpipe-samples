@@ -2,10 +2,10 @@ pipeline "create_organization_workspace_and_add_member" {
   title       = "Create New Organization Workspace and Add Member"
   description = "Create a new workspace in an organization and bring in the organization member."
 
-  param "pipes_cred" {
-    type        = string
-    description = "Name for Pipes credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+   param "conn" {
+    type        = connection.pipes
+    description = "Name of Pipes connection to use. If not provided, the default Pipes connection will be used."
+    default     = connection.pipes.default
   }
 
   param "organization_handle" {
@@ -44,7 +44,7 @@ pipeline "create_organization_workspace_and_add_member" {
   step "pipeline" "create_organization_workspace" {
     pipeline = pipes.pipeline.create_organization_workspace
     args = {
-      cred                = param.pipes_cred
+      conn                = param.conn
       handle              = param.workspace_handle
       instance_type       = param.instance_type
       organization_handle = param.organization_handle
@@ -54,7 +54,7 @@ pipeline "create_organization_workspace_and_add_member" {
   step "pipeline" "create_organization_workspace_member" {
     pipeline = pipes.pipeline.create_organization_workspace_member
     args = {
-      cred             = param.pipes_cred
+      conn             = param.conn
       handle           = param.member_handle
       org_handle       = param.organization_handle
       role             = param.role

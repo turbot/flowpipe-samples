@@ -3,6 +3,6 @@ subscription_id="sdfdsfdf-wxyz-1234-bbbb-529d4c76659c"
 resource_group="sandbox"
 
 # Optional
-# azure_cred = "non_default_cred"
-# zendesk_cred = "non_default_cred"
+# azure_conn = "non_default_conn"
+# zendesk_conn = "non_default_conn"
 # tags_query = "[?tags.environment=='development' || tags.environment=='dev'].name"

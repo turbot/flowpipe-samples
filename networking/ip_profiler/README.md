@@ -24,32 +24,32 @@ cd networking/ip_profiler
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
 - `ABUSEIPDB_API_KEY`
 - `VTCLI_APIKEY`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
-vi creds.fpc
+vi ~/.flowpipe/config/connections.fpc
 ```
 
 ```hcl
-credential "abuseipdb" "default" {
+connection "abuseipdb" "default" {
   api_key = "hJ2lFgP7nR9sT4xVhJ2lFgP7nR9sT4xV8aZ0bC3qW6mO1eK5dH7jI9lM3nA2oZ8vB0xK4yV1cX6eA9ds"
 }
 
-credential "virustotal" "default" {
+connection "virustotal" "default" {
   api_key = "AG.U7..."
 }
 ```
 
-No credentials are required for ReallyFreeGeoIP.
+No connections are required for ReallyFreeGeoIP.
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 

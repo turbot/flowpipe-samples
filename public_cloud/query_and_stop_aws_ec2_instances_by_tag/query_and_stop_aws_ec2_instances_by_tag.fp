@@ -8,10 +8,10 @@ pipeline "query_and_stop_aws_ec2_instances_by_tag" {
     default     = var.aws_region
   }
 
-  param "aws_cred" {
-    type        = string
-    description = "Name for AWS credential to use. If not provided, the default credential will be used."
-    default     = var.aws_cred
+  param "aws_conn" {
+    type        = connection.aws
+    description = "Name for AWS connection to use. If not provided, the default connection will be used."
+    default     = var.aws_conn
   }
 
   step "query" "list_ec2_instances" {
@@ -33,7 +33,7 @@ pipeline "query_and_stop_aws_ec2_instances_by_tag" {
     pipeline = aws.pipeline.stop_ec2_instances
     args = {
       region       = param.aws_region
-      cred         = param.aws_cred
+      conn         = param.aws_conn
       instance_ids = ["${each.value.instance_id}"]
     }
   }

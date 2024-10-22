@@ -8,16 +8,16 @@ pipeline "aws_ec2_instance_scheduler" {
     default     = var.aws_region
   }
 
-  param "aws_cred" {
-    type        = string
-    description = "Name for AWS credential to use. If not provided, the default credential will be used."
-    default     = var.aws_cred
+  param "aws_conn" {
+    type        = connection.aws
+    description = "Name for AWS connection to use. If not provided, the default connection will be used."
+    default     = var.aws_conn
   }
 
-  param "teams_cred" {
-    type        = string
-    description = "Name for Teams credential to use. If not provided, the default credential will be used."
-    default     = var.teams_cred
+  param "teams_conn" {
+    type        = connection.teams
+    description = "Name for Teams connection to use. If not provided, the default connection will be used."
+    default     = var.teams_conn
   }
 
   param "team_id" {
@@ -47,7 +47,7 @@ pipeline "aws_ec2_instance_scheduler" {
     pipeline = aws.pipeline.describe_ec2_instances
     args = {
       region = param.aws_region
-      cred   = param.aws_cred
+      conn   = param.aws_conn
       tags   = {
         schedule_name = param.schedule_name
       }
@@ -65,7 +65,7 @@ pipeline "aws_ec2_instance_scheduler" {
     pipeline    = aws.pipeline.start_ec2_instances
     args = {
       region       = param.aws_region
-      cred         = param.aws_cred
+      conn         = param.aws_conn
       instance_ids = step.transform.scheduled_instance_ids.value
     }
   }
@@ -77,7 +77,7 @@ pipeline "aws_ec2_instance_scheduler" {
     pipeline    = aws.pipeline.stop_ec2_instances
     args = {
       region       = param.aws_region
-      cred         = param.aws_cred
+      conn         = param.aws_conn
       instance_ids = step.transform.scheduled_instance_ids.value
     }
   }
@@ -90,7 +90,7 @@ pipeline "aws_ec2_instance_scheduler" {
       step.pipeline.aws_ec2_instance_stop
     ]
     args = {
-      cred                 = param.teams_cred
+      conn                 = param.teams_conn
       team_id              = param.team_id
       channel_id           = param.teams_channel_id
       message_content_type = "html"

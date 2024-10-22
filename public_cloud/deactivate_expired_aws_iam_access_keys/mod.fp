@@ -5,12 +5,14 @@ mod "deactivate_expired_aws_iam_access_keys" {
   categories    = ["public cloud", "security"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = ">=0.1.1"
+      version = "^1"
     }
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "0.2.1"
+      version = "^1"
     }
   }
-
 }

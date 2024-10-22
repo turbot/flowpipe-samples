@@ -28,7 +28,7 @@ cd ai/summarize_github_issue_with_openai
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
@@ -36,32 +36,32 @@ By default, the following environment variables will be used for authentication:
 - `OPENAI_API_KEY`
 - `SLACK_TOKEN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
-vi creds.fpc
+vi ~/.flowpipe/config/connections.fpc
 ```
 
 ```hcl
-credential "github" "default" {
+connection "github" "default" {
   token = "ghpat-..."
 }
 
-credential "openai" "default" {
+connection "openai" "default" {
   api_key = "sk-jwgthNa..."
 }
 
-credential "slack" "default" {
+connection "slack" "default" {
   token = "xoxp-12345-..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 
-Run the pipeline and specify the `github_repository_owner`, `github_repository_name`, `github_issue_number`, and `slack_channel` pipeline arguments:
+Run the pipeline and specify the `github_repository_owner`, `github_repository_name`, `github_issue_number`, `openai_system_content`, `openai_max_tokens`, `openai_temperature`,`openai_model`, and `slack_channel` pipeline arguments:
 
 ```sh
-flowpipe pipeline run summarize_github_issue_with_openai --arg github_repository_owner=turbot --arg github_repository_name=flowpipe --arg github_issue_number=478 --arg slack_channel=my-channel
+flowpipe pipeline run summarize_github_issue_with_openai --arg 'github_repository_owner=turbot' --arg 'github_repository_name=flowpipe' --arg 'github_issue_number=478' --arg 'openai_system_content=Hi I am a dev' --arg openai_max_tokens=300 --arg 'openai_temperature=1' --arg 'slack_channel=my-channel' --arg 'openai_model=gpt-3.5-turbo'
 ```

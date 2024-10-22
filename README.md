@@ -48,7 +48,7 @@ Run a pipeline:
 flowpipe pipeline run http_list_pagination
 ```
 
-Some mods require [credentials](https://flowpipe.io/docs/run/credentials) and [variables](https://flowpipe.io/docs/build/mod-variables), please see each mod's README.md for specific instructions.
+Some mods require [connections](https://flowpipe.io/docs/run/connections) and [variables](https://flowpipe.io/docs/build/mod-variables), please see each mod's README.md for specific instructions.
 
 ## Open Source & Contributing
 

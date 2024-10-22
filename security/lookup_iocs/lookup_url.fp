@@ -2,10 +2,10 @@ pipeline "lookup_url" {
   title       = "Lookup URL In Different Tools"
   description = "A composite Flowpipe mod that lookup an url in VirusTotal, Urlscan and other tools."
 
-  param "virustotal_cred" {
-    type        = string
-    description = "Name for VirusTotal credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "virustotal_conn" {
+    type        = connection.virustotal
+    description = "Name of VirusTotal connection to use. If not provided, the default VirusTotal connection will be used."
+    default     = connection.virustotal.default
   }
 
   param "apivoid_api_key" {
@@ -22,7 +22,7 @@ pipeline "lookup_url" {
   step "pipeline" "virustotal_url_lookup" {
     pipeline = virustotal.pipeline.get_url_analysis
     args = {
-      cred = param.virustotal_cred
+      conn = param.virustotal_conn
       url  = param.url
     }
   }
