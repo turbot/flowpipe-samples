@@ -36,7 +36,7 @@ pipeline "deactivate_expired_iam_access_keys_with_approval" {
   }
 
   param "notifier" {
-    type        = string
+    type        = notifier
     description = "Notifier to use."
     default     = var.notifier
   }
@@ -62,12 +62,13 @@ pipeline "deactivate_iam_access_key_with_approval" {
   }
 
   param "notifier" {
-    type        = string
+    type        = notifier
     description = "Notifier to use."
+    default     = var.notifier
   }
 
   step "input" "prompt_deactivate_expired_iam_access_key" {
-    notifier = notifier[param.notifier]
+    notifier = param.notifier
     subject  = "Request to deactivate expired IAM access key ${param.access_key.access_key_id} for user ${param.access_key.user_name} [${param.access_key.account_id}]"
     prompt   = "Do you want to deactivate IAM access key ${param.access_key.access_key_id} belonging to ${param.access_key.user_name} [${param.access_key.account_id}]?"
     type     = "button"

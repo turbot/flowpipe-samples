@@ -41,10 +41,16 @@ pipeline "versioning_enforcement" {
     type = string
   }
 
+  param "notifier" {
+    type        = notifier
+    description = "Notifier to use."
+    default     = var.notifier
+  }
+
   step "input" "ask_for_action" {
-    notifier  = notifier[var.notifier]
-    prompt    = "Bucket ${param.bucket} created with no versioning. What would you like to do?"
-    type      = "button"
+    notifier = param.notifier
+    prompt   = "Bucket ${param.bucket} created with no versioning. What would you like to do?"
+    type     = "button"
 
     option "a" {
       label = "Ensure Versioning"
@@ -58,13 +64,13 @@ pipeline "versioning_enforcement" {
   }
 
   step "pipeline" "ensure_version" {
-    if        = step.input.ask_for_action.value == "version"
-    pipeline  = aws.pipeline.put_s3_bucket_versioning
+    if       = step.input.ask_for_action.value == "version"
+    pipeline = aws.pipeline.put_s3_bucket_versioning
     args = {
-      region      = var.aws_region
-      conn        = var.aws_conn
-      bucket      = param.bucket
-      versioning  = true
+      region     = var.aws_region
+      conn       = var.aws_conn
+      bucket     = param.bucket
+      versioning = true
     }
   }
 

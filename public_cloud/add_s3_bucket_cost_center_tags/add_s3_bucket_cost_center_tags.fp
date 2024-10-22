@@ -64,6 +64,7 @@ pipeline "add_cost_center_tag_to_s3_bucket" {
   param "notifier" {
     type        = notifier
     description = "Notifier to use."
+    default     = var.notifier
   }
 
   step "input" "prompt_select_cost_center_tag_value" {
@@ -101,7 +102,7 @@ pipeline "add_cost_center_tag_to_s3_bucket" {
       region        = param.bucket.region
 
       tags = {
-        "cost_center": step.input.prompt_select_cost_center_tag_value.value
+        "cost_center" : step.input.prompt_select_cost_center_tag_value.value
       }
     }
   }
