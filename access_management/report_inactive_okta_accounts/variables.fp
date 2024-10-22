@@ -1,13 +1,13 @@
 variable "jira_conn" {
-  type        = string
+  type        = connection.jira
   description = "Name for Jira connections to use. If not provided, the default connections will be used."
-  default     = "default"
+  default     = connection.jira.default
 }
 
 variable "okta_conn" {
-  type        = string
+  type        = connection.okta
   description = "Name for Oka connections to use. If not provided, the default connections will be used."
-  default     = "default"
+  default     = connection.okta.default
 }
 
 variable "inactive_hours" {

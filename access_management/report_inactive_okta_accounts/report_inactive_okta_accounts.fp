@@ -14,13 +14,13 @@ pipeline "report_inactive_okta_accounts" {
   }
 
   param "jira_conn" {
-    type        = string
+    type        = connection.jira
     description = "Name for Jira connections to use. If not provided, the default connections will be used."
     default     = var.jira_conn
   }
 
   param "okta_conn" {
-    type        = string
+    type        = connection.okta
     description = "Name for Okta connections to use. If not provided, the default connections will be used."
     default     = var.okta_conn
   }
