@@ -10,19 +10,19 @@ pipeline "report_inactive_okta_accounts" {
   description = "Routinely scan Okta environments for potential inactive accounts and deactivate accounts."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "jira_cred" {
+  param "jira_conn" {
     type        = string
-    description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
-    default     = var.jira_cred
+    description = "Name for Jira connections to use. If not provided, the default connections will be used."
+    default     = var.jira_conn
   }
 
-  param "okta_cred" {
+  param "okta_conn" {
     type        = string
-    description = "Name for Okta credentials to use. If not provided, the default credentials will be used."
-    default     = var.okta_cred
+    description = "Name for Okta connections to use. If not provided, the default connections will be used."
+    default     = var.okta_conn
   }
 
   param "inactive_hours" {
@@ -48,7 +48,7 @@ pipeline "report_inactive_okta_accounts" {
   step "pipeline" "get_current_okta_user" {
     pipeline = okta.pipeline.get_user
     args = {
-      cred    = param.okta_cred
+      conn    = param.okta_conn
       user_id = "me"
     }
   }
@@ -57,7 +57,7 @@ pipeline "report_inactive_okta_accounts" {
     pipeline = okta.pipeline.list_users
 
     args = {
-      cred = param.okta_cred
+      conn = param.okta_conn
     }
   }
 
@@ -72,7 +72,7 @@ pipeline "report_inactive_okta_accounts" {
 
     pipeline = okta.pipeline.deactivate_user
     args = {
-      cred    = param.okta_cred
+      conn    = param.okta_conn
       user_id = each.value.profile.email
     }
   }
@@ -88,7 +88,7 @@ pipeline "report_inactive_okta_accounts" {
 
     pipeline = jira.pipeline.create_issue
     args = {
-      cred        = param.jira_cred
+      conn        = param.jira_conn
       description = "User ${each.value.profile.firstName} ${each.value.profile.lastName} with the login ${each.value.profile.login} is scheduled to be deactivated."
       issue_type  = param.issue_type
       project_key = param.project_key

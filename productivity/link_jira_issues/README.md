@@ -40,7 +40,7 @@ vi ~/.flowpipe/config/jira.fpc
 ```
 
 ```hcl
-connection "jira" "jira_cred" {
+connection "jira" "jira_conn" {
   base_url    = "https://test.atlassian.net/"
   api_token   = "ATATT3........."
   username    = "abc@email.com"

@@ -1,12 +1,12 @@
-variable "jira_cred" {
+variable "jira_conn" {
   type        = string
-  description = "Name for Jira credentials to use. If not provided, the default credentials will be used."
+  description = "Name for Jira connections to use. If not provided, the default connections will be used."
   default     = "default"
 }
 
-variable "okta_cred" {
+variable "okta_conn" {
   type        = string
-  description = "Name for Oka credentials to use. If not provided, the default credentials will be used."
+  description = "Name for Oka connections to use. If not provided, the default connections will be used."
   default     = "default"
 }
 

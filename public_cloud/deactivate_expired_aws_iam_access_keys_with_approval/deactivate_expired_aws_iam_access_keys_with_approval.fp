@@ -89,7 +89,7 @@ pipeline "deactivate_iam_access_key_with_approval" {
     if       = step.input.prompt_deactivate_expired_iam_access_key.value == "deactivate"
     pipeline = aws.pipeline.update_iam_access_key
     args = {
-      cred          = param.access_key.conn_name
+      conn          = param.access_key.conn_name
       user_name     = param.access_key.user_name
       access_key_id = param.access_key.access_key_id
       status        = "Inactive"

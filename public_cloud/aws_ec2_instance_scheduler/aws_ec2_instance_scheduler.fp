@@ -10,13 +10,13 @@ pipeline "aws_ec2_instance_scheduler" {
 
   param "aws_conn" {
     type        = connection.aws
-    description = "Name for AWS credential to use. If not provided, the default credential will be used."
+    description = "Name for AWS connection to use. If not provided, the default connection will be used."
     default     = var.aws_conn
   }
 
   param "teams_conn" {
     type        = connection.teams
-    description = "Name for Teams credential to use. If not provided, the default credential will be used."
+    description = "Name for Teams connection to use. If not provided, the default connection will be used."
     default     = var.teams_conn
   }
 

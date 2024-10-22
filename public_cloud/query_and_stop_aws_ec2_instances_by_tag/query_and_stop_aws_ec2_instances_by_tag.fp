@@ -10,7 +10,7 @@ pipeline "query_and_stop_aws_ec2_instances_by_tag" {
 
   param "aws_conn" {
     type        = connection.aws
-    description = "Name for AWS credential to use. If not provided, the default credential will be used."
+    description = "Name for AWS connection to use. If not provided, the default connection will be used."
     default     = var.aws_conn
   }
 

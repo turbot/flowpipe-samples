@@ -3,7 +3,7 @@ pipeline "delete_mail_from_microsoft_office_365" {
   description = "Delete an email from a specified user's mailbox in Microsoft Office 365."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
   param "conn" {

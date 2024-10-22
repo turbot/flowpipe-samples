@@ -58,7 +58,7 @@ vi ~/.flowpipe/config/gcp.fpc
 
 ```hcl
 connection "gcp" "gcp_conn" {
-  credentials = "path/to/credentials.json"
+  connections = "path/to/connections.json"
 }
 ```
 
@@ -72,4 +72,4 @@ For more information on connections in Flowpipe, please see [Managing Connection
 flowpipe pipeline run snapshot_isolate_gcp_compute_instance --arg 'gcp_instance_name=flowpipe-test' --arg 'gcp_project_id=parker-aaa' --arg 'jira_project_key=SBT' --arg 'jira_issue_type=Task'
 ```
 
-**Note:** If no environment variables or configuration files are found, the mod will attempt to use [Application Default Connections](https://cloud.google.com/docs/authentication/provide-credentials-adc) if configured.
+**Note:** If no environment variables or configuration files are found, the mod will attempt to use [Application Default Connections](https://cloud.google.com/docs/authentication/provide-connections-adc) if configured.

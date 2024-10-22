@@ -3,7 +3,7 @@ pipeline "run_search_in_splunk" {
   description = "Runs the provided search in Splunk, waits for the search to complete, and returns the results."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
   param "splunk_auth_token" {

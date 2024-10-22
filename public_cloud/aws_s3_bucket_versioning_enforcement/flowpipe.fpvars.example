@@ -1,8 +1,8 @@
 # AWS Region
 aws_region = "us-east-1"
 
-# Set the AWS credentials profile to use
-# aws_cred = "default"
+# Set the AWS connections profile to use
+# aws_conn = "default"
 
 # Steampipe database connection string
 # Defaults to local Steampipe database

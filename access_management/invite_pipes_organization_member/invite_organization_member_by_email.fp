@@ -3,7 +3,7 @@ pipeline "invite_organization_member_by_email" {
   description = "Invite a member to an organization by email."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
   param "conn" {

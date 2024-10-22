@@ -10,7 +10,7 @@ pipeline "aws_iam_user_group_membership" {
   description = "Monitors IAM users across various groups and oversees associated GitHub issues. It generates new issues for users belonging to multiple groups and updates existing issues as necessary."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
   param "github_conn" {

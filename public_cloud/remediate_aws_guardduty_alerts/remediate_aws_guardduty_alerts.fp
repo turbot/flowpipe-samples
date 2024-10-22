@@ -13,7 +13,7 @@ pipeline "remediate_aws_guardduty_alerts" {
   description = "Automate AWS SNS notifications from Guard Duty Findings triggering Jira issue creation, execute actions in AWS for identified issues, and update issue state to done upon resolution."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
   param "jira_conn" {
@@ -60,7 +60,7 @@ pipeline "remediate_aws_guardduty_alerts" {
   }
 
   step "pipeline" "create_disassociate_iam_instance_profile_issue" {
-    if       = jsondecode(param.alert).detail.type == "UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.InsideAWS"
+    if       = jsondecode(param.alert).detail.type == "UnauthorizedAccess:IAMUser/InstanceConnectionExfiltration.InsideAWS"
     pipeline = jira.pipeline.create_issue
     args = {
       conn        = param.jira_conn
@@ -71,7 +71,7 @@ pipeline "remediate_aws_guardduty_alerts" {
   }
 
   step "pipeline" "disassociate_iam_instance_profile_actions" {
-    if         = jsondecode(param.alert).detail.type == "UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.InsideAWS"
+    if         = jsondecode(param.alert).detail.type == "UnauthorizedAccess:IAMUser/InstanceConnectionExfiltration.InsideAWS"
     depends_on = [step.pipeline.create_disassociate_iam_instance_profile_issue]
     pipeline   = pipeline.disassociate_iam_instance_profile_actions
     args = {
@@ -85,6 +85,6 @@ pipeline "remediate_aws_guardduty_alerts" {
   }
 
   output "disassociate_iam_instance_profile_issue" {
-    value = jsondecode(param.alert).detail.type == "UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.InsideAWS" ? !is_error(step.pipeline.disassociate_iam_instance_profile_actions) ? "Disassociated IAM role for instance ${jsondecode(param.alert).detail.resource.instanceDetails.instanceId}, added an issue comment and updated issue status to done." : "Failed!!" : "No unauthorized IAM role associated with ec2 instance found."
+    value = jsondecode(param.alert).detail.type == "UnauthorizedAccess:IAMUser/InstanceConnectionExfiltration.InsideAWS" ? !is_error(step.pipeline.disassociate_iam_instance_profile_actions) ? "Disassociated IAM role for instance ${jsondecode(param.alert).detail.resource.instanceDetails.instanceId}, added an issue comment and updated issue status to done." : "Failed!!" : "No unauthorized IAM role associated with ec2 instance found."
   }
 }

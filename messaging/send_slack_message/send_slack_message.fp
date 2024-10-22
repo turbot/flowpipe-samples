@@ -3,7 +3,7 @@ pipeline "send_slack_message" {
   description = "Send a message to a Slack channel."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
   param "slack_conn" {

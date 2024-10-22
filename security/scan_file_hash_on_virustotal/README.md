@@ -24,25 +24,25 @@ cd security/scan_file_hash_on_virustotal
 flowpipe mod install
 ```
 
-### Credentials
+### Connections
 
 By default, the following environment variables will be used for authentication:
 
 - `VTCLI_APIKEY`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
-vi creds.fpc
+vi conns.fpc
 ```
 
 ```hcl
-credential "virustotal" "my_virustotal" {
+connection "virustotal" "my_virustotal" {
   api_key = "AG.U7..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 

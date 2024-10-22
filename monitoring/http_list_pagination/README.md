@@ -26,7 +26,7 @@ flowpipe mod install
 
 ### Connections
 
-No credentials are required.
+No connections are required.
 
 ### Usage
 

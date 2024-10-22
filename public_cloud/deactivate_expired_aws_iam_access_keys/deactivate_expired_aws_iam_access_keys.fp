@@ -3,7 +3,7 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
   description = "Deactivates expired AWS IAM access keys and notifies via Slack channel."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
   param "aws_conn" {

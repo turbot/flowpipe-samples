@@ -5,4 +5,4 @@ teams_channel_id = "20-9234-20392-2913"
 
 # Optional
 # aws_conn   = connection.aws.default
-# teams_conn = "non_default_cred"
+# teams_conn = "non_default_conn"

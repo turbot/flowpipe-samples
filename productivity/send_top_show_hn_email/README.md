@@ -52,7 +52,7 @@ connection "sendgrid" "default" {
 }
 ```
 
-For more information on connections in Flowpipe, please see [Managing Connectionss](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connectionss](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 

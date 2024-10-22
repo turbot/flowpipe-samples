@@ -24,7 +24,7 @@ cd public_cloud/query_and_stop_aws_ec2_instance
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
@@ -56,7 +56,7 @@ connection "aws" "aws_session_token" {
 }
 ```
 
-For more information on connections in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/connections).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 

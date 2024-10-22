@@ -77,5 +77,5 @@ channel = "CH1234FEW"
 text    = "Hello!"
 
 # Optional
-# slack_cred = "non_default_cred"
+# slack_conn = "non_default_conn"
 ```

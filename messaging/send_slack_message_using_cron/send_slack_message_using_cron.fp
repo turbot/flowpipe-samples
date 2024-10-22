@@ -10,7 +10,7 @@ pipeline "send_slack_message_using_cron" {
   description = "Send a message to a Slack channel every minute using cron."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
   param "slack_conn" {

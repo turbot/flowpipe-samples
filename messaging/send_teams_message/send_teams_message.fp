@@ -3,7 +3,7 @@ pipeline "send_teams_message" {
   description = "Send a new chat message in the specified channel."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
   param "teams_conn" {

@@ -39,7 +39,7 @@ vi ~/.flowpipe/config/pagerduty.fpc
 ```
 
 ```hcl
-connection "pagerduty" "pagerduty_cred" {
+connection "pagerduty" "pagerduty_conn" {
   api_key = "u+_szhL..."
 }
 ```

@@ -85,7 +85,7 @@ vi flowpipe.fpvars
 aws_region = "us-east-1"
 
 # Set the AWS connections profile to use
-# aws_cred = "default"
+# aws_conn = "default"
 
 # Steampipe database connection string
 # Defaults to local Steampipe database
