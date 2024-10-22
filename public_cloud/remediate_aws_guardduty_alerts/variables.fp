@@ -5,17 +5,17 @@ variable "aws_region" {
   description = "The name of the Region."
 }
 
-variable "aws_cred" {
-  type        = string
-  description = "AWS credentials."
-  default     = "default"
+variable "aws_conn" {
+  type        = connection.aws
+  description = "AWS connections."
+  default     = connection.aws.default
 }
 
 # Jira variables
-variable "jira_cred" {
-  type        = string
-  description = "Jira credentials."
-  default     = "default"
+variable "jira_conn" {
+  type        = connection.jira
+  description = "Jira connections."
+  default     = connection.jira.default
 }
 
 variable "jira_project_key" {

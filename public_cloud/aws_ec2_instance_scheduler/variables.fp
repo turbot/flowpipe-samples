@@ -3,16 +3,16 @@ variable "aws_region" {
   description = "The name of the Region."
 }
 
-variable "aws_cred" {
-  type        = string
-  description = "Name for AWS credentials to use. If not provided, the default credentials will be used."
-  default     = "default"
+variable "aws_conn" {
+  type        = connection.aws
+  description = "Name for AWS connections to use. If not provided, the default connections will be used."
+  default     = connection.aws.default
 }
 
-variable "teams_cred" {
-  type        = string
-  description = "Name for Teams credentials to use. If not provided, the default credentials will be used."
-  default     = "default"
+variable "teams_conn" {
+  type        = connection.teams
+  description = "Name for Teams connections to use. If not provided, the default connections will be used."
+  default     = connection.teams.default
 }
 
 variable "team_id" {

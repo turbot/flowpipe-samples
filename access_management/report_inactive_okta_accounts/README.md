@@ -26,7 +26,7 @@ cd access_management/report_inactive_okta_accounts
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
@@ -36,14 +36,14 @@ By default, the following environment variables will be used for authentication:
 - `OKTA_TOKEN`
 - `OKTA_ORGURL`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/jira.fpc
 ```
 
 ```hcl
-credential "jira" "default" {
+connection "jira" "default" {
   base_url    = "https://test.atlassian.net/"
   api_token   = "ATATT3........."
   username    = "abc@email.com"
@@ -55,13 +55,13 @@ vi ~/.flowpipe/config/okta.fpc
 ```
 
 ```hcl
-credential "okta" "default" {
+connection "okta" "default" {
   domain    = "https://test.okta.com"
   api_token = "00B63........"
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 
@@ -96,6 +96,6 @@ project_key    = "project-foo"
 
 
 # Optional
-# jira_cred = "non_default_cred"
-# okta_cred = "non_default_cred"
+# jira_conn = "non_default_conn"
+# okta_conn = "non_default_conn"
 ```

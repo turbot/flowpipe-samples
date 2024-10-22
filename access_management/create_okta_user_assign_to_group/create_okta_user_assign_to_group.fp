@@ -2,10 +2,10 @@ pipeline "create_okta_user_assign_to_group" {
   title       = "Create User Assign Group"
   description = "Create a user and assign it to a group."
 
-  param "okta_cred" {
-    type        = string
-    description = "Name for Okta credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "conn" {
+    type        = connection.okta
+    description = "Name of Okta connection to use. If not provided, the default Okta connection will be used."
+    default     = connection.okta.default
   }
 
   param "first_name" {
@@ -41,7 +41,7 @@ pipeline "create_okta_user_assign_to_group" {
   step "pipeline" "create_user" {
     pipeline = okta.pipeline.create_user
     args = {
-      cred       = param.okta_cred
+      conn       = param.conn
       first_name = param.first_name
       last_name  = param.last_name
       email      = param.email
@@ -53,7 +53,7 @@ pipeline "create_okta_user_assign_to_group" {
   step "pipeline" "assign_user" {
     pipeline = okta.pipeline.assign_user
     args = {
-      cred     = param.okta_cred
+      conn     = param.conn
       group_id = param.group_id
       user_id  = step.pipeline.create_user.output.user.id
     }
@@ -64,7 +64,7 @@ pipeline "create_okta_user_assign_to_group" {
 
     pipeline = okta.pipeline.list_member_users
     args = {
-      cred     = param.okta_cred
+      conn     = param.conn
       group_id = param.group_id
     }
   }

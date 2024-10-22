@@ -3,19 +3,19 @@ pipeline "ip_profiler" {
   description = "Get valuable information about an IP address by combining data from AbuseIPDB, ReallyFreeGeoIP and VirusTotal."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "abuseipdb_cred" {
-    type        = string
-    default     = "default"
-    description = "Name for AbuseIPDB credentials to use. If not provided, the default credentials will be used."
+  param "abuseipdb_conn" {
+    type        = connection.abuseipdb
+    description = "Name of AbuseIPDB connection to use. If not provided, the default AbuseIPDB connection will be used."
+    default     = connection.abuseipdb.default
   }
 
-  param "virustotal_cred" {
-    type        = string
-    default     = "default"
-    description = "Name for VirusTotal credentials to use. If not provided, the default credentials will be used."
+  param "virustotal_conn" {
+    type        = connection.virustotal
+    description = "Name for connections to use. If not provided, the default connection will be used."
+    default     = connection.virustotal.default
   }
 
   param "ip_addresses" {
@@ -43,7 +43,7 @@ pipeline "ip_profiler" {
     for_each = { for ip in param.ip_addresses : ip => ip }
     pipeline = abuseipdb.pipeline.check_ip_address
     args = {
-      cred            = param.abuseipdb_cred
+      conn            = param.abuseipdb_conn
       ip_address      = each.value
       max_age_in_days = param.abuseipdb_max_age_in_days
     }
@@ -54,7 +54,7 @@ pipeline "ip_profiler" {
     for_each = { for ip in param.ip_addresses : ip => ip }
     pipeline = abuseipdb.pipeline.list_ip_address_reports
     args = {
-      cred            = param.abuseipdb_cred
+      conn            = param.abuseipdb_conn
       ip_address      = each.value
       max_age_in_days = param.abuseipdb_max_age_in_days
     }
@@ -67,7 +67,7 @@ pipeline "ip_profiler" {
     if       = can(regex("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", each.value)) == true
     pipeline = virustotal.pipeline.get_ip_address_report
     args = {
-      cred       = param.virustotal_cred
+      conn       = param.virustotal_conn
       ip_address = each.value
     }
   }

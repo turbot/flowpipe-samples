@@ -26,32 +26,32 @@ cd messaging/send_slack_message_using_cron
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
 - `SLACK_TOKEN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/slack.fpc
 ```
 
 ```hcl
-credential "slack" "default" {
+connection "slack" "default" {
   token = "xoxp-12345-..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 
 Run the pipeline to send a message immediately:
 
 ```sh
-flowpipe pipeline run send_slack_message_using_cron --arg channel=CH1234FEW --arg text="Hello"
+flowpipe pipeline run send_slack_message_using_cron --arg 'channel=channel-name' --arg text="Hello"
 ```
 
 To send a message at the scheduled time, start the Flowpipe server:
@@ -77,5 +77,5 @@ channel = "CH1234FEW"
 text    = "Hello!"
 
 # Optional
-# slack_cred = "non_default_cred"
+# slack_conn = "non_default_conn"
 ```

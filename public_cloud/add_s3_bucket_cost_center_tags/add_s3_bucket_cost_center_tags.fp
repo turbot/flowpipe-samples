@@ -11,11 +11,12 @@ trigger "query" "list_s3_buckets_without_cost_center_tag" {
       arn,
       account_id,
       region,
-      _ctx ->> 'connection_name' as conn_name
+      sp_connection_name as conn
     from
       aws_s3_bucket
     where
       tags ->> 'cost_center' is null
+    limit 4
   EOQ
 
   capture "insert" {
@@ -36,7 +37,7 @@ pipeline "add_s3_bucket_cost_center_tags" {
   }
 
   param "notifier" {
-    type        = string
+    type        = notifier
     description = "Notifier to use."
     default     = var.notifier
   }
@@ -49,7 +50,6 @@ pipeline "add_s3_bucket_cost_center_tags" {
       notifier = param.notifier
     }
   }
-
 }
 
 pipeline "add_cost_center_tag_to_s3_bucket" {
@@ -62,12 +62,13 @@ pipeline "add_cost_center_tag_to_s3_bucket" {
   }
 
   param "notifier" {
-    type        = string
+    type        = notifier
     description = "Notifier to use."
+    default     = var.notifier
   }
 
   step "input" "prompt_select_cost_center_tag_value" {
-    notifier = notifier[param.notifier]
+    notifier = param.notifier
     subject  = "Request to add cost_center tag to S3 bucket ${param.bucket.name} [${param.bucket.account_id} ${param.bucket.region}]"
     prompt   = "Select a cost_center tag value for S3 bucket ${param.bucket.name} [${param.bucket.account_id} ${param.bucket.region}]:"
     type     = "select"
@@ -96,19 +97,19 @@ pipeline "add_cost_center_tag_to_s3_bucket" {
   step "pipeline" "add_tag_to_s3_bucket" {
     pipeline = aws.pipeline.tag_resources
     args = {
-      cred          = param.bucket.conn_name
+      conn          = var.aws_conn
       resource_arns = [param.bucket.arn]
       region        = param.bucket.region
 
       tags = {
-        "cost_center": step.input.prompt_select_cost_center_tag_value.value
+        "cost_center" : step.input.prompt_select_cost_center_tag_value.value
       }
     }
   }
 
   step "message" "notify_s3_bucket_tagged" {
     depends_on = [step.pipeline.add_tag_to_s3_bucket]
-    notifier   = notifier[param.notifier]
+    notifier   = param.notifier
     text       = "Added tag cost_center:${step.input.prompt_select_cost_center_tag_value.value} to S3 bucket ${param.bucket.name} [${param.bucket.account_id} ${param.bucket.region}]"
   }
 }

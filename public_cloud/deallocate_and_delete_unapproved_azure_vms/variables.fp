@@ -1,13 +1,13 @@
-variable "azure_cred" {
-  type        = string
-  description = "Name for Azure credentials to use. If not provided, the default credentials will be used."
-  default     = "default"
+variable "azure_conn" {
+  type        = connection.azure
+  description = "Name for Azure connections to use. If not provided, the default connection will be used."
+  default     = connection.azure.default
 }
 
-variable "zendesk_cred" {
-  type        = string
-  description = "Name for Zendesk credentials to use. If not provided, the default credentials will be used."
-  default     = "default"
+variable "zendesk_conn" {
+  type        = connection.zendesk
+  description = "Name for Zendesk connections to use. If not provided, the default connection will be used."
+  default     = connection.zendesk.default
 }
 
 variable "subscription_id" {

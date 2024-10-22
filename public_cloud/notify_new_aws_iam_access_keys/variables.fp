@@ -5,7 +5,7 @@ variable "database" {
 }
 
 variable "notifier" {
-  type        = string
+  type        = notifier
   description = "Notifier to use."
-  default     = "default"
+  default     = notifier.default
 }

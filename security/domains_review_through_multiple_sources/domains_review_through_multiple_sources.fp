@@ -2,22 +2,22 @@ pipeline "domains_review_through_multiple_sources" {
   title       = "Analyze Domains Through Multiple Sources"
   description = "A composite Flowpipe mod that analyze domain from VirusTotal, Urlscan and other tools."
 
-  param "virustotal_cred" {
-    type        = string
-    description = "Name for VirusTotal credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "virustotal_conn" {
+    type        = connection.virustotal
+    description = "Name for VirusTotal connections to use. If not provided, the default connections will be used."
+    default     = connection.virustotal.default
   }
 
-  param "ip2locationio_cred" {
-    type        = string
-    description = "Name for ip2location.io credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "ip2locationio_conn" {
+    type        = connection.ip2locationio
+    description = "Name for ip2location.io connections to use. If not provided, the default connections will be used."
+    default     = connection.ip2locationio.default
   }
 
-  param "urlscan_cred" {
-    type        = string
-    description = "Name for  URLScan.io credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "urlscan_conn" {
+    type        = connection.urlscan
+    description = "Name for URLScan.io connections to use. If not provided, the default connections will be used."
+    default     = connection.urlscan.default
   }
 
   param "apivoid_api_key" {
@@ -45,7 +45,7 @@ pipeline "domains_review_through_multiple_sources" {
   step "pipeline" "virustotal_domain_scan" {
     pipeline = virustotal.pipeline.get_domain_report
     args = {
-      cred   = param.virustotal_cred
+      conn   = param.virustotal_conn
       domain = param.domain
     }
   }
@@ -53,7 +53,7 @@ pipeline "domains_review_through_multiple_sources" {
   step "pipeline" "urlscan_domain_scan" {
     pipeline = urlscan.pipeline.search_scan
     args = {
-      cred  = param.urlscan_cred
+      conn  = param.urlscan_conn
       query = "domain:${param.domain}"
     }
   }
@@ -61,7 +61,7 @@ pipeline "domains_review_through_multiple_sources" {
   step "pipeline" "ip2locationio_domain_scan" {
     pipeline = ip2locationio.pipeline.get_whois_info
     args = {
-      cred   = param.ip2locationio_cred
+      conn   = param.ip2locationio_conn
       domain = param.domain
     }
   }

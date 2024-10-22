@@ -15,7 +15,7 @@ pipeline "deactivate_expired_aws_iam_access_keys_using_query_step" {
   }
 
   param "notifier" {
-    type        = string
+    type        = notifier
     description = "Notifier to use."
     default     = var.notifier
   }
@@ -41,7 +41,7 @@ pipeline "deactivate_expired_aws_iam_access_keys_using_query_step" {
     pipeline = aws.pipeline.update_iam_access_key
 
     args = {
-      cred          = each.value.conn_name
+      conn          = each.value.conn_name
       access_key_id = each.value.access_key_id
       user_name     = each.value.user_name
       status        = "Inactive"

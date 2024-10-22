@@ -37,14 +37,14 @@ pipeline "notify_new_iam_access_key_created" {
   }
 
   param "notifier" {
-    type        = string
+    type        = notifier
     description = "Notifier to use."
     default     = var.notifier
   }
 
   step "message" "notify_new_iam_access_key" {
     for_each = param.access_keys
-    notifier = notifier[param.notifier]
+    notifier = param.notifier
     text     = "New IAM access key ${each.value.access_key_id} for ${each.value.user_name} [${each.value.account_id}] created at ${each.value.create_date}"
   }
 }

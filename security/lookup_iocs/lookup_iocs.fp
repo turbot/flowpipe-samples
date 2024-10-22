@@ -3,7 +3,7 @@ pipeline "lookup_iocs" {
   description = "A composite Flowpipe mod that lookup IOCs in VirusTotal, Urlscan and other tools."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
   param "hunter_api_key" {

@@ -3,25 +3,25 @@ pipeline "notify_on_call_engineer_with_pagerduty" {
   description = "Allows anyone to see who is on-call for a particular escalation policy, send them an email, notify a Slack channel."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "pagerduty_cred" {
-    type        = string
-    description = "Name for PagerDuty credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "pagerduty_conn" {
+    type        = connection.pagerduty
+    description = "Name of PagerDuty connection to use. If not provided, the default PagerDuty connection will be used."
+    default     = connection.pagerduty.default
   }
 
-  param "slack_cred" {
-    type        = string
-    description = "Name for Slack credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "slack_conn" {
+    type        = connection.slack
+    description = "Name of Slack connection to use. If not provided, the default Slack connection will be used."
+    default     = connection.slack.default
   }
 
-  param "sendgrid_cred" {
-    type        = string
-    description = "Name for SendGrid credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "sendgrid_conn" {
+    type        = connection.sendgrid
+    description = "Name of SendGrid connection to use. If not provided, the default SendGrid connection will be used."
+    default     = connection.sendgrid.default
   }
 
   param "slack_message" {
@@ -54,7 +54,7 @@ pipeline "notify_on_call_engineer_with_pagerduty" {
   step "pipeline" "list_on_calls" {
     pipeline = pagerduty.pipeline.list_on_calls
     args = {
-      cred = param.pagerduty_cred
+      conn = param.pagerduty_conn
     }
   }
 
@@ -64,7 +64,7 @@ pipeline "notify_on_call_engineer_with_pagerduty" {
 
     pipeline = pagerduty.pipeline.get_user
     args = {
-      cred    = param.pagerduty_cred
+      conn    = param.pagerduty_conn
       user_id = each.value
     }
   }
@@ -75,7 +75,7 @@ pipeline "notify_on_call_engineer_with_pagerduty" {
 
     pipeline = slack.pipeline.post_message
     args = {
-      cred    = param.slack_cred
+      conn    = param.slack_conn
       channel = param.slack_channel
       text    = "${param.slack_message}: ${join(", ", [for key, value in step.pipeline.list_all_on_call_user_details : value.output.user.email])}"
     }
@@ -88,7 +88,7 @@ pipeline "notify_on_call_engineer_with_pagerduty" {
 
     pipeline = sendgrid.pipeline.send_mail
     args = {
-      cred    = param.sendgrid_cred
+      conn    = param.sendgrid_conn
       to      = each.value
       from    = param.from
       subject = param.email_subject

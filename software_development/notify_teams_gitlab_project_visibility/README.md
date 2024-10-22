@@ -4,21 +4,21 @@ Notify a Teams channel with GitLab Public Projects of a group. Optionally, updat
 
 ## Getting Started
 
-### Credentials
+### Connections
 
 By default, the following environment variables will be used for authentication:
 
 - `GITLAB_TOKEN`
 - `TEAMS_ACCESS_TOKEN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
 vi ~/.flowpipe/config/gitlab.fpc
 ```
 
 ```hcl
-credential "gitlab" "default" {
+connection "gitlab" "default" {
   token = "glpat-..."
 }
 ```
@@ -28,12 +28,12 @@ vi ~/.flowpipe/config/teams.fpc
 ```
 
 ```hcl
-credential "teams" "default" {
+connection "teams" "default" {
   access_token = "bfc6f1c42dsfsdfdxxxx26977977b2xxxsfsdda98f313c3d389126de0d"
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 

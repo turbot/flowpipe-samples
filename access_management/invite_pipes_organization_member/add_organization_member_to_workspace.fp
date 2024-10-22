@@ -3,13 +3,13 @@ pipeline "add_organization_member_to_workspace" {
   description = "Add organization member to an existing organization workspace."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "pipes_cred" {
-    type        = string
-    description = "Name for Pipes credentials to use. If not provided, the default credentials will be used."
-    default     = "default"
+  param "conn" {
+    type        = connection.pipes
+    description = "Name of Pipes connection to use. If not provided, the default Pipes connection will be used."
+    default     = connection.pipes.default
   }
 
   param "organization_handle" {
@@ -42,7 +42,7 @@ pipeline "add_organization_member_to_workspace" {
   step "pipeline" "create_organization_workspace_member" {
     pipeline = pipes.pipeline.create_organization_workspace_member
     args = {
-      cred             = param.pipes_cred
+      conn             = param.conn
       handle           = param.member_handle
       org_handle       = param.organization_handle
       role             = param.role

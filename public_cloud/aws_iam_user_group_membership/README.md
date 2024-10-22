@@ -30,7 +30,7 @@ cd public_cloud/aws_iam_user_group_membership
 flowpipe mod install
 ```
 
-## Credentials
+## Connections
 
 By default, the following environment variables will be used for authentication:
 
@@ -40,34 +40,34 @@ By default, the following environment variables will be used for authentication:
 - `AWS_PROFILE`
 - `GITHUB_TOKEN`
 
-You can also create `credential` resources in configuration files:
+You can also create `connection` resources in configuration files:
 
 ```sh
-vi creds.fpc
+vi conns.fpc
 ```
 
 ```hcl
-credential "aws" "aws_profile" {
+connection "aws" "aws_profile" {
   profile = "my-profile"
 }
 
-credential "aws" "aws_access_key_pair" {
+connection "aws" "aws_access_key_pair" {
   access_key = "AKIA..."
   secret_key = "dP+C+J..."
 }
 
-credential "aws" "aws_session_token" {
+connection "aws" "aws_session_token" {
   access_key = "AKIA..."
   secret_key = "dP+C+J..."
   session_token = "AQoDX..."
 }
 
-credential "github" "default" {
+connection "github" "default" {
   token = "ghp_..."
 }
 ```
 
-For more information on credentials in Flowpipe, please see [Managing Credentials](https://flowpipe.io/docs/run/credentials).
+For more information on connections in Flowpipe, please see [Managing Connections](https://flowpipe.io/docs/run/connections).
 
 ## Usage
 
@@ -96,8 +96,8 @@ vi flowpipe.fpvars
 
 ```hcl
 # Optional
-# github_cred = "non_default_cred"
-# aws_cred    = "non_default_cred"
+# github_conn = "non_default_conn"
+# aws_conn    = "non_default_conn"
 ```
 
 ## Open Source & Contributing

@@ -10,19 +10,19 @@ pipeline "aws_iam_user_group_membership" {
   description = "Monitors IAM users across various groups and oversees associated GitHub issues. It generates new issues for users belonging to multiple groups and updates existing issues as necessary."
 
   tags = {
-    type = "featured"
+    recommended = "true"
   }
 
-  param "github_cred" {
-    type        = string
-    description = "Name for GitHub credentials to use. If not provided, the default credentials will be used."
-    default     = var.github_cred
+  param "github_conn" {
+    type        = connection.github
+    description = "Name for GitHub connections to use. If not provided, the default connections will be used."
+    default     = var.github_conn
   }
 
-  param "aws_cred" {
-    type        = string
-    description = "Name for AWS credentials to use. If not provided, the default credentials will be used."
-    default     = var.aws_cred
+  param "aws_conn" {
+    type        = connection.aws
+    description = "Name for AWS connections to use. If not provided, the default connections will be used."
+    default     = var.aws_conn
   }
 
   param "github_repository_owner" {
@@ -39,7 +39,7 @@ pipeline "aws_iam_user_group_membership" {
   step "pipeline" "list_iam_users" {
     pipeline = aws.pipeline.list_iam_users
     args = {
-      cred = param.aws_cred
+      conn = param.aws_conn
     }
   }
 
@@ -48,7 +48,7 @@ pipeline "aws_iam_user_group_membership" {
     for_each = { for user in step.pipeline.list_iam_users.output.users : user.UserName => user.UserName }
     pipeline = aws.pipeline.list_iam_groups_for_user
     args = {
-      cred      = param.aws_cred
+      conn      = param.aws_conn
       user_name = each.value
     }
   }
@@ -59,7 +59,7 @@ pipeline "aws_iam_user_group_membership" {
     for_each = { for user, groups in step.pipeline.list_groups_assigned_to_user : user => groups.output }
     pipeline = github.pipeline.search_issues
     args = {
-      cred             = param.github_cred
+      conn             = param.github_conn
       repository_owner = param.github_repository_owner
       repository_name  = param.github_repository_name
       search_value     = "[AWS IAM User in Groups]: User '${each.key}' state:open"
@@ -72,7 +72,7 @@ pipeline "aws_iam_user_group_membership" {
     if       = length(each.value) > 1 && length(step.pipeline.github_search_issue[each.key].output.issues) > 0
     pipeline = github.pipeline.create_issue_comment
     args = {
-      cred             = param.github_cred
+      conn             = param.github_conn
       repository_owner = param.github_repository_owner
       repository_name  = param.github_repository_name
       issue_number     = step.pipeline.github_search_issue[each.key].output.issues[0].number
@@ -86,7 +86,7 @@ pipeline "aws_iam_user_group_membership" {
     if       = length(each.value) <= 1 && length(step.pipeline.github_search_issue[each.key].output.issues) > 0
     pipeline = github.pipeline.close_issue
     args = {
-      cred             = param.github_cred
+      conn             = param.github_conn
       repository_owner = param.github_repository_owner
       repository_name  = param.github_repository_name
       issue_number     = step.pipeline.github_search_issue[each.key].output.issues[0].number
@@ -100,7 +100,7 @@ pipeline "aws_iam_user_group_membership" {
     if       = length(each.value) > 1 && length(step.pipeline.github_search_issue[each.key].output.issues) == 0
     pipeline = github.pipeline.create_issue
     args = {
-      cred             = param.github_cred
+      conn             = param.github_conn
       repository_owner = param.github_repository_owner
       repository_name  = param.github_repository_name
       issue_title      = "[AWS IAM User in Groups]: User '${each.key}' is assigned with ${length(each.value)} IAM groups."
