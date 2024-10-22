@@ -5,8 +5,11 @@ mod "send_message_to_user_in_microsoft_teams" {
   categories    = ["messaging", "sample"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-teams" {
-      version = "1.0.0-rc-1.1"
+      version = "^1"
     }
   }
 }

@@ -5,12 +5,15 @@ mod "add_new_user_in_microsoft_office_365" {
   categories    = ["access management", "sample"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-teams" {
-      version = "1.0.0-rc-1.1"
+      version = "^1"
     }
 
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "1.0.0-rc.1"
+      version = "^1"
     }
   }
 }

@@ -5,8 +5,11 @@ mod "send_slack_message" {
   categories    = ["messaging", "sample"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "0.3.0-rc.2"
+      version = "^1"
     }
   }
 }
