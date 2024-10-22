@@ -5,8 +5,11 @@ mod "aws_s3_bucket_versioning_enforcement" {
   categories    = ["public cloud", "security", "sample"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "v1.0.0-rc.6"
+      version = "^1"
     }
   }
 }

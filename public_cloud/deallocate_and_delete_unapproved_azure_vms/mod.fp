@@ -5,11 +5,14 @@ mod "deallocate_and_delete_unapproved_azure_vms" {
   categories    = ["sample", "public cloud"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-azure" {
-      version = "1.0.0-rc.2"
+      version = "^1"
     }
     mod "github.com/turbot/flowpipe-mod-zendesk" {
-      version = "1.0.0-rc.2"
+      version = "^1"
     }
   }
 }

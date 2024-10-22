@@ -5,8 +5,11 @@ mod "scan_file_hash_on_virustotal" {
   categories    = ["security"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-virustotal" {
-      version = "v1.0.0-rc.1"
+      version = "^1"
     }
   }
 

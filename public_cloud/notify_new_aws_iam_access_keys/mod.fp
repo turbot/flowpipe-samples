@@ -3,4 +3,10 @@ mod "notify_new_aws_iam_access_keys" {
   description   = "Look for new AWS IAM access keys and send a notification when one is created."
   documentation = file("./README.md")
   categories    = ["public cloud", "sample"]
+
+  require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
+  }
 }

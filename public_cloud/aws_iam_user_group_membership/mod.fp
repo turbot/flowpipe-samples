@@ -5,11 +5,14 @@ mod "aws_iam_user_group_membership" {
   categories    = ["public cloud", "sample"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = "1.0.0-rc.6"
+      version = "^1"
     }
     mod "github.com/turbot/flowpipe-mod-github" {
-      version = "1.0.0-rc.0"
+      version = "^1"
     }
   }
 }

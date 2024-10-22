@@ -5,8 +5,11 @@ mod "notify_slack_new_github_release" {
   categories    = ["software development"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-slack" {
-      version = "0.3.0-rc.1"
+      version = "^1"
     }
   }
 }

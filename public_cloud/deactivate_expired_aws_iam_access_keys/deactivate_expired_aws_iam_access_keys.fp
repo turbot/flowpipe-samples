@@ -13,7 +13,7 @@ pipeline "deactivate_expired_aws_iam_access_keys" {
   }
 
   param "slack_conn" {
-    type        = connection.slak
+    type        = connection.slack
     description = "Name for Slack connections to use. If not provided, the default connection will be used."
     default     = var.slack_conn
   }

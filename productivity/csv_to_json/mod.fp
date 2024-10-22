@@ -3,4 +3,10 @@ mod "csv_to_json" {
   description   = "Convert the CSV contents to JSON."
   documentation = file("./README.md")
   categories    = ["productivity", "sample"]
+
+  require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
+  }
 }

@@ -15,7 +15,7 @@ pipeline "deactivate_expired_aws_iam_access_keys_using_query_step" {
   }
 
   param "notifier" {
-    type        = string
+    type        = notifier
     description = "Notifier to use."
     default     = var.notifier
   }

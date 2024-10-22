@@ -5,17 +5,20 @@ mod "lookup_iocs" {
   categories    = ["security"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-abuseipdb" {
-      version = "v1.0.0-rc.1"
+      version = "^1"
     }
     mod "github.com/turbot/flowpipe-mod-virustotal" {
-      version = "v1.0.0-rc.1"
+      version = "^1"
     }
     mod "github.com/turbot/flowpipe-mod-urlscan" {
-      version = "v1.0.0-rc.1"
+      version = "^1"
     }
     mod "github.com/turbot/flowpipe-mod-ip2locationio" {
-      version = "v1.0.0-rc.1"
+      version = "^1"
     }
   }
 }

@@ -5,8 +5,11 @@ mod "link_jira_issues" {
   categories    = ["productivity", "sample"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "1.0.0-rc.1"
+      version = "^1"
     }
   }
 }

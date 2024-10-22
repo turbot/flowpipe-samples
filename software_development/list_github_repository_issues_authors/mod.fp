@@ -5,8 +5,11 @@ mod "list_github_repository_issues_authors" {
   categories  = ["software development"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-github" {
-      version = "0.2.0-rc.2"
+      version = "^1"
     }
   }
 }

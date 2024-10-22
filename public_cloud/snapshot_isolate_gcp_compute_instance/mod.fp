@@ -5,11 +5,14 @@ mod "snapshot_isolate_gcp_compute_instance" {
   categories    = ["public cloud", "sample"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-gcp" {
-      version = "1.0.0-rc-1.1"
+      version = "^1"
     }
     mod "github.com/turbot/flowpipe-mod-jira" {
-      version = "1.0.0-rc.1"
+      version = "^1"
     }
   }
 }

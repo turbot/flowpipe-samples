@@ -5,8 +5,11 @@ mod "send_top_show_hn_email" {
   categories    = ["productivity", "sample"]
 
   require {
+    flowpipe {
+      min_version = "1.0.0"
+    }
     mod "github.com/turbot/flowpipe-mod-sendgrid" {
-      version = "1.0.0-rc.1"
+      version = "^1"
     }
   }
 }
