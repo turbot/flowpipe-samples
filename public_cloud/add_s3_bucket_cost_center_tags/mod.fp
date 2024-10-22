@@ -6,7 +6,7 @@ mod "add_s3_bucket_cost_center_tags" {
 
   require {
     mod "github.com/turbot/flowpipe-mod-aws" {
-      version = ">=1.0.0-rc.6"
+      version = "1.0.0-rc.9"
     }
   }
 }
